@@ -1,0 +1,31 @@
+.navbar{
+    background-color: #282c34;
+    list-style-type: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.navMenu{
+    display: inline-block;
+    text-align: left;
+    font-size: 20px;
+    padding: 20px;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+a:link {
+    color : #5ea5f6;
+}
+a:visited {
+    color : #a489eb;
+}
+a:hover {
+    color : #72d6e8;
+}
+a:active {
+    color : #5297dc
+}
