@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import './main.css';
+
 
 const Main = (props) => {
 
@@ -25,14 +26,16 @@ const Main = (props) => {
     }, []);
 
     return (
-        <header className="App-header">
-            <ul>
                 <div>
+                    <div>
+                    <img className="center1" src="/a1.png" alt="센터1"/>
+                    </div>
+                    <div className="mainBar">
+                        <li className="mainMenu">공지 사항</li>
+                        <li className="mainMenu">이벤트</li>
+                    </div>
                     <img className={scrollPosition > 20 ? "mount1" : "hidden"} src="/img.png" alt="강아지"/>
                 </div>
-                {data.map((v, idx) => <li key={`${idx}-${v}`}>{v}</li>)}
-            </ul>
-        </header>
     );
 };
 
