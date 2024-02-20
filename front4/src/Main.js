@@ -28,7 +28,7 @@ const Main = (props) => {
     return (
                 <div>
                     <div>
-                    <img className="center1" src="/a1.png" alt="센터1"/>
+                    <img className="center1" src="/background1.png" alt="센터1"/>
                     </div>
                     <div className="mainBar">
                         <li className="mainMenu">공지 사항</li>
