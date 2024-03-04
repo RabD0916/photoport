@@ -12,9 +12,14 @@ import java.util.List;
 public class CategoryController {
     @GetMapping("/sendCategory/{userId}")
     public List<String> send(@PathVariable String userId) {
-        String dir = "./images/" + userId;
+        String dir = "./front4/public/images/" + userId;
         File folder = new File(dir);
-        List<String> fileNames = Arrays.asList(folder.list());
+        List<String> fileNames = null;
+        try {
+            fileNames = Arrays.asList(folder.list());
+        } catch(NullPointerException e) {
+            return null;
+        }
 
         return fileNames;
     }

@@ -34,7 +34,7 @@ const Main = (props) => {
                         <li className="mainMenu">공지 사항</li>
                         <li className="mainMenu">이벤트</li>
                     </div>
-                    <img className={scrollPosition > 20 ? "mount1" : "hidden"} src="/img.png" alt="강아지"/>
+                    <img className={scrollPosition > 20 ? "mount1" : "hidden"} src="/a1.png" alt="강아지"/>
                 </div>
     );
 };
