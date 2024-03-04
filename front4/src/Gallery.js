@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
-const Gallary = () => {
+const Gallery = () => {
     const { userId } = useParams();
     const [cate, setCate] = useState([]);
 
@@ -28,4 +28,4 @@ const Gallary = () => {
     );
 }
 
-export default Gallary;
+export default Gallery;

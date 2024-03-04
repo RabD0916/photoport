@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Main";
-import Gallary from "./Gallary";
+import Gallery from "./Gallery";
 
 function App() {
 
@@ -15,7 +15,7 @@ function App() {
               <Nav/>
               <Routes>
                   <Route path={"/"} element={<Main/>}></Route>
-                  <Route path={"/user/:userId"} element={<Gallary />}></Route>
+                  <Route path={"/user/:userId"} element={<Gallery />}></Route>
               </Routes>
           </BrowserRouter>
 

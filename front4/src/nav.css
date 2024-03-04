@@ -1,5 +1,5 @@
 .navbar{
-    background-color: #282c34;
+    background-color: #d9d7d6;
     list-style-type: none;
     text-align: center;
     margin: 0;
@@ -9,19 +9,15 @@
     display: inline-block;
     text-align: left;
     font-size: 20px;
-    padding: 20px;
+    padding: 50px;
 }
-.left{
-    float: left;
+.navMenu a{
+    text-decoration: none;
+    font-weight: bold;
 }
-.right{
-    float: right;
-}
+
 a:link {
-    color : #5ea5f6;
-}
-a:visited {
-    color : #a489eb;
+    color : #000000;
 }
 a:hover {
     color : #72d6e8;
