@@ -6,7 +6,12 @@ const Gallary = () => {
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
-        fetch("/sendCategory/userId")
+        fetch("/sendCategory/" + userId, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
             .then((res) => {
                 return res.json();
             })
@@ -18,7 +23,7 @@ const Gallary = () => {
     return (
         <>
             <h3>{userId}의 갤러리</h3>
-            <div>${cate.pop()}</div>
+            <div>{cate.map((v, idx) => <li key={`${idx}-${v}`}>{v}</li>)}</div>
         </>
     );
 }

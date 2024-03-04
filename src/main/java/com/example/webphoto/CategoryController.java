@@ -12,7 +12,7 @@ import java.util.List;
 public class CategoryController {
     @GetMapping("/sendCategory/{userId}")
     public List<String> send(@PathVariable String userId) {
-        String dir = "../../../../front4/public/img/" + userId;
+        String dir = "./images/" + userId;
         File folder = new File(dir);
         List<String> fileNames = Arrays.asList(folder.list());
 
