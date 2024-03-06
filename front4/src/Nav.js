@@ -8,11 +8,18 @@ function Nav() {
         setUserId(e.target.value);
     };
 
+    const isUserIdEmpty = e => {
+        if(userId.length < 1) {
+            alert("로그인 필요");
+            e.preventDefault();
+        }
+    }
+
     return(
         <>
             <nav className="navbar">
                 <Link to={"/"} className={"navMenu left"}>공지 사항</Link>
-                <Link to={"/user/" + userId} className={"navMenu left"}>갤러리</Link>
+                <Link to={"/user/" + userId} className={"navMenu left"} onClick={isUserIdEmpty}>갤러리</Link>
                 <Link to={"/"} className={"navMenu"}>네컷 생성</Link>
                 <Link to={"/"} className={"navMenu right"}>이름 로고</Link>
                 <Link to={"/"} className={"navMenu right"}>검색 하기</Link>

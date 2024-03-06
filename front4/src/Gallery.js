@@ -8,20 +8,22 @@ const Gallery = () => {
     useEffect(() => {
         fetch("/sendCategory/" + userId)
             .then((res) => {
-                if (res == null) {
-                    alert("존재하지 않는 유저");
-                }
                 return res.json();
             })
             .then(function (result) {
+                if(result[0] === "Folder Not Found") {
+                    alert("해당 유저가 존재하지 않습니다.");
+                    window.history.back();
+                    return;
+                }
                 setCate(result);
             })
-    }, []);
+    }, [userId]);
 
     return (
         <>
             <h3>{userId}의 갤러리</h3>
-            <div>{cate.map((v) => <img src={"/images/" + userId + "/" + v} alt={"null"}></img>)}</div>
+            <div>{cate.map((v) => <img src={"/images/" + userId + "/" + v} alt={v}></img>)}</div>
         </>
     );
 }
