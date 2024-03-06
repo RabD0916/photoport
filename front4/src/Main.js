@@ -1,41 +1,51 @@
-import React, {useEffect, useState} from 'react';
+// Main.js
+import React, { useEffect, useState } from 'react';
 import './main.css';
 
-
 const Main = (props) => {
-
-    const [data, setData] = useState([]);
-    const [scrollPosition, setScrollPosition] = useState(0);
+    const [slideIndex, setSlideIndex] = useState(0);
 
     useEffect(() => {
-        fetch("/showMe")
-            .then((res) => {
-                return res.json();
-            })
-            .then(function (result) {
-                setData(result);
-            })
-    },[]);
+        const interval = setInterval(() => {
+            setSlideIndex((prevIndex) => (prevIndex + 1) % 3); // 여기서 3은 이미지의 개수에 맞게 수정해주세요
+        }, 5000);
 
-    const updateScroll = () => {
-        setScrollPosition(window.scrollY || document.documentElement.scrollTop);
-    };
-
-    useEffect(() => {
-        window.addEventListener("scroll", updateScroll);
+        return () => clearInterval(interval);
     }, []);
 
     return (
-                <div>
-                    <div>
-                    <img className="center1" src="/background1.png" alt="센터1"/>
-                    </div>
-                    <div className="mainBar">
-                        <li className="mainMenu">공지 사항</li>
-                        <li className="mainMenu">이벤트</li>
-                    </div>
-                    <img className={scrollPosition > 20 ? "mount1" : "hidden"} src="/a1.png" alt="강아지"/>
+        <div>
+            <div>
+                <img className="center1" src="/backbaxk.jpg" alt="센터1" />
+            </div>
+            <div className="mainBar">
+                <li className="mainMenu left1">공지 사항</li>
+                <li className="mainMenu right1">이벤트</li>
+            </div>
+            <div className="mainfirst">
+                <div className="firstleft">
+                    이벤트
                 </div>
+                <div className="firstright">간편하게 스캔하여 저장하자!! 네컷앨범을 사용해 보세요</div>
+            </div>
+            <div className="mainsecond">
+                <div className="second">
+                    <div className={`second1 ${slideIndex === 0 ? 'active' : ''}`}>
+                        <img className="seimg" src="/one.jpg" alt="짱구 독사진 포즈" />
+                    </div>
+                    <div className={`second1 ${slideIndex === 1 ? 'active' : ''}`}>
+                        <img className="seimg" src="/one1.jpg" alt="수지 독사진 포즈" />
+                    </div>
+                    <div className="second2">포즈2</div>
+                    <div className="second3">포즈3</div>
+                </div>
+            </div>
+            <div className="mainthird">
+                <div className="third">
+                    사진관
+                </div>
+            </div>
+        </div>
     );
 };
 

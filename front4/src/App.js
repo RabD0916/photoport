@@ -5,6 +5,7 @@ import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Main";
 import Gallery from "./Gallery";
+import Footer from "./footer";
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
                   <Route path={"/user/:userId"} element={<Gallery />}></Route>
               </Routes>
           </BrowserRouter>
-
+          <Footer/>
       </div>
   );
 }
