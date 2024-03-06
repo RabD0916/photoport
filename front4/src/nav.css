@@ -1,27 +1,77 @@
 .navbar{
-    background-color: #d9d7d6;
-    list-style-type: none;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-}
-.navMenu{
-    display: inline-block;
-    text-align: left;
-    font-size: 20px;
-    padding: 50px;
-}
-.navMenu a{
-    text-decoration: none;
+
     font-weight: bold;
 }
+a{
+    text-decoration: none;
+}
+.centerLink {
+    padding-top: 20px;
+    text-align: center;
+}
+.rightLinks {
+    text-align: right;
+}
+.searchLink {
+    display: block;
+    text-align: right; /* 검색하기 링크를 오른쪽 정렬합니다. */
+    margin-bottom: 10px; /* 검색하기 링크 아래 여백을 추가합니다. */
+}
 
-a:link {
-    color : #000000;
+.otherLinks {
+    display: inline-block;
+
 }
-a:hover {
-    color : #72d6e8;
+.otherLinks a {
+    display: inline-block;
+    margin-left: 10px; /* 다른 링크들 사이의 간격을 조절합니다. */
 }
-a:active {
-    color : #5297dc
+.centerLink a {
+    background-color: #abcdef;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease; /* 색상 변경 시 부드럽게 변화하도록 설정합니다. */
 }
+
+.centerLink a:hover {
+    background-color: #95d5ff; /* 호버 상태일 때의 배경색을 지정합니다. */
+}
+
+.rightLinks a {
+    background-color: #fedcba;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.rightLinks a:hover {
+    background-color: #ffbdbd;
+}
+
+.searchLink a {
+    background-color: #aabbcc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.searchLink a:hover {
+    background-color: #c9dfff;
+}
+
+.otherLinks a {
+    background-color: #ccbbaa;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.otherLinks a:hover {
+    background-color: #ffeb99;
+}
+
+

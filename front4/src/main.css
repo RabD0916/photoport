@@ -73,22 +73,10 @@
     margin: 50px auto; /* 가운데 정렬을 위해 좌우 여백을 auto로 설정 */
 }
 
-
-
 .seimg {
     display: inline-block; /* 이미지를 블록 요소로 표시하여 가운데 정렬 가능하게 합니다. */
     vertical-align: middle; /* 이미지를 수직으로 가운데 정렬합니다. */
     max-width: 100%; /* 이미지가 부모 요소의 너비를 초과하지 않도록 최대 너비 설정 */
     max-height: 100%; /* 이미지가 부모 요소의 높이를 초과하지 않도록 최대 높이 설정 */
-}
-
-/* main.css */
-.second1 {
-    transition: opacity 0.5s ease; /* 투명도가 변경될 때 0.5초간의 변화를 가지도록 설정합니다. */
-    opacity: 0; /* 초기에는 이미지를 숨겨둡니다. */
-}
-
-.second1.active {
-    opacity: 1; /* 활성화된 이미지는 보이도록 설정합니다. */
 }
 
