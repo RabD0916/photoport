@@ -24,6 +24,9 @@ const Gallery = () => {
         <>
             <h3>{userId}의 갤러리</h3>
             <div>{cate.map((v) => <img src={"/images/" + userId + "/" + v} alt={v}></img>)}</div>
+            <div>
+                갤러리 페이지
+            </div>
         </>
     );
 }
