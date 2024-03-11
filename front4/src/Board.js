@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { Button } from "antd"
-// import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 // import Axios from "axios"
 import { PlusCircleOutlined } from "@ant-design/icons"
 import DetailList from "./Create.js"

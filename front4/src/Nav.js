@@ -11,11 +11,20 @@ function Nav() {
     return(
         <>
             <nav className="navbar">
-                <Link to={"/"} className={"navMenu left"}>공지 사항</Link>
-                <Link to={"/user/" + userId} className={"navMenu left"}>갤러리</Link>
-                <Link to={"/"} className={"navMenu"}>네컷 생성</Link>
-                <Link to={"/"} className={"navMenu right"}>이름 로고</Link>
-                <Link to={"/"} className={"navMenu right"}>검색 하기</Link>
+                <div className="centerLink">
+                    <Link to={"/"} className={"center"}>포토포트</Link>
+                </div>
+                <div className="rightLinks">
+                    <div className="searchLink">
+                        <Link to={"/"} className={"right"}>검색 하기</Link>
+                    </div>
+                    <div className="otherLinks">
+                        <Link to={"/user/" + userId} className={"downright"}>갤러리</Link>
+                        <Link to={"/"} className={"downright"}>네컷 생성</Link>
+                        <Link to={"/"} className={"downright"}>마이페이지</Link>
+                        <Link to={"/"} className={"downright"}>게시판</Link>
+                    </div>
+                </div>
             </nav>
 
             <input type={"text"} placeholder={"유저 아이디"} value={userId} onChange={saveUserId}></input>
