@@ -16,6 +16,8 @@ function Nav() {
         }
     }
 
+
+
     return (
         <>
             <nav className="navbar">
@@ -27,7 +29,7 @@ function Nav() {
                         <Link to={"/"} className={"right"}>검색 하기</Link>
                     </div>
                     <div className="otherLinks">
-                        <Link to={"/user/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
+                        <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
                         <Link to={"/"} className={"downright"}>네컷 생성</Link>
                         <Link to={"/"} className={"downright"}>마이페이지</Link>
                         <Link to={"/"} className={"downright"}>게시판</Link>

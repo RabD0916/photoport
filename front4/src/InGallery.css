@@ -1,0 +1,22 @@
+.product-list{
+    width: 735px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cate{
+    display: block;
+    width: 225px;
+    text-align: center;
+    text-decoration:none;
+    color: black;
+    float:left;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
+.cate-name{
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
