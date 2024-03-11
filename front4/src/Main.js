@@ -1,3 +1,4 @@
+// Main.js
 import React, { useEffect, useState } from 'react';
 import './main.css';
 
@@ -6,7 +7,7 @@ const Main = (props) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setSlideIndex((prevIndex) => (prevIndex + 1) % 2); // 여기서 3은 이미지의 개수에 맞게 수정해주세요
+            setSlideIndex((prevIndex) => (prevIndex + 1) % 3); // 여기서 3은 이미지의 개수에 맞게 수정해주세요
         }, 5000);
 
         return () => clearInterval(interval);
@@ -29,10 +30,10 @@ const Main = (props) => {
             </div>
             <div className="mainsecond">
                 <div className="second">
-                    <div className="second1" style={{ display: slideIndex === 0 ? 'block' : 'none' }}>
+                    <div className={`second1 ${slideIndex === 0 ? 'active' : ''}`}>
                         <img className="seimg" src="/one.jpg" alt="짱구 독사진 포즈" />
                     </div>
-                    <div className="second1" style={{ display: slideIndex === 1 ? 'block' : 'none' }}>
+                    <div className={`second1 ${slideIndex === 1 ? 'active' : ''}`}>
                         <img className="seimg" src="/one1.jpg" alt="수지 독사진 포즈" />
                     </div>
                     <div className="second2">포즈2</div>
