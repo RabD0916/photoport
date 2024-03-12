@@ -1,4 +1,4 @@
-import './InGallery.css';
+import '../Css/InGallery.css';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
