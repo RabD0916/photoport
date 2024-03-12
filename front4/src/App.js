@@ -5,6 +5,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Main";
 import Gallery from "./Gallery";
 import Footer from "./footer";
+import InGallery from "./InGallery";
+import InCategory from "./InCategory";
 import MyPage from "./MyPage";
 import Create from "./Create";
 import Board from "./Board";
@@ -19,7 +21,8 @@ function App() {
                   <Route path={"/MyPage"} element={<MyPage/>}></Route>
                   <Route path={"/Create"} element={<Create/>}></Route>
                   <Route path={"/Board"} element={<Board/>}></Route>
-                  <Route path={"/user/:userId"} element={<Gallery />}></Route>
+                  <Route path={"/gallery/:userId"} element={<InGallery />}></Route>
+                  <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>
