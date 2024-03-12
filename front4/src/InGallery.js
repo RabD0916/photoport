@@ -8,34 +8,15 @@ const InGallery = () => {
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
-        let isCompleted = false;
-
-        async function get() {
-            const result = await axios.get(
-                `http://localhost:3000/sendCategory/${userId}`
-            );
-            if (!isCompleted) {
-                setCate(result.data);
-            }
-        }
-
-        get();
-        return () => {
-            isCompleted = true;
-        }
-        // fetch("/sendCategory/" + userId)
-        //     .then((res) => {
-        //         return res.json();
-        //     })
-        //     .then(function (result) {
-        //         if(result[0] === "Folder Not Found") {
-        //             alert("해당 유저가 존재하지 않습니다.");
-        //             window.history.back();
-        //             return;
-        //         }
-        //         setCate(result);
-        //     })
+        getCategoryList().then(r => setCate(r));
     }, [userId]);
+
+    async function getCategoryList() {
+        const result = await axios.get(
+            `http://localhost:3000/sendCategory/${userId}`
+        );
+        return result.data;
+    }
 
     const createCategory = e => {
 
