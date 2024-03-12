@@ -8,15 +8,17 @@ const InGallery = () => {
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
+        async function getCategoryList() {
+            const result = await axios.get(
+                `http://localhost:3000/sendCategory/${userId}`
+            );
+            return result.data;
+        }
+
         getCategoryList().then(r => setCate(r));
     }, [userId]);
 
-    async function getCategoryList() {
-        const result = await axios.get(
-            `http://localhost:3000/sendCategory/${userId}`
-        );
-        return result.data;
-    }
+
 
     const createCategory = e => {
 
