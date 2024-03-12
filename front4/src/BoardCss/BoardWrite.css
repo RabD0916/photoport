@@ -1,0 +1,44 @@
+/* 글씨 크기와 테두리를 적용할 클래스 */
+.big-font {
+    font-size: 20px;
+    border: 5px solid black;
+}
+
+/* 가운데 정렬을 적용할 클래스 */
+.center-align {
+    background-image: url("../../public/594.jpg");
+    text-align: center;
+    margin: 10px;
+}
+.button-style {
+    font-weight: bold;
+    border-radius: 10px;
+    margin: 10px;
+    font-size: 10px;
+    border: 2px solid black;
+    background-color: lightgray; /* 버튼 배경색 */
+    color: black; /* 버튼 텍스트 색상 */
+    padding: 10px 20px; /* 내부 여백 */
+    cursor: pointer; /* 마우스 커서 모양 */
+}
+
+/* 버튼 호버 효과 */
+.button-style:hover {
+    background-color: gray; /* 호버 시 배경색 */
+    color: white; /* 호버 시 텍스트 색상 */
+}
+
+.picture{
+    width: 50%;
+    height: 200px;  /*나중에 오토로 바꾸기*/
+    background-color: #95d5ff;
+    display: inline-block;
+    border: 2px solid black;
+    margin: 10px;
+}
+.content{
+    margin :10px;
+}
+.text{
+    width: 50%;
+}

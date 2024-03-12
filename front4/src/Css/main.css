@@ -1,0 +1,84 @@
+.center1{
+    width: 100%;
+    height: auto;
+    background-color: pink;
+
+}
+.mainBar {
+    display: flex;
+    margin-top: -10px; /* 여백 제거 */
+}
+.mainMenu {
+    flex: 1;
+    list-style: none;
+    text-align: center;
+    padding: 10px;
+}
+
+.left1 {
+    background-color: black;
+    color: white;
+}
+
+.right1 {
+    background-color: gray;
+    color: white;
+}
+.mainfirst{
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #777777;
+    height: 700px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.firstright, .firstleft {
+    flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
+    padding: 20px; /* 내부 여백 추가 */
+}
+
+.mainsecond{
+    background-color: white;
+    height: 700px;
+    padding-top: 20px;
+}
+.second, .third{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.second {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.mainthird{
+    background-color: #fdd1d6;
+    height: 500px;
+    padding-top: 20px;
+}
+
+.second1 , .second2 , .second3{
+    width: 400px; /* 너비를 400px로 설정 */
+    height: 450px; /* 높이를 450px로 설정 */
+    background-color: pink; /* 배경색을 분홍색으로 설정 */
+    text-align: center; /* 내부 요소를 가운데 정렬 */
+    line-height: 450px; /* 내부 요소를 수직으로 가운데 정렬 */
+    font-weight: bold; /* 텍스트를 진하게 설정 */
+    border-radius: 10px; /* 테두리를 둥글게 만듭니다. */
+    margin: 50px auto; /* 가운데 정렬을 위해 좌우 여백을 auto로 설정 */
+    border-style: solid;
+    border-width: 2px;
+}
+
+.seimg {
+    display: inline-block; /* 이미지를 블록 요소로 표시하여 가운데 정렬 가능하게 합니다. */
+    vertical-align: middle; /* 이미지를 수직으로 가운데 정렬합니다. */
+    max-width: 100%; /* 이미지가 부모 요소의 너비를 초과하지 않도록 최대 너비 설정 */
+    max-height: 100%; /* 이미지가 부모 요소의 높이를 초과하지 않도록 최대 높이 설정 */
+}
+
