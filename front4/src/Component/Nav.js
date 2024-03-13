@@ -1,7 +1,8 @@
 import '../Css/nav.css';
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import Search from '../testttt/search.png';
+import Mypag from '../testttt/mypage.png';
 function Nav() {
     const [userId, setUserId] = useState('');
 
@@ -23,13 +24,13 @@ function Nav() {
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
-                        <Link to={"/"} className="right"></Link>
+                        <Link to={"/"} className="right"><img className={"searchicon"} src={Search} alt="하이"/></Link>
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
                         {/*<Link to={"/"} className={"downright"}>네컷 생성</Link>*/}
                         <Link to={"/Board"} className={"downright"}>게시판</Link>
-                        <Link to={"/mypage/login"} className={"downright"}>마이페이지</Link>
+                        <Link to={"/"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>
             </nav>

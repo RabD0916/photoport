@@ -1,9 +1,12 @@
 .navbar{
-
     font-weight: bold;
 }
 a{
     text-decoration: none;
+}
+
+.center{
+    color: pink;
 }
 .centerLink {
     padding-top: 20px;
@@ -13,22 +16,20 @@ a{
     text-align: right;
 }
 .searchLink {
+    position: fixed; /* 화면에 고정된 위치에 요소를 배치합니다. */
+    top: 0; /* 화면의 맨 위에 위치하도록 설정합니다. */
+    right: 0; /* 화면의 오른쪽에 위치하도록 설정합니다. */
+    padding: 10px;
     display: block;
     text-align: right; /* 검색하기 링크를 오른쪽 정렬합니다. */
     margin-bottom: 10px; /* 검색하기 링크 아래 여백을 추가합니다. */
 }
 
-.otherLinks {
-    display: inline-block;
 
-}
 .otherLinks a {
     display: inline-block;
-    margin-left: 10px; /* 다른 링크들 사이의 간격을 조절합니다. */
-}
-
-.centerLink a:hover {
-    color: red;
+    margin-left: 20px; /* 다른 링크들 사이의 간격을 조절합니다. */
+    padding: 10px;
 }
 
 .rightLinks a {
@@ -39,6 +40,16 @@ a{
     color: red;
 }
 
+.searchicon{
+    width: 30px;
+    height: 30px;
+}
+.mypageicon {
+    width: 30px;
+}
+.downright{
+    color: hotpink;
+}
 
 
 
