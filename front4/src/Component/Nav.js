@@ -28,9 +28,8 @@ function Nav() {
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
-                        {/*<Link to={"/"} className={"downright"}>네컷 생성</Link>*/}
                         <Link to={"/Board"} className={"downright"}>게시판</Link>
-                        <Link to={"/"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
+                        <Link to={"/login"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>
             </nav>

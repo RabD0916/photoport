@@ -10,6 +10,7 @@ import BoardWrite from "./Board/BoardWrite";
 import Footer from "./Component/footer";
 import InGallery from "./Component/InGallery";
 import InCategory from "./Component/InCategory";
+import Login from "./mypage/login";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/write"} element={<BoardWrite/>}></Route>
+                  <Route path={"/login"} element={<Login/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>
