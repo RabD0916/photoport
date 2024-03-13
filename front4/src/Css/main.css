@@ -27,8 +27,8 @@
 .mainfirst{
     font-weight: bold;
     font-size: 20px;
-    background-color: #777777;
-    height: 700px;
+    background-color: #c6c4c4;
+    height: 500px;
     padding-top: 20px;
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
@@ -41,7 +41,7 @@
 }
 
 .mainsecond{
-    background-color: white;
+    background-color: #c6c4c4;
     height: 700px;
     padding-top: 20px;
 }
@@ -80,5 +80,10 @@
     vertical-align: middle; /* 이미지를 수직으로 가운데 정렬합니다. */
     max-width: 100%; /* 이미지가 부모 요소의 너비를 초과하지 않도록 최대 너비 설정 */
     max-height: 100%; /* 이미지가 부모 요소의 높이를 초과하지 않도록 최대 높이 설정 */
+}
+.fontfont{
+    font-size: 20px;
+    margin:20px;
+    font-weight: bold;
 }
 

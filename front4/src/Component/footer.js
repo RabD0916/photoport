@@ -18,6 +18,7 @@ function footer(){
                 </div>
                 <div className="footerright">
                     <img className="map" src="/map.jpg" alt="지도" />
+                    {/*<div className={"linkiss"}>링크들</div>*/}
                 </div>
             </div>
         </div>
