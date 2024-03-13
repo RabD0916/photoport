@@ -3,7 +3,7 @@
     font-weight: bold;
 }
 a{
-    text-decoration: none; /*텍스트 글자 밑줄 제거*/
+    text-decoration: none;
 }
 .centerLink {
     padding-top: 20px;
@@ -27,7 +27,7 @@ a{
     margin-left: 10px; /* 다른 링크들 사이의 간격을 조절합니다. */
 }
 .centerLink a {
-    /*background-color: #abcdef;*/
+    background-color: #abcdef;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -35,11 +35,11 @@ a{
 }
 
 .centerLink a:hover {
-    /*background-color: #95d5ff; !* 호버 상태일 때의 배경색을 지정합니다. *!*/
+    background-color: #95d5ff; /* 호버 상태일 때의 배경색을 지정합니다. */
 }
 
 .rightLinks a {
-    /*background-color: #fedcba;*/
+    background-color: #fedcba;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -47,34 +47,31 @@ a{
 }
 
 .rightLinks a:hover {
-    /*갤러리. 게시판. 마이페이지 마우스 접근시 핑크*/
-    /*background-color: #ffbdbd;*/
-    color: #ff0000;
-
+    background-color: #ffbdbd;
 }
 
 .searchLink a {
-    /*background-color: #aabbcc;*/
-    /*padding: 10px;*/
-    /*border-radius: 5px;*/
-    /*box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);*/
-    /*transition: background-color 0.3s ease;*/
+    background-color: #aabbcc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
 .searchLink a:hover {
-    /*background-color: #c9dfff;*/
+    background-color: #c9dfff;
 }
 
 .otherLinks a {
-    /*background-color: #ccbbaa;*/
-    /*padding: 10px;*/
-    /*border-radius: 5px;*/
-    /*box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);*/
-    /*transition: background-color 0.3s ease;*/
+    background-color: #ccbbaa;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
 .otherLinks a:hover {
-    /*background-color: #ffeb99;*/
+    background-color: #ffeb99;
 }
 
 

@@ -23,7 +23,7 @@ function Nav() {
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
-                        <Link to={"/"} className={"right"}>검색 하기</Link>
+                        <Link to={"/"} className="right"></Link>
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
