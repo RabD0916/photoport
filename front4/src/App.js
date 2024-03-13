@@ -3,7 +3,6 @@ import Nav from './Component/Nav';
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Component/Main";
-// import Footer from "./Component/footer";
 import MyPage from "./Component/MyPage";
 import Create from "./CreateCut/Create";
 import BoardList from "./Board/BoardList";

@@ -27,9 +27,9 @@ function Nav() {
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
-                        <Link to={"/"} className={"downright"}>네컷 생성</Link>
-                        <Link to={"/"} className={"downright"}>마이페이지</Link>
+                        {/*<Link to={"/"} className={"downright"}>네컷 생성</Link>*/}
                         <Link to={"/Board"} className={"downright"}>게시판</Link>
+                        <Link to={"/"} className={"downright"}>마이페이지</Link>
                     </div>
                 </div>
             </nav>
