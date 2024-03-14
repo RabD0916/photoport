@@ -23,7 +23,7 @@ const InCategory = () => {
     const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
-        fetch("/sendMedia/" + userId + "/" + cateId)
+        fetch("/sendMedia/" + cateId)
             .then((res) => {
                 return res.json();
             })

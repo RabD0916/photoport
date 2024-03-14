@@ -1,17 +1,24 @@
 package com.example.webphoto;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.util.HashMap;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @RestController
 public class GalleryController {
+    private final String path = "./front4/public/images/";
+    private String nowUser = "";
+    private String nowCate = "";
+
     @GetMapping("/sendCategory/{userId}")
-    public String[][] send(@PathVariable String userId) {
-        String dir = "./front4/public/images/" + userId;
+    public String[][] sendCategory(@PathVariable String userId) {
+        String dir = path + userId;
         String[] cateNames = getFileNames(dir);
         String[][] cateInfo;
 
@@ -29,20 +36,95 @@ public class GalleryController {
                     cateInfo[i][1] = mediaNames[0];
                 }
             }
+            this.nowUser = userId;
         }
         return cateInfo;
     }
 
-    @GetMapping("/sendMedia/{userId}/{cateId}")
-    public String[] send(@PathVariable String userId, @PathVariable String cateId) {
-        String dir = "./front4/public/images/" + userId + "/" + cateId;
+    @GetMapping("/sendMedia/{cateName}")
+    public String[] sendMedia(@PathVariable String cateName) {
+        String dir = path + nowUser + "/" + cateName;
         String[] mediaNames = getFileNames(dir);
 
         if(mediaNames == null) {
             mediaNames = new String[1];
             mediaNames[0] = "Media Not Found";
+        } else {
+            nowCate = cateName;
         }
         return mediaNames;
+    }
+
+    @PostMapping("/createCategory/{cateName}")
+    public String createCategory(@PathVariable String cateName) {
+        String dir = path + nowUser + "/" + cateName;
+        File folder = new File(dir);
+        String result;
+        if(!folder.exists()) {
+            result = folder.mkdir() ? "Success" : "Fail";
+        } else {
+            result = "Already Exist";
+        }
+        return result;
+    }
+
+    @DeleteMapping("/deleteCategory/{cateName}")
+    public String deleteCategory(@PathVariable String cateName) {
+        String dir = path + nowUser + "/" + cateName;
+        return delete(dir);
+    }
+
+    @DeleteMapping("/forceDeleteCategory/{cateName}")
+    public String forceDeleteCategory(@PathVariable String cateName) {
+        String dir = path + nowUser + "/" + cateName;
+        for(String mediaName : getFileNames(dir)) {
+            String mediaDir = dir + "/" + mediaName;
+            String result = delete(mediaDir);
+            if(!result.equals("Success")) {
+                return result;
+            }
+        }
+        return delete(dir);
+    }
+
+    @PatchMapping("/moveMedia/{nextCateName}/{mediaNames}")
+    public String moveMedia(@PathVariable String nextCateName, @PathVariable String mediaNames) {
+        String[] arr = mediaNames.split(",");
+        for(String mediaName : arr) {
+            String prevDir = path + nowUser + "/" + nowCate + "/" + mediaName;
+            Path prevPath = Paths.get(prevDir);
+            Path nextPath = Paths.get(path + nowUser + "/" + nextCateName + "/" + mediaName);
+            try {
+                Files.move(prevPath, nextPath, StandardCopyOption.ATOMIC_MOVE);
+                delete(prevDir);
+            } catch(Exception e) {
+                e.printStackTrace();
+                return "Fail";
+            }
+        }
+        return "Success";
+    }
+
+    @DeleteMapping("/deleteMedia/{mediaNames}")
+    public String deleteMedia(@PathVariable String mediaNames) {
+        String[] arr = mediaNames.split(",");
+        for(String mediaName : arr) {
+            String dir = path + nowUser + "/" + nowCate + "/" + mediaName;
+            String result = delete(dir);
+            if(!result.equals("Success")) {
+                return result;
+            }
+        }
+        return "Success";
+    }
+
+    public String delete(String dir) {
+        File file = new File(dir);
+        if(file.exists()) {
+            return file.delete() ? "Success" : "Fail";
+        } else {
+            return "Not Exist";
+        }
     }
 
     public String[] getFileNames(String dir) {
