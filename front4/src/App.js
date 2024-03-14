@@ -21,6 +21,7 @@ import Noticepage from "./Notice/Notice";
 function App() {
   return (
       <div className="App">
+
           <BrowserRouter>
               <Nav/>
               <Routes>

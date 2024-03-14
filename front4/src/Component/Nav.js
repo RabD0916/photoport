@@ -18,17 +18,17 @@ function Nav() {
     }
     return (
         <>
-            <nav className="navbar">
+            <nav className="main_navbar">
                 <div className="centerLink">
-                    <Link to={"/"} className={"center"}>포토포트</Link>
+                    <Link to={"/"} className={"center main_a"}>포토포트</Link>
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
                         <Link to={"/"} className="right"><img className={"searchicon"} src={Search} alt="하이"/></Link>
                     </div>
                     <div className="otherLinks">
-                        <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
-                        <Link to={"/Board"} className={"downright"}>게시판</Link>
+                        <Link to={"/gallery/" + userId} className={"downright main_a"} onClick={isUserIdEmpty}>갤러리</Link>
+                        <Link to={"/Board"} className={"downright main_a"}>게시판</Link>
                         <Link to={"/login"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>

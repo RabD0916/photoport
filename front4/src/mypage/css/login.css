@@ -2,14 +2,13 @@
     margin-top: 80px;
     display: inline-block;
     text-align: center;
-
 }
 label{
     width: 400px;
     margin-bottom: 7px;
 }
 .login{
-    margin-top: 80px;
+    margin-top: 20px;
     margin-bottom: 80px;
     display: inline-block;
     text-align: center;
@@ -19,4 +18,52 @@ label{
 }
 .fbtn{
     width: 400px;
+}
+.under_b{
+    display: flex;
+    justify-content: center;
+}
+.under_b a{
+    display: inline-block;
+    margin-top: 100px;
+    text-decoration: none;
+}
+.v-line {
+    margin-top: 100px;
+    float: left;
+    border : solid 1px #32a1ce;
+    height : 20px;
+}
+.idFind{
+    float: left;
+    width: 20%;
+}
+.pwFind{
+    float: left;
+    width: 20%;
+}
+.sign{
+    float: left;
+    width: 20%;
+}
+.log_mark{
+
+}
+
+
+.oauth2_logo{
+    margin-top: 20px;
+    display: inline-block;
+}
+.oauth1{
+    float: left;
+    width: 20%;
+}
+.oauth2{
+    float: left;
+    width: 20%;
+}
+.oauth3{
+    float: left;
+    width: 20%;
 }

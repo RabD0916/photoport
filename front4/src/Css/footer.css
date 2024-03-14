@@ -1,8 +1,8 @@
-.mainfooter {
+.main_footer {
     background-color: black;
     color: white;
 }
-.footerfirst{
+.footer_first{
     font-weight: bold;
     font-size: 20px;
     display: flex;
@@ -10,30 +10,31 @@
     align-items: center; /* 세로 중앙 정렬 */
 }
 
-.footerleft {
+.footer_left {
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
     padding: 30px;
     text-align: left;
 }
-.footerright{
+.footer_right{
     flex: 1;
 }
-.map{
+.naver_map{
     margin-top: 30px;
     width: 300px;
     height: 300px;
 }
-.application{
+.app_logo{
     width: 150px;
     height: 150px;
     margin: 50px;
 }
-.googlebutton{
+.google_button{
     width: 150px;
     height: 50px;
     margin-left: 40px;
 }
-/*.linkiss {*/
-/*    background-color: #c6c4c4;*/
-/*    width: 100px;*/
-/*}*/
+.Line{
+    border : 0px;
+    border-top: 5px solid #ffffff;
+}
+
