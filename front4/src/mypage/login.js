@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import "./css/login.css"
+
+import {Link} from "react-router-dom";
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
 
@@ -35,12 +37,14 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
     return (
         <div>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossOrigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossOrigin="anonymous"></script>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossOrigin="anonymous"/>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
             <h2>
                 로그인
             </h2>
-            <form onSubmit={handleSubmit} class="row g-3">
+            <div className="login">
+            <form onSubmit={handleSubmit} className="form1 g-3">
                 <label>
                     <input type="text" className="form-control"name="username" value={formData.username} onChange={handleChange}  placeholder="아이디를 입력해 주세요" />
                 </label>
@@ -50,9 +54,21 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                 </label>
                 <br />
                 <div className="col-auto">
-                <button type="submit" className="btn btn-primary mb-3">로그인</button>
+                    <button type="button" className="btn btn-success fbtn">Success</button>
                 </div>
             </form>
+                <div>
+                    <li>
+                        <Link to={"/signup"} className={"center"}>회원가입</Link>
+                    </li>
+                    <li>
+                        <Link to={"/findID"} className={"center"}>아이디찾기</Link>
+                    </li>
+                    <li>
+                        <Link to={"/findPW"} className={"center"}>비밀번호찾기</Link>
+                    </li>
+                </div>
+            </div>
         </div>
     );
 }

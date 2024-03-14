@@ -1,0 +1,22 @@
+.form1{
+    margin-top: 80px;
+    display: inline-block;
+    text-align: center;
+
+}
+label{
+    width: 400px;
+    margin-bottom: 7px;
+}
+.login{
+    margin-top: 80px;
+    margin-bottom: 80px;
+    display: inline-block;
+    text-align: center;
+    width: 567px;
+    height: 360px;
+    background-color: #caf3f3;
+}
+.fbtn{
+    width: 400px;
+}

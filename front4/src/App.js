@@ -11,7 +11,9 @@ import Footer from "./Component/footer";
 import InGallery from "./Component/InGallery";
 import InCategory from "./Component/InCategory";
 import Login from "./mypage/login";
-
+import Signup from "./mypage/signup";
+import FindID from "./mypage/findID";
+import FindPW from "./mypage/findPW";
 
 function App() {
   return (
@@ -27,6 +29,9 @@ function App() {
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/write"} element={<BoardWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
+                  <Route path={"/signup"} element={<Signup/>}></Route>
+                  <Route path={"/findID"} element={<FindID/>}></Route>
+                  <Route path={"/findPW"} element={<FindPW/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

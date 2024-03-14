@@ -1,8 +1,8 @@
-const signup=() =>{
+const findPW=() =>{
     return(
         <div>
 
         </div>
     )
 }
-export default signup;
+export default findPW;

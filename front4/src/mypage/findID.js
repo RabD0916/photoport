@@ -1,8 +1,8 @@
-const signup=() =>{
+const findID=() =>{
     return(
         <div>
 
         </div>
     )
 }
-export default signup;
+export default findID;
