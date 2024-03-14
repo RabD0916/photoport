@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import "../BoardCss/BoardWrite.css"
+import "./BoardCss/BoardWrite.css"
 
 const BoardWrite = () => {
     const navigate = useNavigate();

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../Css/main.css';
+import Mainlogo from '../testttt/photoport.png';
+import Eventpage from '../Event/Event'
+import {Link} from "react-router-dom";
 
 const Main = (props) => {
     const [slideIndex, setSlideIndex] = useState(0);
@@ -18,13 +21,13 @@ const Main = (props) => {
                 <img className="center1" src="/backbaxk.jpg" alt="센터1"/>
             </div>
             <div className="mainBar">
-                <li className="mainMenu left1">공지 사항</li>
-                <li className="mainMenu right1">이벤트</li>
+                <li className="mainMenu left1"><Link to={"/Notice"} className={"mainnav"}>공지사항</Link></li>
+                <li className="mainMenu right1"><Link to={"/Event"} className={"mainnav"}>이벤트</Link></li>
             </div>
-            <div className="fontfont">내가 좋아하는 최애와 함께 이벤트 참여하기</div>
+
             <div className="mainfirst">
-            <div className="firstleft">
-                    이벤트
+                <div className="firstleft">
+                    <img src={Mainlogo} className={"mainlogo"} alt={"메인로고"}/>
                 </div>
                 <div className="firstright">간편하게 스캔하여 저장하자!! 네컷앨범을 사용해 보세요</div>
             </div>
@@ -41,9 +44,10 @@ const Main = (props) => {
                     <div className="second3">포즈3</div>
                 </div>
             </div>
+            <div className="fontfont">내가 좋아하는 최애와 함께 이벤트 참여하기</div>
             <div className="mainthird">
                 <div className="third">
-                    사진관
+                    Hot Frame
                 </div>
             </div>
         </div>
