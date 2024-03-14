@@ -14,6 +14,9 @@ import Login from "./mypage/login";
 import Signup from "./mypage/signup";
 import FindID from "./mypage/findID";
 import FindPW from "./mypage/findPW";
+import Eventpage from "./Event/Event";
+import Noticepage from "./Notice/Notice";
+
 
 function App() {
   return (
@@ -29,6 +32,8 @@ function App() {
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/write"} element={<BoardWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
+                  <Route path={"/Event"} element={<Eventpage/>}></Route>
+                  <Route path={"/Notice"} element={<Noticepage/>}></Route>
                   <Route path={"/signup"} element={<Signup/>}></Route>
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
