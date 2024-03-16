@@ -18,17 +18,84 @@ const InGallery = () => {
         getCategoryList().then(r => setCate(r));
     }, [userId]);
 
+    async function createCate(cateName) {
+        const result = await axios.post(
+            `http://localhost:3000/createCategory/${cateName}`
+        )
+        return result.data;
+    }
 
+    async function deleteCate(cateName) {
+        const result = await axios.delete(
+            `http://localhost:3000/deleteCategory/${cateName}`
+        )
+        return result.data;
+    }
+
+    async function forceDeleteCate(cateName) {
+        const result = await axios.delete(
+            `http://localhost:3000/forceDeleteCategory/${cateName}`
+        )
+        return result.data;
+    }
 
     const createCategory = e => {
+        const cateName = prompt("생성할 카테고리 이름을 입력하세요.");
+        if(cateName === null) {
+            return;
+        }
+        if(cateName === "") {
+            alert("생성할 카테고리의 이름을 입력하지 않았습니다.")
+            return;
+        }
+        createCate(cateName).then((result) => {
+            if(result === "Success") {
+                alert("카테고리 생성 성공");
+                window.location.reload();
+            } else if(result === "Already Exist") {
+                alert("이미 있는 카테고리 이름입니다.");
+            } else {
+                alert("카테고리 생성 실패");
+            }
+        });
+    }
 
+    const deleteCategory = e => {
+        const cateName = prompt("삭제할 카테고리 이름을 입력하세요.");
+        if(cateName === null) {
+            return;
+        }
+        if(cateName === "") {
+            alert("삭제할 카테고리의 이름을 입력하지 않았습니다.")
+            return;
+        }
+        deleteCate(cateName).then((result) => {
+            if(result === "Success") {
+                alert("카테고리 삭제 성공");
+                window.location.reload();
+                return "";
+            }
+            alert("내부에 사진이 있어 삭제하지 못했습니다.");
+            if(window.confirm("내부의 사진까지 삭제하시겠습니까?")) {
+                forceDeleteCate(cateName).then(result => {
+                    if(result === "Success") {
+                        alert("카테고리 삭제 성공");
+                        window.location.reload();
+                        return "";
+                    }
+                    alert("카테고리 삭제 실패");
+                });
+            }
+
+        });
     }
 
     return (
         <>
             <h1>{userId}의 갤러리</h1>
             <div>
-                <Link to={"rightLinks"} onClick={createCategory} className={"downright"}>카테고리 생성</Link>
+                <a onClick={createCategory} className={"downright"}>카테고리 생성</a>
+                <a onClick={deleteCategory} className={"downright"}>카테고리 삭제</a>
             </div>
             <div className={"cate-list"}>{cate.map((cateId) => (
                 <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
