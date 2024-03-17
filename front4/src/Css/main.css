@@ -1,3 +1,12 @@
+.hi{
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    display: inline-block;
+    width: 30%;
+    margin-right: 3%; /* 각 요소 사이의 간격 조정 */
+    box-sizing: border-box;
+}
 .center1{
     width: 100%;
     height: auto;
@@ -21,13 +30,13 @@
 }
 
 .right1 {
-    background-color: gray;
+    background-color: #c5c1c1;
     color: white;
 }
 .mainfirst{
     font-weight: bold;
     font-size: 20px;
-    background-color: #c6c4c4;
+    background-color: #eee0e0;
     height: 500px;
     padding-top: 20px;
     display: flex;
@@ -41,7 +50,7 @@
 }
 
 .mainsecond{
-    background-color: #c6c4c4;
+    background-color: #eee0e0;
     height: 700px;
     padding-top: 20px;
 }
@@ -98,5 +107,11 @@
 
 .mainnav:hover {
     color: yellow; /* 호버 시 텍스트 색상 변경 */
+}
+
+.frame{
+    width: 30%;
+    height: auto;
+    margin : 20px;
 }
 

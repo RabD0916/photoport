@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '../Css/main.css';
 import Mainlogo from '../testttt/photoport.png';
-import Eventpage from '../Event/Event'
 import {Link} from "react-router-dom";
+import Frame1 from "../testttt/frame1.jpg"
+import Frame2 from "../testttt/frame2.jpg"
+import Frame3 from "../testttt/frame3.jpg"
 
 const Main = (props) => {
     const [slideIndex, setSlideIndex] = useState(0);
@@ -44,10 +46,12 @@ const Main = (props) => {
                     <div className="second3">포즈3</div>
                 </div>
             </div>
-            <div className="fontfont">내가 좋아하는 최애와 함께 이벤트 참여하기</div>
+            <div className="fontfont">원하는 프레임을 골라 자신만의 네컷을 만들자!</div>
             <div className="mainthird">
                 <div className="third">
-                    Hot Frame
+                    <img className={"frame"} src={Frame1} alt={"프레임1"}/>
+                    <img className={"frame"} src={Frame2} alt={"프레임2"}/>
+                    <img className={"frame"} src={Frame3} alt={"프레임3"}/>
                 </div>
             </div>
         </div>
