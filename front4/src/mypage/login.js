@@ -67,7 +67,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                     <img src={Kakao} className="oauth3" alt="카카오" />
                 </div>
                 <div className="under_b">
-                        <Link to={"/signup"} className={"sign"}>SIUP</Link>
+                        <Link to={"/join"} className={"sign"}>SIUP</Link>
                         <div className='v-line'></div>
                         <Link to={"/findID"} className={"idFind"}>FIND ID</Link>
                         <div className='v-line'></div>

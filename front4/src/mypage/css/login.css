@@ -25,11 +25,11 @@ label{
 }
 .under_b a{
     display: inline-block;
-    margin-top: 100px;
+    margin-top: 30px;
     text-decoration: none;
 }
 .v-line {
-    margin-top: 100px;
+    margin-top: 30px;
     float: left;
     border : solid 1px #32a1ce;
     height : 20px;
@@ -57,13 +57,16 @@ label{
 }
 .oauth1{
     float: left;
-    width: 20%;
+    width: 30%;
+    margin-right: 10px;
 }
 .oauth2{
     float: left;
-    width: 20%;
+    width: 30%;
+    margin-right: 10px;
 }
 .oauth3{
     float: left;
-    width: 20%;
+    width: 30%;
+    margin-right: 10px;
 }
