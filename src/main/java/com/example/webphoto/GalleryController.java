@@ -87,9 +87,10 @@ public class GalleryController {
         return delete(dir);
     }
 
-    @PatchMapping("/moveMedia/{nextCateName}/{mediaNames}")
-    public String moveMedia(@PathVariable String nextCateName, @PathVariable String mediaNames) {
+    @PatchMapping("/moveMedia/{mediaNames}/{nextCateName}")
+    public String moveMedia(@PathVariable String mediaNames, @PathVariable String nextCateName) {
         String[] arr = mediaNames.split(",");
+        System.out.println(nextCateName);
         for(String mediaName : arr) {
             String prevDir = path + nowUser + "/" + nowCate + "/" + mediaName;
             Path prevPath = Paths.get(prevDir);

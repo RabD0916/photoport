@@ -1,4 +1,5 @@
 import '../Css/InGallery.css';
+import '../Css/nav.css';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
@@ -50,10 +51,10 @@ const InGallery = () => {
         }
         createCate(cateName).then((result) => {
             if(result === "Success") {
-                alert("카테고리 생성 성공");
+                alert("카테고리 생성 완료");
                 window.location.reload();
             } else if(result === "Already Exist") {
-                alert("이미 있는 카테고리 이름입니다.");
+                alert("이미 존재하는 카테고리 이름입니다.");
             } else {
                 alert("카테고리 생성 실패");
             }
@@ -71,22 +72,22 @@ const InGallery = () => {
         }
         deleteCate(cateName).then((result) => {
             if(result === "Success") {
-                alert("카테고리 삭제 성공");
+                alert("카테고리 삭제 완료");
                 window.location.reload();
-                return "";
+                return;
             }
             alert("내부에 사진이 있어 삭제하지 못했습니다.");
-            if(window.confirm("내부의 사진까지 삭제하시겠습니까?")) {
-                forceDeleteCate(cateName).then(result => {
-                    if(result === "Success") {
-                        alert("카테고리 삭제 성공");
-                        window.location.reload();
-                        return "";
-                    }
-                    alert("카테고리 삭제 실패");
-                });
+            if(!window.confirm("내부의 사진까지 삭제하시겠습니까?")) {
+                return;
             }
-
+            forceDeleteCate(cateName).then(result => {
+                if(result === "Success") {
+                    alert("카테고리 삭제 완료");
+                    window.location.reload();
+                    return;
+                }
+                alert("카테고리 삭제 실패");
+            });
         });
     }
 
