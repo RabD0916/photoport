@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #ffffff;
 }
 
 .mount1{ animation: 1.5s ease-in-out loadEffect1; }

@@ -93,20 +93,23 @@ const InGallery = () => {
 
     return (
         <>
-            <h1>{userId}의 갤러리</h1>
-            <div>
-                <a onClick={createCategory} className={"downright"}>카테고리 생성</a>
-                <a onClick={deleteCategory} className={"downright"}>카테고리 삭제</a>
+            <h1>{userId}'s Gallery</h1>
+            <div className={"galnav"}>
+                <div><a onClick={createCategory} className={"Catete"}>카테고리 생성</a></div>
+                {/*<div><a onClick={deleteCategory} className={"Catete"}>카테고리 삭제</a></div>*/}
             </div>
+            <div className={"rowbar"}></div>
             <div className={"cate-list"}>{cate.map((cateId) => (
                 <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
                     {cateId[1] !== "Empty" ?
-                        <img src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]} alt={cateId[1]} width="225"
+                        <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
+                             alt={cateId[1]} width="225"
                              height="225px"></img>
                         : null}
-                    <div>{cateId[0]}</div>
+                    <div className={"cate-name"}>{cateId[0]}</div>
                 </Link>
             ))}
+                <div><a onClick={createCategory} className={"cate-create"}>카테고리 생성</a></div>
             </div>
         </>
     );

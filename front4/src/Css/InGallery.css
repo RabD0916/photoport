@@ -5,15 +5,20 @@
 }
 
 .cate{
-    display: block;
-    width: 225px;
+    display: inline-block;
+    /*width: 225px;*/
     text-align: center;
     text-decoration:none;
     color: black;
     float:left;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 30px;
+    /*margin-left: 10px;*/
+    /*margin-right: 10px;*/
+    /*margin-bottom: 30px;*/
+    width: 30%; /* 또는 적절한 값으로 설정 */
+    margin: 1.5% 1.5%; /* 적절한 간격 설정 */
+    box-sizing: border-box; /* 내부 패딩과 보더를 포함한 전체 너비 유지 */
+    border: 2px solid black;
+    border-radius: 15px;
 }
 
 .cate-name{
@@ -21,6 +26,60 @@
     margin-bottom: 4px;
 }
 
-.cate-list{
-    height: 1000px;
+.cate-list {
+    margin: 10px;
+    display: flex; /* 또는 display: grid; */
+    flex-wrap: wrap; /* 필요에 따라 설정 */
+
 }
+
+.Catete{
+    font-weight: bold;
+    width: 20%;
+    color: #fdd1d6;
+    margin: 20px;
+    font-size: 30px;
+}
+.rowbar{
+    border-bottom: 1px solid black; /* 가로로 한 줄 그어줌 */
+    margin-left: 200px;
+    margin-right: 200px;/* 원하는 간격 설정 */
+}
+.galnav{
+    margin: 20px;
+    width: 80%;
+    display: inline;
+}
+.cate-name{
+    margin: 20px;
+    color: #95d5ff;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 15px;
+
+}
+.cate-image{
+    border-radius: 15px;
+}
+h1{
+    background-color: #fdd1d6;
+    width: 80%;
+    text-align: center;
+    display: inline-block;
+    border: 3px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    font-size: 50px;
+}
+.cate-create {
+    margin:auto;
+    display: inline-block;
+    border: 2px solid black; /* 테두리 스타일 */
+    width: 300px; /* 너비 설정 */
+    height: 300px; /* 높이 설정 */
+    line-height: 150px; /* 텍스트 수직 정렬을 위해 */
+    text-align: center; /* 텍스트 가로 정렬을 위해 */
+    border-radius: 15px;
+    /* 추가적인 스타일은 필요에 따라 여기에 작성 */
+}
+
