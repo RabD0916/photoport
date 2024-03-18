@@ -1,20 +1,40 @@
+.gal_main{
+    height: 100%;
+}
 .product-list{
     width: 735px;
     margin-left: auto;
     margin-right: auto;
 }
+.not_box{
+    margin-top: 20px;
+    padding-top: 80%;
+}
 
 .cate{
     display: inline-block;
-    /*width: 225px;*/
-    text-align: center;
     text-decoration:none;
     color: black;
     float:left;
-    /*margin-left: 10px;*/
-    /*margin-right: 10px;*/
-    /*margin-bottom: 30px;*/
     width: 30%; /* 또는 적절한 값으로 설정 */
+    height: 80%;
+    margin: 1.5% 1.5%; /* 적절한 간격 설정 */
+    box-sizing: border-box; /* 내부 패딩과 보더를 포함한 전체 너비 유지 */
+    border: 2px solid black;
+    border-radius: 15px;
+}
+.create_p{
+    display: inline-block;
+    width: 80%;
+    height: 80%;
+}
+.cate_create{
+    display: inline-block;
+    text-decoration:none;
+    color: black;
+    width: 30%;
+    height: 80%;
+    float:left;
     margin: 1.5% 1.5%; /* 적절한 간격 설정 */
     box-sizing: border-box; /* 내부 패딩과 보더를 포함한 전체 너비 유지 */
     border: 2px solid black;
@@ -22,15 +42,16 @@
 }
 
 .cate-name{
+    display:inline-block;
+    width: 80%;
     margin-top: 20px;
     margin-bottom: 4px;
 }
 
 .cate-list {
-    margin: 10px;
-    display: flex; /* 또는 display: grid; */
-    flex-wrap: wrap; /* 필요에 따라 설정 */
-
+    display: inline-block;
+    width: 98%;
+    height: 90%;
 }
 
 .Catete{
@@ -59,6 +80,7 @@
 
 }
 .cate-image{
+    margin-top: 20px;
     border-radius: 15px;
 }
 h1{
@@ -71,15 +93,5 @@ h1{
     padding: 20px;
     font-size: 50px;
 }
-.cate-create {
-    margin:auto;
-    display: inline-block;
-    border: 2px solid black; /* 테두리 스타일 */
-    width: 300px; /* 너비 설정 */
-    height: 300px; /* 높이 설정 */
-    line-height: 150px; /* 텍스트 수직 정렬을 위해 */
-    text-align: center; /* 텍스트 가로 정렬을 위해 */
-    border-radius: 15px;
-    /* 추가적인 스타일은 필요에 따라 여기에 작성 */
-}
+
 
