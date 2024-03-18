@@ -6,11 +6,11 @@ import Main from "./Component/Main";
 import Footer from "./Component/Footer";
 import InGallery from "./Component/InGallery";
 import InCategory from "./Component/InCategory";
-import Login from "./mypage/login";
-import Signup from "./mypage/signup";
-import FindID from "./mypage/findID";
-import FindPW from "./mypage/findPW";
-import Join from "./mypage/join"
+import Login from "./mypage/Login";
+import Signup from "./mypage/Signup";
+import FindID from "./mypage/FindID";
+import FindPW from "./mypage/FindPW";
+import Join from "./mypage/Join"
 import Eventpage from "./Event/Event";
 import Noticepage from "./Notice/Notice";
 import Create from "./CreateCut/Create";

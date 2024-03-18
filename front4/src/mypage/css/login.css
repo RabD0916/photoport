@@ -70,3 +70,49 @@ label{
     width: 30%;
     margin-right: 10px;
 }
+
+.join_style{
+    display: inline-block;
+    width: 400px;
+    border: solid #000000;
+}
+.check_agree{
+    margin-top: 10px;
+    margin-bottom: 0px;
+    float: right;
+}
+.privacy_scroll{
+    width: 370px;
+    resize: none;
+}
+.all_agree{
+    margin: auto;
+    text-align: right;
+}
+
+.next_button:link, .next_button:visited {
+    background-color: #ace2f1;
+    color: #000000;
+    padding: 10px 180px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+}
+.next_button:hover, .next_button:active {
+    background-color: #7696a4;
+}
+
+.sign_p{
+    margin: 0px;
+    text-align: left;
+    width: 120px;
+}
+.sign_input{
+    margin: 0px;
+    margin-bottom: 20px;
+    float: left;
+}
+.call_input{
+    width: 100px;
+}
