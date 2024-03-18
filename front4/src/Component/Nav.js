@@ -32,9 +32,9 @@ function Nav() {
                         <Link to={"/login"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>
+            <input type={"text"} placeholder={"유저 아이디"} value={userId} onChange={saveUserId}></input>
             </nav>
 
-            <input type={"text"} placeholder={"유저 아이디"} value={userId} onChange={saveUserId}></input>
         </>
     );
 }

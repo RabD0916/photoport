@@ -51,7 +51,7 @@
 
 .mainsecond{
     background-color: #eee0e0;
-    height: 700px;
+    height: auto;
     padding-top: 20px;
 }
 .second, .third{
@@ -67,13 +67,13 @@
 
 .mainthird{
     background-color: #fdd1d6;
-    height: 500px;
+    height: auto;
     padding-top: 20px;
 }
 
 .second1 , .second2 , .second3{
     width: 400px; /* 너비를 400px로 설정 */
-    height: 450px; /* 높이를 450px로 설정 */
+    height: auto; /* 높이를 450px로 설정 */
     background-color: pink; /* 배경색을 분홍색으로 설정 */
     text-align: center; /* 내부 요소를 가운데 정렬 */
     line-height: 450px; /* 내부 요소를 수직으로 가운데 정렬 */
@@ -96,13 +96,14 @@
     font-weight: bold;
 }
 .mainlogo{
-    width: 30%;
-    height: 30%;
+    width: 300px;
+    height: auto;
     border-radius: 15px;
 }
 .mainnav {
     color: white;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .mainnav:hover {
@@ -113,5 +114,8 @@
     width: 30%;
     height: auto;
     margin : 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
 }
 

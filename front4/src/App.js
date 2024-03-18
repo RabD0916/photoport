@@ -3,7 +3,7 @@ import Nav from './Component/Nav';
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Component/Main";
-import Footer from "./Component/footer";
+import Footer from "./Component/Footer";
 import InGallery from "./Component/InGallery";
 import InCategory from "./Component/InCategory";
 import Login from "./mypage/login";

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "../Css/footer.css";
 import Mainlogo from '../testttt/photoport.png';
-function footer(){
+function Footer(){
+
     return(
         <div className="main_footer">
             <div className="footer_first">
@@ -10,19 +11,18 @@ function footer(){
                     <div>조이름: 카고</div>
                     <div>조원 : 정재헌 ,김영우,신철규,권혁,유현수</div>
                     <div>문의:wogjs@naver.com</div>
-                <hr className="Line"/>
+                    <hr className="Line"/>
                     <div>
-                        <img className="application" src={Mainlogo} alt="인생네컷어플" />
-                        <img className="app_logo" src="/444.png" alt="인생네컷어플" />
+                        <img className="application" src={Mainlogo} alt="인생네컷어플"/>
                     </div>
 
                     <div>
-                        <img className="google_button" src="/googleplay.png" alt="다운로드버튼" />
+                        <img className="google_button" src="/googleplay.png" alt="다운로드버튼"/>
                     </div>
 
                 </div>
                 <div className="footer_right">
-                    <img className="naver_map" src="/map.jpg" alt="지도" />
+                    <img className="naver_map" src="/map.jpg" alt="지도"/>
                     {/*<div className={"linkiss"}>링크들</div>*/}
                 </div>
             </div>
@@ -31,4 +31,4 @@ function footer(){
     )
 }
 
-export default footer;
+export default Footer;

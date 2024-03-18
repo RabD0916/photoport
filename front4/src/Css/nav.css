@@ -1,5 +1,8 @@
 .main_navbar{
     font-weight: bold;
+    /*position: fixed;*/
+    /*z-index: 1;*/
+    /*width: 100%;*/ /*상단바 고정 */
 }
 .main_a{
     text-decoration: none;
