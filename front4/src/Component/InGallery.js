@@ -101,7 +101,7 @@ const InGallery = () => {
 
             <div className={"rowbar"}></div>
 
-            <div className={"cate-list"} style={{textAlign: "center"}}>
+            <div className={"cate-list"}>
                 {cate.map((cateId) => (
                     <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
                         {cateId[1] !== "Empty" ?

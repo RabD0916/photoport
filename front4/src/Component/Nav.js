@@ -27,8 +27,8 @@ function Nav() {
                         <Link to={"/"} className="right"><img className={"searchicon"} src={Search} alt="하이"/></Link>
                     </div>
                     <div className="otherLinks">
-                        <Link to={"/gallery/" + userId} className={"downright main_a"} onClick={isUserIdEmpty}>갤러리</Link>
-                        <Link to={"/Board"} className={"downright main_a"}>게시판</Link>
+                        <Link to={"/gallery/" + userId} className={"downright main_b"} onClick={isUserIdEmpty}>갤러리</Link>
+                        <Link to={"/Board"} className={"downright main_b"}>게시판</Link>
                         <Link to={"/login"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>

@@ -102,9 +102,10 @@ const InCategory = () => {
             {/*<h3>{cateId} 님의 카테고리</h3>*/}
             <div>[카테고리 이름] 카테고리</div>
             <div>
-                <a onClick={moveMedia} className={"MoveMedia"}>Media 이동</a>
-                <a onClick={deleteMedia} className={"DelMedia"}>Media 삭제</a>
+                <a onClick={moveMedia} className={"MoveMedia"}>미디어 이동</a>
+                <a onClick={deleteMedia} className={"DelMedia"}>미디어 삭제</a>
             </div>
+            <div className={"rowbar"}></div>
 
             {selectedMediaNames && (
                 <div>

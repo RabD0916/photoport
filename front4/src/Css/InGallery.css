@@ -1,6 +1,5 @@
 .gal_main {
     height: 100%;
-    text-align: center;
 }
 
 .product-list {
@@ -22,8 +21,8 @@
     text-align: center;
     text-decoration: none;
     color: black;
-    width: 15%;
-    height: auto;
+    width: 45%;
+    float: left;
     margin: 1.5%; /* 좌우 여백을 동일하게 설정 */
     box-sizing: border-box;
     border: 2px solid black;
@@ -90,7 +89,7 @@ h1 {
 }
 .CreCate{
     position: fixed;
-    bottom: 100px;
+    bottom: 70px;
     right: 100px;
     width: 50px;
     height: 50px;
@@ -108,7 +107,7 @@ h1 {
 
 .DelCate{
     position: fixed;
-    bottom: 160px;
+    bottom: 130px;
     right: 100px;
     width: 50px;
     height: 50px;
