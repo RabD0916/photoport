@@ -1,0 +1,48 @@
+
+.DelMedia, .MoveMedia{
+    font-size: 15px;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    background-color: #fdd1d6;
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center;
+    border: 2px solid #c42927;
+    border-radius: 15px;
+    transition: transform 0.2s ease-in-out; /* 변환 효과를 부드럽게 만듭니다 */
+}
+.DelMedia:hover {
+    transform: scale(1.1); /* 마우스를 가져다 대면 확대 효과를 줍니다 */
+}
+.MoveMedia:hover {
+    transform: scale(1.1); /* 마우스를 가져다 대면 확대 효과를 줍니다 */
+}
+.MoveMedia{
+    bottom: 100px;
+    right: 100px;
+}
+.DelMedia{
+    bottom: 160px;
+    right: 100px;
+}
+.Media-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 요소들을 수평 중앙 정렬 */
+    align-items: center; /* 요소들을 수직 중앙 정렬 */
+    width: 100%; /* 부모 요소에 가로 전체 너비 할당 */
+    height: auto; /* 높이 자동 조정 */
+}
+
+.Media-list .cate-list {
+    display: flex; /* 갤러리 요소들을 가로로 정렬 */
+    flex-wrap: wrap; /* 요소들이 넘칠 경우 다음 줄로 이동 */
+    justify-content: center; /* 요소들을 수평 중앙 정렬 */
+    align-items: center; /* 요소들을 수직 중앙 정렬 */
+}
+
+.Media-list .cate-list img {
+    margin: 10px; /* 이미지 간격 조절 */
+    border: 5px solid #a42323;
+}

@@ -93,26 +93,25 @@ const InGallery = () => {
 
     return (
         <div className={"gal_main"}>
-            <h1>{userId}'s Gallery</h1>
+            <h1>{userId}님의 추억</h1>
             <div className={"galnav"}>
-                <div><a onClick={createCategory} className={"Catete"}>카테고리 생성</a></div>
-                <div><a onClick={deleteCategory} className={"Catete"}>카테고리 삭제</a></div>
+                <button onClick={createCategory} className={"CreCate"}>추가</button>
+                <button onClick={deleteCategory} className={"DelCate"}>삭제</button>
             </div>
 
             <div className={"rowbar"}></div>
 
-
-            <div className={"cate-list"}>
+            <div className={"cate-list"} style={{textAlign: "center"}}>
                 {cate.map((cateId) => (
-                <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
-                    {cateId[1] !== "Empty" ?
-                        <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                             alt={cateId[1]} width="225px"
-                             height="225px"></img>
-                        : <div className={"not_box"}></div>}
-                    <div className={"cate-name"}>{cateId[0]}</div>
-                </Link>
-            ))}
+                    <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
+                        {cateId[1] !== "Empty" ?
+                            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
+                                 alt={cateId[1]} width="225px"
+                                 height="225px"></img>
+                            : <div className={"not_box"}></div>}
+                        <div className={"cate-name"}>{cateId[0]}</div>
+                    </Link>
+                ))}
             </div>
         </div>
     );

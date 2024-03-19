@@ -1,4 +1,4 @@
-import '../Css/InGallery.css';
+import '../Css/InCategory.css';
 import '../Css/nav.css';
 import React, {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
@@ -98,11 +98,12 @@ const InCategory = () => {
 
     return (
         <>
-            <h1>{userId}의 갤러리</h1>
-            <h3>{cateId} 카테고리</h3>
+            <h1>{userId} 님의 추억</h1>
+            {/*<h3>{cateId} 님의 카테고리</h3>*/}
+            <div>[카테고리 이름] 카테고리</div>
             <div>
-                <a onClick={moveMedia} className={"downright"}>미디어 이동</a>
-                <a onClick={deleteMedia} className={"downright"}>미디어 삭제</a>
+                <a onClick={moveMedia} className={"MoveMedia"}>Media 이동</a>
+                <a onClick={deleteMedia} className={"DelMedia"}>Media 삭제</a>
             </div>
 
             {selectedMediaNames && (
@@ -114,7 +115,7 @@ const InCategory = () => {
                 </div>
             )}
 
-            <GalleryContainer>
+            <GalleryContainer className={"Media-list"}>
                 <div className={"cate-list"}>{media.map((mediaName, index) => (
                     //<Link key={index} to={"/gallery/" + userId + "/" + cateId + "/" + mediaName} className={"cate"}>
                     <img src={"/images/" + userId + "/" + cateId + "/" + mediaName}
