@@ -1,4 +1,5 @@
 import '../Css/InGallery.css';
+import '../Css/nav.css';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
@@ -95,7 +96,7 @@ const InGallery = () => {
             <h1>{userId}'s Gallery</h1>
             <div className={"galnav"}>
                 <div><a onClick={createCategory} className={"Catete"}>카테고리 생성</a></div>
-                {/*<div><a onClick={deleteCategory} className={"Catete"}>카테고리 삭제</a></div>*/}
+                <div><a onClick={deleteCategory} className={"Catete"}>카테고리 삭제</a></div>
             </div>
 
             <div className={"rowbar"}></div>
@@ -106,13 +107,12 @@ const InGallery = () => {
                 <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
                     {cateId[1] !== "Empty" ?
                         <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                             alt={cateId[1]} width="80%"
-                             height="80%"></img>
+                             alt={cateId[1]} width="225px"
+                             height="225px"></img>
                         : <div className={"not_box"}></div>}
                     <div className={"cate-name"}>{cateId[0]}</div>
                 </Link>
             ))}
-               <a onClick={createCategory} className={"cate_create"}><div className={"create_p"}><p>+</p></div></a>
             </div>
         </div>
     );
