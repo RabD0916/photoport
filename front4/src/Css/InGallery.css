@@ -29,6 +29,14 @@
     border-radius: 15px;
     vertical-align: top; /* 가운데 정렬을 위해 top으로 정렬 */
 }
+
+.cate-name{
+    display:inline-block;
+    width: 80%;
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
+
 .cate-list {
     display: inline-block;
     width: 98%;
@@ -68,8 +76,7 @@
     background-color: #401F71;
     border: 2px #824D74 solid;
 }
-
-.cate-image {
+.cate-image{
     margin-top: 20px;
     border-radius: 15px;
     max-width: 80%;

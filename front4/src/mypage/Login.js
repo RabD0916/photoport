@@ -50,7 +50,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             <div className="login">
             <form onSubmit={handleSubmit} className="form1 g-3">
                 <label>
-                    <input type="text" className="form-control"name="username" value={formData.username} onChange={handleChange}  placeholder="아이디를 입력해 주세요" />
+                    <input type="text" className="form-control" name="username" value={formData.username} onChange={handleChange}  placeholder="아이디를 입력해 주세요" />
                 </label>
                 <br />
                 <label>
