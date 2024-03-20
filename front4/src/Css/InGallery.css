@@ -10,10 +10,15 @@
 }
 
 .not_box {
-    display: inline-block;
-    width: 225px;
-    height: 225px;
     margin-top: 20px;
+    border-radius: 15px;
+    max-width: 80%;
+    max-height: 80%;
+    width: 60%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cate {
@@ -21,11 +26,11 @@
     text-align: center;
     text-decoration: none;
     color: black;
-    width: 45%;
+    width: 30%;
     float: left;
     margin: 1.5%; /* 좌우 여백을 동일하게 설정 */
     box-sizing: border-box;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
     border-radius: 15px;
     vertical-align: top; /* 가운데 정렬을 위해 top으로 정렬 */
 }
@@ -44,14 +49,6 @@
     text-align: center; /* 중앙 정렬로 수정 */
 }
 
-.Catete {
-    display: inline;
-    font-weight: bold;
-    width: 20%;
-    color: #fdd1d6;
-    margin: 20px;
-    font-size: 30px;
-}
 
 .rowbar {
     border-bottom: 1px solid black; /* 가로로 한 줄 그어줌 */
@@ -62,26 +59,35 @@
 .galnav {
     margin: 20px;
     width: 80%;
-    display: inline;
+    display: flex;
+    margin-left: 11%; /* 오른쪽으로 이동 */
 }
+
 
 .cate-name {
     display: inline-block;
-    width: 60%;
+    width: 30%;
     font-size: 30px;
-    margin: 20px;
-    color: #FDAF7B;
+    margin: 3%;
+    color: #FFF3C7;
     font-weight: bold;
     border-radius: 15px;
-    background-color: #401F71;
-    border: 2px #824D74 solid;
+    padding: 10px;
+    background-color: #F7418F;
+    border: 2px #FEC7B4 solid;
 }
 .cate-image{
     margin-top: 20px;
     border-radius: 15px;
     max-width: 80%;
     max-height: 80%;
+    width: 50%;
+    height: 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 
 h1 {
     background-color: #fdd1d6;
@@ -94,38 +100,27 @@ h1 {
     font-size: 50px;
     color: hotpink;
 }
-.CreCate{
-    position: fixed;
-    bottom: 70px;
-    right: 100px;
-    width: 50px;
-    height: 50px;
-    background-color: #fdd1d6;
-    display: flex;
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center;
-    border: 2px solid #c42927;
-    border-radius: 15px;
-    transition: transform 0.2s ease-in-out; /* 변환 효과를 부드럽게 만듭니다 */
+.CreCate,.DelCate,.ReCate {
+    font-size: 15px;
+    margin: 5px 10px 5px 0;
+    background-color: pink; /* 분홍색 배경 */
+    color: white; /* 텍스트 색상 */
+    padding: 15px 25px; /* 내부 여백 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 마우스 커서 */
+    text-align: left; /* 왼쪽 정렬 */
+    transition: background-color 0.3s; /* 호버 효과 */
 }
 .CreCate:hover {
+    background-color: #ff6b6b;
     transform: scale(1.1); /* 마우스를 가져다 대면 확대 효과를 줍니다 */
 }
-
-.DelCate{
-    position: fixed;
-    bottom: 130px;
-    right: 100px;
-    width: 50px;
-    height: 50px;
-    background-color: #fdd1d6;
-    display: flex;
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center;
-    border: 2px solid #c42927;
-    border-radius: 15px;
-    transition: transform 0.2s ease-in-out; /* 변환 효과를 부드럽게 만듭니다 */
-}
 .DelCate:hover {
+    background-color: #ff6b6b;
+    transform: scale(1.1); /* 마우스를 가져다 대면 확대 효과를 줍니다 */
+}
+.ReCate:hover {
+    background-color: #ff6b6b;
     transform: scale(1.1); /* 마우스를 가져다 대면 확대 효과를 줍니다 */
 }

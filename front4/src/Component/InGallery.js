@@ -32,6 +32,12 @@ const InGallery = () => {
         )
         return result.data;
     }
+    async function RenameCate(cateName) {
+        const result = await axios.Rename(
+            `http://localhost:3000/RenameCategory/${cateName}`
+        )
+        return result.data;
+    }
 
     async function forceDeleteCate(cateName) {
         const result = await axios.delete(
@@ -90,13 +96,42 @@ const InGallery = () => {
             });
         });
     }
+    const renameCategory = () => {
+        const newCateName = prompt("수정할 카테고리 이름을 입력하세요.");
+        if(newCateName === null) {
+            return;
+        }
+        if(newCateName === "") {
+            alert("수정할 카테고리의 이름을 입력하지 않았습니다.");
+            return;
+        }
+        const cateName = prompt("새로운 카테고리 이름을 입력하세요.", newCateName);
+        if(cateName === null) {
+            return;
+        }
+        if(cateName === "") {
+            alert("카테고리의 이름을 입력하지 않았습니다.");
+            return;
+        }
+        RenameCate(cateName).then((result) => {
+            if(result === "Success") {
+                alert("카테고리 수정 완료");
+                window.location.reload();
+            } else if(result === "Already Exist") {
+                alert("이미 존재하는 카테고리 이름입니다.");
+            } else {
+                alert("카테고리 수정 실패");
+            }
+        });
+    }
 
     return (
         <div className={"gal_main"}>
             <h1>{userId}님의 추억</h1>
             <div className={"galnav"}>
-                <button onClick={createCategory} className={"CreCate"}>추가</button>
-                <button onClick={deleteCategory} className={"DelCate"}>삭제</button>
+                    <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
+                    <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
+                    <button onClick={renameCategory} className={"ReCate"}>앨범 수정</button>
             </div>
 
             <div className={"rowbar"}></div>
@@ -106,8 +141,7 @@ const InGallery = () => {
                     <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
                         {cateId[1] !== "Empty" ?
                             <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                                 alt={cateId[1]} width="225px"
-                                 height="225px"></img>
+                                 alt={cateId[1]}></img>
                             : <div className={"not_box"}></div>}
                         <div className={"cate-name"}>{cateId[0]}</div>
                     </Link>
