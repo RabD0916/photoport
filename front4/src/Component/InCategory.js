@@ -1,5 +1,4 @@
 import '../Css/InCategory.css';
-import '../Css/nav.css';
 import React, {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,13 +10,13 @@ const GalleryContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const Image = styled.img`
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  margin: 10px;
-  cursor: pointer;
-`;
+// const Image = styled.img`
+//   width: 200px;
+//   height: 200px;
+//   object-fit: cover;
+//   margin: 10px;
+//   cursor: pointer;
+// `;
 
 const InCategory = () => {
     const {userId} = useParams();
@@ -98,10 +97,12 @@ const InCategory = () => {
 
     return (
         <>
-            <h1>{userId} 님의 추억</h1>
-            {/*<h3>{cateId} 님의 카테고리</h3>*/}
-            <div>[카테고리 이름] 카테고리</div>
-            <div>
+            <div className={"five"}>
+                <h1>{userId}님의 추억
+                    <span>{cateId}</span>
+                </h1>
+            </div>
+            <div className={"incate-nav"}>
                 <button onClick={moveMedia} className={"MoveMedia"}>미디어 이동</button>
                 <button onClick={deleteMedia} className={"DelMedia"}>미디어 삭제</button>
             </div>

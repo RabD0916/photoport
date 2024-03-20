@@ -45,7 +45,7 @@ const Signup=() =>{
             setPassValue('');
             return;
         }else{
-            if(sign_pass.trim()!=sign_pass_ch.trim()){
+            if(sign_pass.trim()!==sign_pass_ch.trim()){
                 inputPassCh.current.focus();
                 alert("비밀번호를 확인해주세요");
                 setPassChValue('');

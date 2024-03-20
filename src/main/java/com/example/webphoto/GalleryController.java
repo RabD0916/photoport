@@ -24,7 +24,7 @@ public class GalleryController {
 
         if(cateNames == null) {
             cateInfo = new String[1][1];
-            cateInfo[0][0] = "Folder Not Found";
+            cateInfo[0][0] = "Basic Folder";
         } else {
             cateInfo = new String[cateNames.length][2];
             for (int i=0; i<cateNames.length; i++) {

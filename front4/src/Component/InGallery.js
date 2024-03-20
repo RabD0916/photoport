@@ -127,7 +127,11 @@ const InGallery = () => {
 
     return (
         <div className={"gal_main"}>
-            <h1>{userId}님의 추억</h1>
+            <div className={"five"}>
+                <h1>{userId}님의 추억
+                <span>Categories</span>
+                </h1>
+            </div>
             <div className={"galnav"}>
                     <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
                     <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
@@ -140,7 +144,7 @@ const InGallery = () => {
                 {cate.map((cateId) => (
                     <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
                         {cateId[1] !== "Empty" ?
-                            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
+                            <img className={"cate-image"} src={"/images/" + userId + "/" + (cateId[0]) + "/" + cateId[1]}
                                  alt={cateId[1]}></img>
                             : <div className={"not_box"}></div>}
                         <div className={"cate-name"}>{cateId[0]}</div>
