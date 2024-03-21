@@ -1,6 +1,6 @@
 import '../Css/InCategory.css';
 import React, {useEffect, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import axios from "axios";
 
@@ -55,6 +55,7 @@ const InCategory = () => {
     const moveMedia = e => {
         if(selectedMediaNames.length < 1) {
             alert("사진을 선택하지 않으셨습니다.");
+            return;
         }
 
         const nextMediaName = prompt("이동할 카테고리 이름을 적으세요.");
@@ -99,7 +100,7 @@ const InCategory = () => {
         <>
             <div className={"five"}>
                 <h1>{userId}님의 추억
-                    <span>{cateId}</span>
+                    <span>{decodeURI(decodeURIComponent(cateId.replaceAll("&", "%")))}</span>
                 </h1>
             </div>
             <div className={"incate-nav"}>
@@ -118,7 +119,7 @@ const InCategory = () => {
             )}
 
             <GalleryContainer className={"Media-list"}>
-                <div className={"cate-list"}>{media.map((mediaName, index) => (
+                <div className={"cate-list"}>{media.map((mediaName) => (
                     //<Link key={index} to={"/gallery/" + userId + "/" + cateId + "/" + mediaName} className={"cate"}>
                     <img src={"/images/" + userId + "/" + cateId + "/" + mediaName}
                          alt={mediaName} className={"incate-image"}

@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +32,8 @@ public class GalleryController {
         } else {
             cateInfo = new String[cateNames.length][2];
             for (int i=0; i<cateNames.length; i++) {
-                String[] mediaNames = getFileNames(dir + "/" + cateNames[i]);
+                String[] mediaNames = new String[0];
+                mediaNames = getFileNames(dir + "/" + cateNames[i]);
                 cateInfo[i][0] = cateNames[i];
                 if (mediaNames.length < 1) {
                     cateInfo[i][1] = "Empty";
@@ -57,7 +62,8 @@ public class GalleryController {
 
     @PostMapping("/createCategory/{cateName}")
     public String createCategory(@PathVariable String cateName) {
-        String dir = path + nowUser + "/" + cateName;
+        String dir = null;
+        dir = path + nowUser + "/" + URLEncoder.encode(cateName, StandardCharsets.UTF_8).replaceAll("%", "&");
         File folder = new File(dir);
         String result;
         if(!folder.exists()) {
@@ -70,13 +76,13 @@ public class GalleryController {
 
     @DeleteMapping("/deleteCategory/{cateName}")
     public String deleteCategory(@PathVariable String cateName) {
-        String dir = path + nowUser + "/" + cateName;
+        String dir = path + nowUser + "/" + URLEncoder.encode(cateName, StandardCharsets.UTF_8).replaceAll("%", "&");
         return delete(dir);
     }
 
     @DeleteMapping("/forceDeleteCategory/{cateName}")
     public String forceDeleteCategory(@PathVariable String cateName) {
-        String dir = path + nowUser + "/" + cateName;
+        String dir = path + nowUser + "/" + URLEncoder.encode(cateName, StandardCharsets.UTF_8).replaceAll("%", "&");
         for(String mediaName : getFileNames(dir)) {
             String mediaDir = dir + "/" + mediaName;
             String result = delete(mediaDir);
@@ -90,11 +96,11 @@ public class GalleryController {
     @PatchMapping("/moveMedia/{mediaNames}/{nextCateName}")
     public String moveMedia(@PathVariable String mediaNames, @PathVariable String nextCateName) {
         String[] arr = mediaNames.split(",");
-        System.out.println(nextCateName);
         for(String mediaName : arr) {
             String prevDir = path + nowUser + "/" + nowCate + "/" + mediaName;
             Path prevPath = Paths.get(prevDir);
-            Path nextPath = Paths.get(path + nowUser + "/" + nextCateName + "/" + mediaName);
+            Path nextPath = Paths.get(path + nowUser + "/" +
+                    URLEncoder.encode(nextCateName, StandardCharsets.UTF_8).replaceAll("%", "&") + "/" + mediaName);
             try {
                 Files.move(prevPath, nextPath, StandardCopyOption.ATOMIC_MOVE);
                 delete(prevDir);
