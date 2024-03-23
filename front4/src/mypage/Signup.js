@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import "./css/login.css";
+import "./css/login.scss";
 import { useNavigate } from "react-router-dom";
 const Signup=() =>{
     const [sign_id,setIdValue] = useState('')
@@ -76,7 +76,7 @@ const Signup=() =>{
 
     return(
         <div>
-            <h1>회원가입</h1>
+            <h1 className="sign_font">회원가입</h1>
             <div className="join_style">
             <form action="" method="post">
                 <p className="sign_p">*아이디  </p><input ref={inputId} type="text" className="sign_input" name={sign_id} onChange={handleIdChange} placeholder="아이디를 입력하세요."/>

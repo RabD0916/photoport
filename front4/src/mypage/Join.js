@@ -61,7 +61,7 @@ const Join = () => {
             <h2>회원가입</h2>
             <form action="/Signup" method="post">
                 <section className="join_style">
-                    <h3>회원가입 약관동의 및 본인인증단계 입니다.</h3>
+                    <h3 className="top_font">회원가입 약관동의 및 본인인증단계 입니다.</h3>
                     <div className="all_agree"> 전체동의<input type="checkbox" checked={selectAll} onChange={handleSelectAllChange} /></div>
                     <h4 className="check_agree">*홈페이지 이용약관 동의 (필수)<span> 동의<input type="checkbox" name="checkbox1" checked={checkbox1} onChange={handleCheckboxChange} /></span></h4>
                     <textarea className="privacy_scroll" readOnly>

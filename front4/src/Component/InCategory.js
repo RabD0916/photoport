@@ -113,7 +113,7 @@ const InCategory = () => {
                 <div>
                     <h3>Selected Image</h3>
                     {selectedMediaNames.map((mediaName) => (
-                        <img src={mediaName} alt="Selected"/>
+                        <img src={"/images/" + userId + "/" + cateId + "/" +mediaName} alt="Selected"/>
                     ))}
                 </div>
             )}
