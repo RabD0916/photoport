@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "./css/login.scss"
-import "../Css/nav.css"
 import {Link} from "react-router-dom";
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
@@ -45,10 +44,10 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
                 <form onSubmit={handleSubmit} method="post">
                     <div className="first-input input__block first-input__block">
-                        <input type="email" placeholder="Email" className="input" name="username" value={formData.username} onChange={handleChange}   />
+                        <input type="email" placeholder="아이디를 입력해주세요" className="input" name="username" value={formData.username} onChange={handleChange}   />
                     </div>
                     <div className="input__block">
-                        <input type="password" placeholder="Password" className="input" name="password" value={formData.password} onChange={handleChange}    />
+                        <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />
                     </div>
                     <button className="signin__btn">
                         Sign in
@@ -73,15 +72,13 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                     <i className="fa fa-github"></i>
                     <a href="src={Kakao">카카오</a>
                 </button>
-            </div>
-
-            <footer>
-                <p className={"find_id"}>
+                <p className={"id_role"}>
                     <Link to={"/join"}>SIGN UP</Link>
                     <Link to={"/findID"}>FIND ID</Link>
                     <Link to={"/findPW"}>FIND PW</Link>
                 </p>
-            </footer>
+            </div>
+
             </div>
     );
 }

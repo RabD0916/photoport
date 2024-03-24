@@ -19,6 +19,13 @@ h1{
     transition:.2s linear;
 }
 
+.find__p{
+    display: flex;
+    font-size: 10px;
+    color: red;
+    padding: 0 0 0 4%;
+}
+
 .links{
     list-style-type:none;
     li{
@@ -129,10 +136,9 @@ form{
         cursor:pointer;
         font-size:14px;
         font-family: 'Montserrat', sans-serif;
-        box-shadow:0 15px 30px rgba(#e91e63,.36);
         transition:.2s linear;
         &:hover{
-            box-shadow:0 0 0 rgba(#e91e63,.0);
+            background-color: #080808;
         }
     }
 }
@@ -184,62 +190,43 @@ form{
     &.google__btn{
         background:#5b90f0;
         color:white;
-        box-shadow:0 15px 30px rgba(#5b90f0,.36);
         transition:.2s linear;
         .fa{
             font-size:20px;
             padding:0 5px 0 0 ;
         }
         &:hover{
-            box-shadow:0 0 0 rgba(#5b90f0,.0);
-        }
-    }
-    &.github__btn{
-        background:#25282d;
-        color:white;
-        box-shadow:0 15px 30px rgba(#25282d,.36);
-        transition:.2s linear;
-        .fa{
-            font-size:20px;
-            padding:0 5px 0 0 ;
-        }
-        &:hover{
-            box-shadow:0 0 0 rgba(#25282d,.0);
-        }
-    }
-}
-
-footer{
-    p{
-        text-align:center;
-        .fa{
-            color: #e91e63;
+            background-color: #080808;
         }
         a{
             text-decoration:none;
-            font-size:17px;
-            margin:0 5px;
-            .fa-facebook{
-                color:#3b5998;
-            }
-            .fa-twitter{
-                color:#1da1f2;
-            }
-            .fa-instagram{
-                color:#f77737;
-            }
-            .fa-linkedin{
-                color:#0077b5;
-            }
-            .fa-behance{
-                color:#1769ff;
-            }
         }
-
+    }
+    &.github__btn{
+        background:#5b90f0;
+        color:white;
+        transition:.2s linear;
+        .fa{
+            font-size:20px;
+            padding:0 5px 0 0 ;
+        }
+        &:hover{
+            background-color: #080808;
+        }
+        a{
+            text-decoration:none;
+        }
     }
 }
-
-
+.id_role{
+    a{
+        font-size: 30px;
+        display: inline-block;
+        text-decoration: none;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
 
 
 .join_style{
