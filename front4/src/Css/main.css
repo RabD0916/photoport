@@ -64,7 +64,6 @@
 .main_div{
     background-color: #fdd1d6;
     height: auto;
-    padding-top: 20px;
 }
 
 .font_font{
@@ -92,9 +91,11 @@
 }
 
 .frame{
+    display: inline-flex;
+    max-width: 1600px;
     width: 30%;
     height: auto;
-    margin : 20px;
+    margin: 0 1% 0 1%;
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
