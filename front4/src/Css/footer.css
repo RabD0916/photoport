@@ -4,34 +4,36 @@
 }
 .footer_first{
     font-weight: bold;
-    font-size: 20px;
+    max-font-size: 20px;
+    font-size: 80%;
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
 }
-
-.footer_left {
-    flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
-    padding: 30px;
-    text-align: left;
+.footer_left p{
+    display: flex;
 }
 .footer_right{
     flex: 1;
 }
 .naver_map{
-    margin-top: 30px;
-    width: 300px;
-    height: 300px;
+    max-width: 200px;
+    width: 100%;
+    height: auto;
 }
 .application{
-    width: 150px;
-    height: 150px;
+    max-width: 100px;
+    width: 80%;
+    height: auto;
     margin: 50px;
 }
+.app_logo{
+    max-width: 100px;
+}
 .google_button{
-    width: 150px;
-    height: 50px;
-    margin-left: 40px;
+    max-width: 100px;
+    width: 100%;
+    height: auto;
 }
 .Line{
     border : 0px;

@@ -9,16 +9,19 @@
     box-sizing: border-box;
 }
 .center1{
-    width: 100%;
+    max-width: 800%;
+    width: 80%;
     height: auto;
     background-color: pink;
-
 }
 .mainBar {
     display: flex;
     margin-top: -10px; /* 여백 제거 */
 }
 .mainMenu {
+    max-width: 4800px;
+    width: 80%;
+    height: auto;
     flex: 1;
     list-style: none;
     text-align: center;
@@ -34,79 +37,57 @@
     background-color: #c5c1c1;
     color: white;
 }
-.mainfirst{
-
-    font-size: 30px;
+.main_first{
+    max-font-size: 30px;
+    font-size: 90%;
     background-color: #eee0e0;
-    height: 500px;
+    height: auto;
     padding-top: 20px;
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
 }
 
-.firstright, .firstleft {
+.main_first p{
+    max-font-size: 200px;
+    font-size: 100%;
+}
+
+.first_right, .first_left {
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
     padding: 20px; /* 내부 여백 추가 */
 }
-
-.mainsecond{
-    background-color: #eee0e0;
-    height: auto;
-    padding-top: 20px;
-}
-.second, .third{
+.third{
     font-weight: bold;
-    font-size: 30px;
 }
 
-.second {
-    display: flex;
-    justify-content: space-between;
-}
-
-
-.mainthird{
+.main_div{
     background-color: #fdd1d6;
     height: auto;
     padding-top: 20px;
 }
 
-.second1 , .second2 , .second3{
-    width: 400px; /* 너비를 400px로 설정 */
-    height: auto; /* 높이를 450px로 설정 */
-    background-color: pink; /* 배경색을 분홍색으로 설정 */
-    text-align: center; /* 내부 요소를 가운데 정렬 */
-    line-height: 450px; /* 내부 요소를 수직으로 가운데 정렬 */
-    border-radius: 10px; /* 테두리를 둥글게 만듭니다. */
-    margin: 50px auto; /* 가운데 정렬을 위해 좌우 여백을 auto로 설정 */
-    border-style: solid;
-    border-width: 2px;
-}
-
-.seimg {
-    display: inline-block; /* 이미지를 블록 요소로 표시하여 가운데 정렬 가능하게 합니다. */
-    vertical-align: middle; /* 이미지를 수직으로 가운데 정렬합니다. */
-    max-width: 100%; /* 이미지가 부모 요소의 너비를 초과하지 않도록 최대 너비 설정 */
-    max-height: 100%; /* 이미지가 부모 요소의 높이를 초과하지 않도록 최대 높이 설정 */
-}
-.fontfont{
-    font-size: 30px;
+.font_font{
+    max-font-size: 30px;
+    font-size: 100%;
     margin:20px;
     font-weight: bold;
 }
-.mainlogo{
-    width: 300px;
+.main_logo{
+    max-width: 300px;
+    width: 70%;
     height: auto;
     border-radius: 15px;
 }
-.mainnav {
+.main_nav {
+    max-font-size: 30px;
+    font-size: 80%;
     color: white;
     font-weight: bold;
     text-decoration: none;
 }
 
-.mainnav:hover {
+.main_nav:hover {
     color: yellow; /* 호버 시 텍스트 색상 변경 */
 }
 
