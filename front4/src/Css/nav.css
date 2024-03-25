@@ -6,13 +6,11 @@
 }
 .main_a{
     text-decoration: none;
-    max-font-size: 90px;
-    font-size: 100%;
+    font-size: 3vw;
 }
 .main_b{
     text-decoration: none;
-    max-font-size: 30px;
-    font-size: 80%;
+    font-size: 2vw;
 }
 
 .center{

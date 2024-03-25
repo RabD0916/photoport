@@ -37,9 +37,8 @@
     background-color: #c5c1c1;
     color: white;
 }
+
 .main_first{
-    max-font-size: 30px;
-    font-size: 90%;
     background-color: #eee0e0;
     height: auto;
     padding-top: 20px;
@@ -48,15 +47,16 @@
     align-items: center; /* 세로 중앙 정렬 */
 }
 
-.main_first p{
-    max-font-size: 200px;
-    font-size: 100%;
+.main_first{
+    max-font-size: 120px;
+    font-size: 50%;
 }
 
 .first_right, .first_left {
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
     padding: 20px; /* 내부 여백 추가 */
-}
+    font-size: 3vw;
+    }
 .third{
     font-weight: bold;
 }
@@ -67,14 +67,12 @@
 }
 
 .font_font{
-    max-font-size: 30px;
-    font-size: 100%;
-    margin:20px;
+    font-size: 2vw;
     font-weight: bold;
 }
 .main_logo{
-    max-width: 300px;
-    width: 70%;
+    max-width:600px;
+    width: 100%;
     height: auto;
     border-radius: 15px;
 }

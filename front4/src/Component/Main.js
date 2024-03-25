@@ -31,9 +31,11 @@ const Main = (props) => {
                 <div className="first_left">
                     <img src={Mainlogo} className={"main_logo"} alt={"메인로고"}/>
                 </div>
-                <p className="first_right">간편하게 스캔하여 저장하자!! 네컷앨범을 사용해 보세요</p>
+                <div className="first_right">간편하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요</div>
             </div>
-            <div className="font_font">요즘은 사진을 어떻게 찍을까?</div>
+
+            <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>
+
             <div className="main_div">
                 <div className="third">
                     <img className={"frame"} src={"/one.jpg"} alt={"프레임1"}/>
@@ -41,7 +43,7 @@ const Main = (props) => {
                     <img className={"frame"} src={"/one1.jpg"} alt={"프레임3"}/>
                 </div>
             </div>
-            <div className="font_font">원하는 프레임을 골라 자신만의 네컷을 만들자!</div>
+            <p className="font_font">내가 만든 포즈 한번봐줘!</p>
             <div className="main_div">
                 <div className="third">
                     <img className={"frame"} src={Frame1} alt={"프레임1"}/>

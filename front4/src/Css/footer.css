@@ -3,15 +3,15 @@
     color: white;
 }
 .footer_first{
-    font-weight: bold;
-    max-font-size: 20px;
-    font-size: 80%;
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
 }
+
 .footer_left p{
+    font-weight: bold;
     display: flex;
+    font-size: 1vw;
 }
 .footer_right{
     flex: 1;
@@ -36,7 +36,7 @@
     height: auto;
 }
 .Line{
-    border : 0px;
-    border-top: 5px solid #ffffff;
+    border : 1px;
+    border-top: 2px solid #ffffff;
 }
 
