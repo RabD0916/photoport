@@ -129,29 +129,28 @@ const InGallery = () => {
         <div className={"gal_main"}>
             <div className={"five"}>
                 <h1>{userId}님의 추억
-                <span>Categories</span>
+                    <span>Categories</span>
                 </h1>
             </div>
             <div className={"galnav"}>
-                    <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
-                    <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
-                    <button onClick={renameCategory} className={"ReCate"}>앨범 수정</button>
+                <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
+                <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
+                <button onClick={renameCategory} className={"ReCate"}>앨범 수정</button>
             </div>
-
-            <div className={"rowbar"}></div>
-
+            <div className={"rowbar"}/>
 
             <div className={"cate-list"}>
                 {cate.map((cateId) => (
-                <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
-                    {cateId[1] !== "Empty" ?
-                        <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                             alt={cateId[1]}
-                             ></img>
-                        : <div className={"not_box"}></div>}
-                    <div className={"cate-name"}>{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}</div>
-                </Link>
-            ))}
+                    <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
+                        {cateId[1] !== "Empty" ?
+                            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
+                                 alt={cateId[1]}
+                            ></img>
+                            : <div className={"not_box"}></div>}
+                        <div
+                            className={"cate-name"}>{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}</div>
+                    </Link>
+                ))}
             </div>
         </div>
     );
