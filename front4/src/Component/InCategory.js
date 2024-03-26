@@ -52,6 +52,9 @@ const InCategory = () => {
         return result.data;
     }
 
+    const createMedia =e => {
+
+    }
     const moveMedia = e => {
         if(selectedMediaNames.length < 1) {
             alert("사진을 선택하지 않으셨습니다.");
@@ -104,6 +107,7 @@ const InCategory = () => {
                 </h1>
             </div>
             <div className={"incate-nav"}>
+                <button onClick={createMedia} className={"MoveMedia"}>미디어 생성</button>
                 <button onClick={moveMedia} className={"MoveMedia"}>미디어 이동</button>
                 <button onClick={deleteMedia} className={"DelMedia"}>미디어 삭제</button>
             </div>

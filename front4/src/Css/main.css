@@ -4,13 +4,12 @@
     font-weight: bold;
     font-size: 30px;
     display: inline-block;
-    width: 30%;
+    width: 30vw;
     margin-right: 3%; /* 각 요소 사이의 간격 조정 */
     box-sizing: border-box;
 }
 .center1{
-    max-width: 800%;
-    width: 80%;
+    width: 80vw;
     height: auto;
     background-color: pink;
 }
@@ -72,14 +71,12 @@
     font-weight: bold;
 }
 .main_logo{
-    max-width:600px;
-    width: 100%;
+    width: 20vw;
     height: auto;
     border-radius: 15px;
 }
 .main_nav {
-    max-font-size: 30px;
-    font-size: 80%;
+    font-size: 2vw;
     color: white;
     font-weight: bold;
     text-decoration: none;

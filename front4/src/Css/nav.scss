@@ -7,7 +7,6 @@ $shadowColour: rgba(0, 0, 0, .6);
     //Prevent highlight colour when element is tapped
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-
 @mixin hardwareAccel() {
     //Improve performance on mobile/tablet devices
     transform: translateZ(0);
@@ -33,7 +32,6 @@ $shadowColour: rgba(0, 0, 0, .6);
     text-decoration: none;
     font-size: 2vw;
 }
-
 .center{
     color: pink;
 }
@@ -48,18 +46,14 @@ $shadowColour: rgba(0, 0, 0, .6);
     position: fixed; /* 화면에 고정된 위치에 요소를 배치합니다. */
     top: 0; /* 화면의 맨 위에 위치하도록 설정합니다. */
     right: 0; /* 화면의 오른쪽에 위치하도록 설정합니다. */
-    padding: 10px;
+    padding: 1%;
     display: block;
     text-align: right; /* 검색하기 링크를 오른쪽 정렬합니다. */
     margin-bottom: 10px; /* 검색하기 링크 아래 여백을 추가합니다. */
 }
-
-
 .otherLinks a {
     display: inline-block;
-    margin-left: 20px; /* 다른 링크들 사이의 간격을 조절합니다. */
-    padding: 10px;
-    position: relative;
+    padding: 1%;
     transition-duration: $defaultDuration;
     transition-property: transform;
 
@@ -112,12 +106,12 @@ $shadowColour: rgba(0, 0, 0, .6);
     color: red;
 }
 
-.searchicon{
-    width: 30px;
-    height: 30px;
+.search_icon{
+    width: 2vw;
+    height: 2vw;
 }
-.mypageicon {
-    width: 30px;
+.mypage_icon {
+    width: 2vw;
 }
 .downright{
     color: hotpink;

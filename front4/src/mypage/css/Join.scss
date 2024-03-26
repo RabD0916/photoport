@@ -1,0 +1,55 @@
+.custom_check{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.join_style{
+  margin: auto;
+}
+.sign_div{
+  display: inline-block;
+  width: 90vw;
+}
+
+.sign_main{
+  font-size: 1vw;
+}
+
+.top_font{
+  font-size: 2vw;
+}
+.check_agree{
+  display: flow;
+  text-align: right;
+  font-size: 2vw;
+}
+.all_agree{
+  text-align: right;
+  font-size: 2vw;
+}
+.scroll{
+  height: 20vw;
+  max-width: 1600vw;
+  width: 100%;
+  resize: none;
+}
+.scroll_div{
+  display: inline-block;
+}
+.sign_next{
+  max-width: 1400px;
+  width: 101%;
+  max-height: 70px;
+  height: 6vw;
+  font-size: 3vw;
+  background-color: #5b90f0;
+  color: white;
+  border-radius: 20px;
+  &:hover{
+    background-color: black;
+  }
+}

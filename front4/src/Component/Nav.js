@@ -24,12 +24,12 @@ function Nav() {
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
-                        <Link to={"/"} className="right"><img className={"searchicon"} src={Search} alt="하이"/></Link>
+                        <Link to={"/"} className="right"><img className={"search_icon"} src={Search} alt="하이"/></Link>
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright main_b"} onClick={isUserIdEmpty}>갤러리</Link>
                         <Link to={"/Board"} className={"downright main_b"}>게시판</Link>
-                        <Link to={"/login"}><img className={"mypageicon"} src={Mypag} alt="하이"/></Link>
+                        <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="하이"/></Link>
                     </div>
                 </div>
             <input type={"text"} placeholder={"유저 아이디"} value={userId} onChange={saveUserId}></input>

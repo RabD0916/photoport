@@ -85,8 +85,9 @@ const Signup=() =>{
                 <p className="sign_p">*이메일  </p>
                 <input ref={inputEmail} type="text" className="sign_input" name={sign_email} onChange={handleEmailChange} placeholder="이메일 입력"/>
                 <p className="sign_p">*전화번호  </p><input ref={inputPhone} type="text" className="sign_input" name={sign_phone} onChange={handlePhoneChange} placeholder={"010-0000-0000"}/>
+                <input className="next_input" type="submit" onClick={sign_handle} value="회원가입"/>
             </form>
-            <input className="next_input" type="submit" onClick={sign_handle} value="회원가입"/>
+
             </div>
         </div>
     )

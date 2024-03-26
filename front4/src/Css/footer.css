@@ -17,22 +17,19 @@
     flex: 1;
 }
 .naver_map{
-    max-width: 200px;
-    width: 100%;
+    width: 15vw;
     height: auto;
 }
 .application{
-    max-width: 100px;
-    width: 80%;
+    width: 30vw;
     height: auto;
     margin: 50px;
 }
 .app_logo{
-    max-width: 100px;
+    width: 20vw;
 }
 .google_button{
-    max-width: 100px;
-    width: 100%;
+    width: 15vw;
     height: auto;
 }
 .Line{
