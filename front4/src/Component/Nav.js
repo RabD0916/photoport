@@ -1,4 +1,4 @@
-import '../Css/nav.css';
+import '../Css/nav.scss';
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Search from '../testttt/search.png';

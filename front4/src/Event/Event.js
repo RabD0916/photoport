@@ -1,5 +1,5 @@
 import React from "react";
-import '../Css/Event.css'
+import '../Css/Event.scss'
 import test from'../testttt/photoport.png'
 import test2 from "../img/kakao.png";
 const Event = () => {

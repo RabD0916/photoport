@@ -1,5 +1,5 @@
 import '../Css/InGallery.css';
-import '../Css/nav.css';
+import '../Css/nav.scss';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
