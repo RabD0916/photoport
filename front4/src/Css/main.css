@@ -55,7 +55,22 @@
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
     padding: 20px; /* 내부 여백 추가 */
     font-size: 3vw;
-    }
+}
+
+/*@keyframes slideInFromRight {*/
+/*    0% {*/
+/*        transform: translateX(100%);*/
+/*        opacity: 0;*/
+/*    }*/
+/*    100% {*/
+/*        transform: translateX(0);*/
+/*        opacity: 1;*/
+/*    }*/
+/*}*/
+/*.first_right{*/
+/*    animation: slideInFromRight 1.5s ease-out forwards;*/
+/*    animation-iteration-count: 1;*/
+/*}*/
 .third{
     font-weight: bold;
 }
@@ -86,7 +101,7 @@
     color: yellow; /* 호버 시 텍스트 색상 변경 */
 }
 
-.frame{
+.frame-in1{
     display: inline-flex;
     max-width: 1600px;
     width: 30%;
@@ -95,5 +110,45 @@
     border-style: solid;
     border-width: 2px;
     border-radius: 10px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+.frame-out1{
+    display: inline-flex;
+    max-width: 1600px;
+    width: 30%;
+    height: auto;
+    margin: 0 1% 0 1%;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.frame-in2{
+    display: inline-flex;
+    max-width: 1600px;
+    width: 30%;
+    height: auto;
+    margin: 0 1% 0 1%;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.frame-out2 {
+    display: inline-flex;
+    max-width: 1600px;
+    width: 30%;
+    height: auto;
+    margin: 0 1% 0 1%;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
