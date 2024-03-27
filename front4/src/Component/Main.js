@@ -5,6 +5,8 @@ import {Link} from "react-router-dom";
 import Frame1 from "../testttt/frame1.jpg"
 import Frame2 from "../testttt/frame2.jpg"
 import Frame3 from "../testttt/frame3.jpg"
+import { ScrollAnimation } from "./ScrollAnimation";
+
 
 const Main = (props) => {
 
@@ -103,9 +105,13 @@ const Main = (props) => {
 
             <div className="main_first">
                 <div className="first_left">
+                    <ScrollAnimation>
                     <img src={Mainlogo} className={"main_logo"} alt={"메인로고"}/>
-                </div>
+                    </ScrollAnimation>
+                    </div>
+                <ScrollAnimation>
                 <div ref={textRef} className={isVisible2 ? "first_right" : ""}>간편하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요</div>
+                </ScrollAnimation>
             </div>
 
             <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>

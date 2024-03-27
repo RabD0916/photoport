@@ -53,7 +53,6 @@
 
 .first_right, .first_left {
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
-    padding: 20px; /* 내부 여백 추가 */
     font-size: 3vw;
 }
 
