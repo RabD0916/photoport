@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import "./css/login.scss"
 import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         username: '',
@@ -27,8 +31,8 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             console.log("accessToken 값 : " + accessToken);
 
             localStorage.setItem('accessToken', accessToken);
-            // 로그인 성공 시 handleLogin 함수 호출
-            handleLogin(accessToken);
+            localStorage.setItem('username', formData.username);
+            navigate("/")
         } catch (error) {
             console.error('Error:', error);
         }
@@ -44,7 +48,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
                 <form onSubmit={handleSubmit} method="post">
                     <div className="first-input input__block first-input__block">
-                        <input type="email" placeholder="아이디를 입력해주세요" className="input" name="username" value={formData.username} onChange={handleChange}   />
+                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="username" value={formData.username} onChange={handleChange}   />
                     </div>
                     <div className="input__block">
                         <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />

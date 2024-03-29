@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @RestController
+@RequestMapping("/api")
 public class GalleryController {
     private final String path = "./front4/public/images/";
     private String nowUser = "";

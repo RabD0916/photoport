@@ -5,43 +5,68 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const InGallery = () => {
-    const {userId} = useParams();
+    // const {userId} = useParams();
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('username');
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
         async function getCategoryList() {
             const result = await axios.get(
-                `http://localhost:3000/sendCategory/${userId}`
+                `http://localhost:8080/api/sendCategory/${userId}`,
+                {
+                    headers : {
+                        Authorization : `Bearer ${accessToken}`
+                    }
+                }
             );
             return result.data;
         }
-
         getCategoryList().then(r => setCate(r));
     }, [userId]);
 
     async function createCate(cateName) {
         const result = await axios.post(
-            `http://localhost:3000/createCategory/${cateName}`
-        )
+            `http://localhost:8080/api/createCategory/${cateName}`,
+        {},
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                },
+            }
+        );
         return result.data;
     }
 
     async function deleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:3000/deleteCategory/${cateName}`
+            `http://localhost:8080/api/deleteCategory/${cateName}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                }
+            }
         )
         return result.data;
     }
     async function RenameCate(cateName) {
         const result = await axios.Rename(
-            `http://localhost:3000/RenameCategory/${cateName}`
+            `http://localhost:8080/api/RenameCategory/${cateName}`
         )
         return result.data;
     }
 
     async function forceDeleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:3000/forceDeleteCategory/${cateName}`
+            `http://localhost:8080/api/forceDeleteCategory/${cateName}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                }
+            }
         )
         return result.data;
     }

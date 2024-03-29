@@ -23,11 +23,17 @@ const InCategory = () => {
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
+    const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
         async function getMediaList() {
             const result = await axios.get(
-                `http://localhost:3000/sendMedia/${cateId}`
+                `http://localhost:3000/api/sendMedia/${cateId}`,
+                {
+                    headers : {
+                        Authorization : `Bearer ${accessToken}`
+                    }
+                }
             );
             return result.data;
         }
@@ -36,7 +42,13 @@ const InCategory = () => {
 
     async function moveM(mediaNames, nextCateName) {
         const result = await axios.patch(
-            `http://localhost:3000/moveMedia/${mediaNames}/${nextCateName}`
+            `http://localhost:8080/api/moveMedia/${mediaNames}/${nextCateName}`,
+            {},
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }
         )
         return result.data;
     }
@@ -47,7 +59,12 @@ const InCategory = () => {
         }
 
         const result = await axios.delete(
-            `http://localhost:3000/deleteMedia/${mediaNames}`
+            `http://localhost:8080/api/deleteMedia/${mediaNames}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }
         )
         return result.data;
     }
