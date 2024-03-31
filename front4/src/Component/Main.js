@@ -109,13 +109,17 @@ const Main = (props) => {
                     <img src={Mainlogo} className={"main_logo"} alt={"메인로고"}/>
                     </ScrollAnimation>
                     </div>
-                <ScrollAnimation>
+                <ScrollAnimation className={"font_font"}>
                 <div ref={textRef} className={isVisible2 ? "first_right" : ""}>간편하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요</div>
                 </ScrollAnimation>
             </div>
-
+            <p className={"font_font"}>르세라핌과 사진 콜라보 이벤트!!</p>
+            <div className={"third_div"}>
+                <div>
+                    <img className={"event_div"} src="/main_img/event.png" alt="" />
+                </div>
+            </div>
             <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>
-
             <div className="main_div">
                 <div className="third">
                     <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={"/one.jpg"} alt={"프레임1"} ref={imageRef1}/>
@@ -126,9 +130,9 @@ const Main = (props) => {
             <p className="font_font">내가 만든 포즈 한번봐줘!</p>
             <div className="main_div">
                 <div className="third">
-                    <img className={isVisible2 ? "frame-in2" : "frame-out2"} src={Frame1} alt={"프레임1"} ref={imageRef2}/>
-                    <img className={isVisible2? "frame-in2" : "frame-out2"} src={Frame2} alt={"프레임2"} ref={imageRef2}/>
-                    <img className={isVisible2 ? "frame-in2" : "frame-out2"} src={Frame3} alt={"프레임3"} ref={imageRef2}/>
+                    <img className={isVisible2 ? "frame-in1" : "frame-out1"} src={Frame1} alt={"프레임1"} ref={imageRef2}/>
+                    <img className={isVisible2? "frame-in1" : "frame-out1"} src={Frame2} alt={"프레임2"} ref={imageRef2}/>
+                    <img className={isVisible2 ? "frame-in1" : "frame-out1"} src={Frame3} alt={"프레임3"} ref={imageRef2}/>
                 </div>
             </div>
         </div>

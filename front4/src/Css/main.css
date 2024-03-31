@@ -18,13 +18,8 @@
     margin-top: -10px; /* 여백 제거 */
 }
 .mainMenu {
-    max-width: 4800px;
-    width: 80%;
-    height: auto;
     flex: 1;
     list-style: none;
-    text-align: center;
-    padding: 10px;
 }
 
 .left1 {
@@ -38,15 +33,10 @@
 }
 
 .main_first{
-    background-color: #eee0e0;
-    height: auto;
     padding-top: 20px;
     display: flex;
     justify-content: center; /* 가로 중앙 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
-}
-
-.main_first{
     max-font-size: 120px;
     font-size: 50%;
 }
@@ -54,6 +44,7 @@
 .first_right, .first_left {
     flex: 1; /* 각각의 하위 요소가 반반의 공간을 차지하도록 함 */
     font-size: 3vw;
+    padding: 15% 0 15% 0;
 }
 
 /*@keyframes slideInFromRight {*/
@@ -72,15 +63,19 @@
 /*}*/
 .third{
     font-weight: bold;
+    margin: auto;
+    padding: 0 0 7% 0;
 }
-
+.event_div{
+    width: 100%;
+}
 .main_div{
-    background-color: #fdd1d6;
-    height: auto;
-    padding-top: 20px;
+    margin-bottom: 2%;
+    padding: 2% 0 2% 0;
 }
 
 .font_font{
+    padding-top: 3%;
     font-size: 2vw;
     font-weight: bold;
 }
@@ -102,26 +97,17 @@
 
 .frame-in1{
     display: inline-flex;
-    max-width: 1600px;
-    width: 30%;
-    height: auto;
+    width: 31%;
     margin: 0 1% 0 1%;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    opacity: 1;
+    border-radius: 5px;
     transition: opacity 0.5s ease-in-out;
 }
 .frame-out1{
     display: inline-flex;
-    max-width: 1600px;
-    width: 30%;
+    width: 31%;
     height: auto;
     margin: 0 1% 0 1%;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
-    opacity: 0;
+    border-radius: 5px;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -150,4 +136,5 @@
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
+
 

@@ -10,6 +10,7 @@ const frameInAnimation = keyframes`
     opacity: 1;
     transform: translateX(0%);
   }
+
 `;
 
 export const Container = styled.div`
@@ -17,4 +18,6 @@ export const Container = styled.div`
     animation: ${frameInAnimation} 2s forwards;
   }
   flex: 1;
+  font-size: 3vw;
+  margin: auto;
 `;

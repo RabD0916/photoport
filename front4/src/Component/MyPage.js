@@ -1,10 +1,12 @@
 import React from "react";
+import "../Css/MyPage.sass";
+
 
 function MyPage(){
     return(
         <>
             <div>
-                마이페이지
+
             </div>
         </>
     )
