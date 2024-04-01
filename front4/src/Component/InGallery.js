@@ -5,12 +5,14 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const InGallery = () => {
-    // const {userId} = useParams();
+    //const {userId} = useParams();
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('username');
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
+        console.log(userId);
+        console.log(accessToken);
         async function getCategoryList() {
             const result = await axios.get(
                 `http://localhost:8080/api/sendCategory/${userId}`,

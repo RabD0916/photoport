@@ -69,6 +69,8 @@ public class UserService {
 
     // 유저 아이디로 검색
     public User findById(String username) {
+        System.out.println("유저 이름 :");
+        System.out.println(username);
         Optional<User> res = userRepository.findById(username);
         if (res.isPresent()) return res.get();
         return null;

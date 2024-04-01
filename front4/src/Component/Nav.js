@@ -8,7 +8,7 @@ import { useNavigate} from "react-router-dom";
 import LogoutIcon from '../testttt/logout.png';
 function Nav() {
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    // const queryParams = new URLSearchParams(location.search);
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
 
