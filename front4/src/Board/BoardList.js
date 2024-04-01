@@ -29,12 +29,12 @@ const BoardList = () => {
                 <div className="boardList">
                     {/* 게시글들 */}
                     <div className="boardItem">
-                        <div className="title">친구와 한컷</div>
+                        <header className="title">친구와 한컷</header>
                         <img className="boardImage" src="/boardlist1.png" alt="사진1"/>
-                        <div className="imageOverlay">
+                        <main className="imageOverlay">
                             <img src="/boardlist1.png" alt="미리보기"/>
-                        </div>
-                        <div className="content">내용</div>
+                        </main>
+                        <footer className="content">내용</footer>
                     </div>
 
                     <div className="boardItem">

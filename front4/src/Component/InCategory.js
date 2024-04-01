@@ -23,11 +23,17 @@ const InCategory = () => {
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
+    const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
         async function getMediaList() {
             const result = await axios.get(
-                `http://localhost:3000/sendMedia/${cateId}`
+                `http://localhost:3000/api/sendMedia/${cateId}`,
+                {
+                    headers : {
+                        Authorization : `Bearer ${accessToken}`
+                    }
+                }
             );
             return result.data;
         }
@@ -36,7 +42,13 @@ const InCategory = () => {
 
     async function moveM(mediaNames, nextCateName) {
         const result = await axios.patch(
-            `http://localhost:3000/moveMedia/${mediaNames}/${nextCateName}`
+            `http://localhost:8080/api/moveMedia/${mediaNames}/${nextCateName}`,
+            {},
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }
         )
         return result.data;
     }
@@ -47,11 +59,19 @@ const InCategory = () => {
         }
 
         const result = await axios.delete(
-            `http://localhost:3000/deleteMedia/${mediaNames}`
+            `http://localhost:8080/api/deleteMedia/${mediaNames}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }
         )
         return result.data;
     }
 
+    const createMedia =e => {
+
+    }
     const moveMedia = e => {
         if(selectedMediaNames.length < 1) {
             alert("사진을 선택하지 않으셨습니다.");
@@ -104,6 +124,7 @@ const InCategory = () => {
                 </h1>
             </div>
             <div className={"incate-nav"}>
+                <button onClick={createMedia} className={"MoveMedia"}>미디어 생성</button>
                 <button onClick={moveMedia} className={"MoveMedia"}>미디어 이동</button>
                 <button onClick={deleteMedia} className={"DelMedia"}>미디어 삭제</button>
             </div>
@@ -113,7 +134,7 @@ const InCategory = () => {
                 <div>
                     <h3>Selected Image</h3>
                     {selectedMediaNames.map((mediaName) => (
-                        <img src={mediaName} alt="Selected"/>
+                        <img src={"/images/" + userId + "/" + cateId + "/" +mediaName} alt="Selected"/>
                     ))}
                 </div>
             )}

@@ -1,6 +1,7 @@
 import React from "react";
-import '../Css/Event.css'
+import '../Css/Event.scss'
 import test from'../testttt/photoport.png'
+import test2 from "../img/kakao.png";
 const Event = () => {
   return (
       <>
@@ -10,6 +11,12 @@ const Event = () => {
           </div>
 
           <div className={"EventList"}>
+              <div className={"EventItem"}>
+                  <img src={test2} className={"Eventimage"} alt={"이벤트 사진"}/>
+                  <div className={"EventContent"}>
+                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                  </div>
+              </div>
               <div className={"EventItem"}>
                   <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
                   <div className={"EventContent"}>

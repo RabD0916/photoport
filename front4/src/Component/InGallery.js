@@ -1,47 +1,72 @@
 import '../Css/InGallery.css';
-import '../Css/nav.css';
+import '../Css/nav.scss';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const InGallery = () => {
-    const {userId} = useParams();
+    // const {userId} = useParams();
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('username');
     const [cate, setCate] = useState([]);
 
     useEffect(() => {
         async function getCategoryList() {
             const result = await axios.get(
-                `http://localhost:3000/sendCategory/${userId}`
+                `http://localhost:8080/api/sendCategory/${userId}`,
+                {
+                    headers : {
+                        Authorization : `Bearer ${accessToken}`
+                    }
+                }
             );
             return result.data;
         }
-
         getCategoryList().then(r => setCate(r));
     }, [userId]);
 
     async function createCate(cateName) {
         const result = await axios.post(
-            `http://localhost:3000/createCategory/${cateName}`
-        )
+            `http://localhost:8080/api/createCategory/${cateName}`,
+        {},
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                },
+            }
+        );
         return result.data;
     }
 
     async function deleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:3000/deleteCategory/${cateName}`
+            `http://localhost:8080/api/deleteCategory/${cateName}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                }
+            }
         )
         return result.data;
     }
     async function RenameCate(cateName) {
         const result = await axios.Rename(
-            `http://localhost:3000/RenameCategory/${cateName}`
+            `http://localhost:8080/api/RenameCategory/${cateName}`
         )
         return result.data;
     }
 
     async function forceDeleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:3000/forceDeleteCategory/${cateName}`
+            `http://localhost:8080/api/forceDeleteCategory/${cateName}`,
+            {
+                headers : {
+                    Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type' : 'application/json'
+                }
+            }
         )
         return result.data;
     }
@@ -129,29 +154,28 @@ const InGallery = () => {
         <div className={"gal_main"}>
             <div className={"five"}>
                 <h1>{userId}님의 추억
-                <span>Categories</span>
+                    <span>Categories</span>
                 </h1>
             </div>
             <div className={"galnav"}>
-                    <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
-                    <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
-                    <button onClick={renameCategory} className={"ReCate"}>앨범 수정</button>
+                <button onClick={createCategory} className={"CreCate"}>앨범 추가</button>
+                <button onClick={deleteCategory} className={"DelCate"}>앨범 삭제</button>
+                <button onClick={renameCategory} className={"ReCate"}>앨범 수정</button>
             </div>
-
-            <div className={"rowbar"}></div>
-
+            <div className={"rowbar"}/>
 
             <div className={"cate-list"}>
                 {cate.map((cateId) => (
-                <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
-                    {cateId[1] !== "Empty" ?
-                        <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                             alt={cateId[1]}
-                             ></img>
-                        : <div className={"not_box"}></div>}
-                    <div className={"cate-name"}>{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}</div>
-                </Link>
-            ))}
+                    <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
+                        {cateId[1] !== "Empty" ?
+                            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
+                                 alt={cateId[1]}
+                            ></img>
+                            : <div className={"not_box"}></div>}
+                        <div
+                            className={"cate-name"}>{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}</div>
+                    </Link>
+                ))}
             </div>
         </div>
     );

@@ -47,6 +47,7 @@ function App() {
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
                   <Route path={"/join"} element={<Join/>}></Route>
+                  <Route path={"/CreateCut"} element={<Create/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

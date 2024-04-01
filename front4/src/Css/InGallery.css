@@ -41,7 +41,7 @@ h1 em {
 }
 .five h1:before {
     position: absolute;
-    left: 0;
+    /*left: 0;*/
     bottom: 38px;
     width: 60px;
     height: 4px;
@@ -59,29 +59,35 @@ h1 em {
 }
 
 .not_box {
-    margin-top: 20px;
+    margin: auto;
     border-radius: 15px;
-    max-width: 80%;
-    max-height: 80%;
-    width: 60%;
-    height: auto;
+    max-width: 400px;
+    max-height: 600px;
+    width: 90%;
+    height: 90%;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
-
+.cate-image{
+    margin: auto;
+    border-radius: 15px;
+    max-width: 400px;
+    max-height: 600px;
+    width: 90%;
+    height: 90%;
+    display: block;
+}
 .cate {
+    margin : 2% 0 2% 0;
     display: inline-block;
     text-align: center;
     text-decoration: none;
     color: black;
-    width: 30%;
-    float: left;
-    margin: 1.5%; /* 좌우 여백을 동일하게 설정 */
+    max-width: 400px;
+    width: 80%;
+    height: 600px;
+    /*float: left;*/
     box-sizing: border-box;
-    /*border: 2px solid black;*/
     border-radius: 15px;
-    vertical-align: top; /* 가운데 정렬을 위해 top으로 정렬 */
 }
 
 .cate-name{
@@ -100,16 +106,13 @@ h1 em {
 
 
 .rowbar {
-    border-bottom: 1px solid black; /* 가로로 한 줄 그어줌 */
-    margin-left: 200px;
-    margin-right: 200px;/* 원하는 간격 설정 */
+    float: left;
+    width: 80%;
 }
 
 .galnav {
     margin: 20px;
     width: 80%;
-    display: flex;
-    margin-left: 11%; /* 오른쪽으로 이동 */
 }
 
 
@@ -125,28 +128,21 @@ h1 em {
     background-color: #F7418F;
     border: 2px #FEC7B4 solid;
 }
-.cate-image{
-    margin-top: 20px;
-    border-radius: 15px;
-    max-width: 80%;
-    max-height: 80%;
-    width: 50%;
-    height: 500px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+
 .CreCate,.DelCate,.ReCate {
-    font-size: 15px;
-    margin: 5px 10px 5px 0;
+    float: left;
+    font-size: 1vw;
+    margin: 1% 1% 1% 0;
     background-color: pink; /* 분홍색 배경 */
     color: white; /* 텍스트 색상 */
     padding: 15px 25px; /* 내부 여백 */
     border: none; /* 테두리 없음 */
-    border-radius: 5px; /* 모서리 둥글게 */
+    border-radius: 20px; /* 모서리 둥글게 */
     cursor: pointer; /* 마우스 커서 */
-    text-align: left; /* 왼쪽 정렬 */
     transition: background-color 0.3s; /* 호버 효과 */
+}
+.CreCate{
+    margin: 1% 1% 1% 15%;
 }
 .CreCate:hover {
     background-color: #ff6b6b;

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "./css/login.css"
-import "../Css/nav.css"
-import Kakao from "../img/kakao.png";
-
+import "./css/login.scss"
 import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         username: '',
@@ -30,51 +31,59 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             console.log("accessToken 값 : " + accessToken);
 
             localStorage.setItem('accessToken', accessToken);
-            // 로그인 성공 시 handleLogin 함수 호출
-            handleLogin(accessToken);
+            localStorage.setItem('username', formData.username);
+            navigate("/")
         } catch (error) {
             console.error('Error:', error);
         }
     };
-
     return (
-
         <div>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossOrigin="anonymous"/>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+            <div className="container">
+                <ul className="links">
+                    <li>
+                        <a href="#" id="signin">로그인</a>
+                    </li>
+                </ul>
 
-            <h4 className="log_mark">
-                로그인
-            </h4>
-            <div className="login">
-            <form onSubmit={handleSubmit} className="form1 g-3">
-                <label>
-                    <input type="text" className="form-control" name="username" value={formData.username} onChange={handleChange}  placeholder="아이디를 입력해 주세요" />
-                </label>
-                <br />
-                <label>
-                    <input type="password" className="form-control" name="password" value={formData.password} onChange={handleChange}  placeholder="비밀번호를 입력해 주세요" />
-                </label>
-                <br />
-                <div className="col-auto">
-                    <button type="button" className="btn btn-success fbtn">Success</button>
+                <form onSubmit={handleSubmit} method="post">
+                    <div className="first-input input__block first-input__block">
+                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="username" value={formData.username} onChange={handleChange}   />
+                    </div>
+                    <div className="input__block">
+                        <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />
+                    </div>
+                    <button className="signin__btn">
+                        Sign in
+                    </button>
+                </form>
+
+                <div className="separator">
+                    <p>OR</p>
                 </div>
-            </form>
-                <div className="oauth2_logo">
-                    <img src={Kakao} className="oauth1" alt="카카오" />
-                    <img src={Kakao} className="oauth2" alt="카카오" />
-                    <img src={Kakao} className="oauth3" alt="카카오" />
-                </div>
-                <div className="under_b">
-                        <Link to={"/join"} className={"sign"}>SIGN UP</Link>
-                        <div className='v-line'></div>
-                        <Link to={"/findID"} className={"idFind"}>FIND ID</Link>
-                        <div className='v-line'></div>
-                        <Link to={"/findPW"} className={"pwFind"}>FIND PW</Link>
-                </div>
+
+                <button className="google__btn">
+                    <i className="fa fa-google"></i>
+                    <a href="src={Kakao">카카오</a>
+                </button>
+
+                <button className="github__btn">
+                    <i className="fa fa-github"></i>
+                    <a href="src={Kakao">카카오</a>
+                </button>
+                
+                <button className="github__btn">
+                    <i className="fa fa-github"></i>
+                    <a href="src={Kakao">카카오</a>
+                </button>
+                <p className={"id_role"}>
+                    <Link to={"/join"}>SIGN UP</Link>
+                    <Link to={"/findID"}>FIND ID</Link>
+                    <Link to={"/findPW"}>FIND PW</Link>
+                </p>
             </div>
-        </div>
+
+            </div>
     );
 }
 
