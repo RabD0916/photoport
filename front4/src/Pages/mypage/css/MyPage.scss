@@ -1,0 +1,62 @@
+
+
+.main-mypage {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.myprofile {
+  text-align: center; /* 텍스트 가운데 정렬 */
+  display: flex; /* 수정 버튼과 닉네임을 가로로 배열하기 위해 */
+  flex-direction: column; /* 세로로 정렬되도록 설정 */
+  align-items: center; /* 가로 중앙 정렬 */
+}
+
+.pro-image {
+  width: 25vw; /* 적당한 크기로 조정하세요 */
+  height: 25vw; /* 적당한 크기로 조정하세요 */
+  border: 0.1vw solid black;
+  border-radius: 50%; /* 동그란 모양을 위해 반지름 50%로 설정 */
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+
+.follow{
+  font-size: 2vw;
+  margin-top: 10px; /* 적당한 간격 설정 */
+  border: 0.1vw solid black;
+  width: 20vw;
+  height: 3vw;
+  display: inline; /* 내용을 가로로 배열하기 위해 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.pro-nick{
+  flex: 1;
+  button{
+
+  }
+}
+
+.content-list{
+  display: flex;
+  flex-wrap: wrap; /* 요소들이 넘치면 다음 줄로 이동 */
+  justify-content: center; /* 가로 중앙 정렬 */
+}
+.my-pageNav{
+flex: 1;
+  button{
+    border: 0.1vw solid black;
+    font-size: 2vw;
+    margin: 4% 0 0 0;
+    padding: 1vw;
+    width: 10vw;
+    background: none;
+  }
+}
+
+

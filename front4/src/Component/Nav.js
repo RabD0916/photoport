@@ -1,11 +1,11 @@
-import '../Css/nav.scss';
+import './nav.scss';
 import { Link } from "react-router-dom";
 import {useEffect, useState} from "react";
-import Search from '../testttt/search.png';
-import Mypag from '../testttt/mypage.png';
+import Search from '../img/search.png';
+import Mypag from '../img/mypage.png';
 import { useLocation } from "react-router-dom";
 import { useNavigate} from "react-router-dom";
-import LogoutIcon from '../testttt/logout.png';
+import LogoutIcon from '../img/logout.png';
 function Nav() {
     const location = useLocation();
     // const queryParams = new URLSearchParams(location.search);

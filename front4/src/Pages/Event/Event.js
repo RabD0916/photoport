@@ -1,7 +1,7 @@
 import React from "react";
-import '../Css/Event.scss'
-import test from'../testttt/photoport.png'
-import test2 from "../img/kakao.png";
+import './Event.scss'
+import test from '../../img/photoport.png'
+import test2 from "../../img/kakao.png";
 const Event = () => {
   return (
       <>
