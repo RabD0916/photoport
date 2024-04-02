@@ -6,6 +6,7 @@ import Mypag from '../testttt/mypage.png';
 import { useLocation } from "react-router-dom";
 import { useNavigate} from "react-router-dom";
 import LogoutIcon from '../testttt/logout.png';
+import axios from "axios";
 function Nav() {
     const location = useLocation();
     // const queryParams = new URLSearchParams(location.search);
@@ -39,7 +40,7 @@ function Nav() {
     }
 
     // 로그아웃 핸들러
-    const logoutHandler = () => {
+    const logoutHandler = async (e) => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("username");
         setIsLoggedIn(false);

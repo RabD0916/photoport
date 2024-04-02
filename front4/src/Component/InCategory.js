@@ -19,15 +19,13 @@ const GalleryContainer = styled.div`
 // `;
 
 const InCategory = () => {
-    const {userId} = useParams();
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
-    const [accessToken, setAccessToken] = useState("");
-//    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("username");
 
     useEffect(() => {
-        setAccessToken(localStorage.getItem("accessToken"));
         async function getMediaList() {
             const result = await axios.get(
                 `http://localhost:3000/api/sendMedia/${cateId}`,

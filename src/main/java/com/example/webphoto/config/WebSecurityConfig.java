@@ -30,12 +30,12 @@ public class WebSecurityConfig {
     SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
                 // API 경로에 대한 보안 설정
-                .securityMatcher("/api/**")
+                .securityMatcher("/**")
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 특정 API 경로에 대해 인증 없이 허용
-                                .requestMatchers("/api/join", "/api/signin", "/api/token", "api/hello","api/mailSend", "api/mailauthCheck").permitAll()
+                                .requestMatchers("/api/join", "/api/signin", "/api/token", "/api/hello","/api/mailSend", "/api/mailauthCheck", "/", "/h2-console/**").permitAll()
                                 // 그 외의 모든 요청은 인증이 필요함
                                 .anyRequest().authenticated()
                 )

@@ -5,6 +5,9 @@ import com.example.webphoto.service.BoardService;
 import com.example.webphoto.service.FileService;
 import com.example.webphoto.service.TokenService;
 import com.example.webphoto.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +43,6 @@ public class ApiController {
     @PostMapping("/signin")
     public ResponseEntity<CreateAccessTokenResponse> postSignin(
             @RequestBody CreateAccessTokenRequest request) {
-
         try {
             CreateAccessTokenResponse response = tokenService.createAccessToken(request);
             return ResponseEntity.ok(response);
