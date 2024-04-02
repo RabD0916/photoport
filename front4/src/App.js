@@ -4,19 +4,20 @@ import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./Component/Main";
 import Footer from "./Component/Footer";
-import InGallery from "./Component/InGallery";
-import InCategory from "./Component/InCategory";
-import Login from "./mypage/Login";
-import Signup from "./mypage/Signup";
-import FindID from "./mypage/FindID";
-import FindPW from "./mypage/FindPW";
-import Join from "./mypage/Join"
-import Eventpage from "./Event/Event";
-import Noticepage from "./Notice/Notice";
-import Create from "./CreateCut/Create";
-import MyPage from "./Component/MyPage";
-import BoardList from "./Board/BoardList";
-import BoardWrite from "./Board/BoardWrite";
+import InGallery from "./Pages/Gallery/InGallery";
+import InCategory from "./Pages/Gallery/InCategory";
+import Login from "./Pages/mypage/Login";
+import Signup from "./Pages/mypage/Signup";
+import FindID from "./Pages/mypage/FindID";
+import FindPW from "./Pages/mypage/FindPW";
+import Join from "./Pages/mypage/Join"
+import Eventpage from "./Pages/Event/Event";
+import Noticepage from "./Pages/Notice/Notice";
+import Create from "./Pages/CreateCut/Create";
+import MyPage from "./Pages/mypage/MyPage";
+import BoardList from "./Pages/Board/BoardList";
+import BoardWrite from "./Pages/Board/BoardWrite";
+import EventDetail from "./Pages/Event/EventDetail";
 
 /*
 function Eventpage() {
@@ -48,6 +49,7 @@ function App() {
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
                   <Route path={"/join"} element={<Join/>}></Route>
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
+                  <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

@@ -1,5 +1,5 @@
 import React from "react"
-import '../Css/Create.scss'
+import './Create.scss'
 const Create = (props) => {
 
     return (

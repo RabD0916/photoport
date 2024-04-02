@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../Css/main.css';
-import Mainlogo from '../testttt/photoport.png';
+import './main.css';
+import Mainlogo from '../img/photoport.png';
 import {Link} from "react-router-dom";
-import Frame1 from "../testttt/frame1.jpg"
-import Frame2 from "../testttt/frame2.jpg"
-import Frame3 from "../testttt/frame3.jpg"
+import Frame1 from "../img/frame1.jpg"
+import Frame2 from "../img/frame2.jpg"
+import Frame3 from "../img/frame3.jpg"
 import { ScrollAnimation } from "./ScrollAnimation";
 
 
