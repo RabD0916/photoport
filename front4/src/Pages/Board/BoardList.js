@@ -4,11 +4,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import "./BoardCss/Board.css";
 
 const BoardList = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('username');
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState([]);
 
     const getBoardList = async () => {
-        const resp = await (await axios.get('//localhost:8080/board')).data; // 2) 게시글 목록 데이터에 할당
+        const resp = await axios.get('http://localhost:8080/api/boards',
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }); // 2) 게시글 목록 데이터에 할당
         setBoardList(resp.data); // 3) boardList 변수에 할당
 
         const pngn = resp.pagination;
@@ -20,7 +27,7 @@ const BoardList = () => {
     };
 
     useEffect(() => {
-        getBoardList(); // 1) 게시글 목록 조회 함수 호출
+        getBoardList().then(r => console.log(r)); // 1) 게시글 목록 조회 함수 호출
     }, []);
 
     return (

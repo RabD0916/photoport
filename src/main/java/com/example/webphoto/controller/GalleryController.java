@@ -1,4 +1,4 @@
-package com.example.webphoto;
+package com.example.webphoto.controller;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.bind.annotation.*;

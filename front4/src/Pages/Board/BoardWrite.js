@@ -4,6 +4,8 @@ import axios from 'axios';
 import "./BoardCss/BoardWrite.css"
 
 const BoardWrite = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('username');
     const navigate = useNavigate();
 
     const [board, setBoard] = useState({
@@ -24,7 +26,11 @@ const BoardWrite = () => {
     };
 
     const saveBoard = async () => {
-        await axios.post(`//localhost:8080/board`, board).then((res) => {
+        await axios.post(`http://localhost:8080/api/boards`, board, {
+            headers : {
+                Authorization : `Bearer ${accessToken}`
+            }
+        }).then((res) => {
             alert('등록되었습니다.');
             navigate('/board');
         });
