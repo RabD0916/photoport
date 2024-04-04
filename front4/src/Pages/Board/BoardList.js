@@ -9,6 +9,9 @@ const BoardList = () => {
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState([]);
 
+    const handleCreate =() =>{
+        navigate('/BoardWrite');
+    }
     const getBoardList = async () => {
         const resp = await axios.get('http://localhost:8080/api/boards',
             {
@@ -34,7 +37,7 @@ const BoardList = () => {
         <div>
             <div className="mainboard">
                 <div className={"boardSelect"}></div>
-                <div className={"boardNav"}><button>게시글 생성</button></div>
+                <div className={"boardNav"}><button onClick={handleCreate}>게시글 생성</button></div>
                 <div className="boardList">
                     {/* 게시글들 */}
                     <div className="boardItem">

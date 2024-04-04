@@ -41,7 +41,7 @@ function App() {
                   <Route path={"/gallery/:userId"} element={<InGallery />}></Route>
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
                   <Route path={"/Board"} element={<BoardList/>}></Route>
-                  <Route path={"/write"} element={<BoardWrite/>}></Route>
+                  <Route path={"/Boardwrite"} element={<BoardWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
                   <Route path={"/Event"} element={<Eventpage/>}></Route>
                   <Route path={"/Notice"} element={<Noticepage/>}></Route>

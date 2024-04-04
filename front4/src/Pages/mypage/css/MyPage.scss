@@ -14,40 +14,54 @@
 }
 
 .pro-image {
-  width: 25vw; /* 적당한 크기로 조정하세요 */
-  height: 25vw; /* 적당한 크기로 조정하세요 */
+  position: relative;
+  width: 14vw; /* 적당한 크기로 조정하세요 */
+  height: 14vw; /* 적당한 크기로 조정하세요 */
   border: 0.1vw solid black;
   border-radius: 50%; /* 동그란 모양을 위해 반지름 50%로 설정 */
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  //background-image: url("../../img/photoport.png");
   background-size: cover;
+  .img_btn{
+    padding: 0;
+    margin-right: 10%;
+    width: 4vw;
+    height: 2vw;
+    font-size: 0.5vw;
+    border: 0.1vw solid black;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #f0f0f0;
+}
+}
+.input_container {
+  width: 30vw;
+  display: flex;
+  align-items: center; /* h2를 세로로 중앙 정렬 */
+  font-size: 1vw;
 }
 
 
-.pro-name{
-  font-size: 2vw;
-  margin: 10px 5px 5px 10px; /* 적당한 간격 설정 */
+.input_container h2 {
+
+  margin: 4% 3% 0 44%;
+}
+
+.input_container button {
+  margin-top: 4%;
+  padding: 0;
+  font-size: 1vw;
   border: 0.1vw solid black;
-  width: 20vw;
-  height: 3vw;
-  display: inline; /* 내용을 가로로 배열하기 위해 */
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
+  width: 3vw;
+  height: 2vw;
 }
-.pro-edit{
-  display: inline;
-}
+
 .follow{
-  font-size: 2vw;
-  margin-top: 10px; /* 적당한 간격 설정 */
+  position: relative;
+  font-size: 1vw;
+  margin-top: 1%; /* 적당한 간격 설정 */
   border: 0.1vw solid black;
-  width: 20vw;
-  height: 3vw;
-  display: inline; /* 내용을 가로로 배열하기 위해 */
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
+  width: 10vw;
+  height: 2vw;
 }
 
 .content-list{

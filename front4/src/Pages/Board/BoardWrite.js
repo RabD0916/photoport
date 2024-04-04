@@ -41,7 +41,7 @@ const BoardWrite = () => {
     };
 
     const backToList = () => {
-        navigate('/board');
+        navigate("/gallery/" + userId);
     };
 
     return (
