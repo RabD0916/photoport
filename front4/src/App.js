@@ -18,6 +18,7 @@ import MyPage from "./Pages/mypage/MyPage";
 import BoardList from "./Pages/Board/BoardList";
 import BoardWrite from "./Pages/Board/BoardWrite";
 import EventDetail from "./Pages/Event/EventDetail";
+import Test1 from "./Pages/mypage/Test1";
 
 /*
 function Eventpage() {
@@ -50,6 +51,7 @@ function App() {
                   <Route path={"/join"} element={<Join/>}></Route>
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
+                  <Route path={"/compotest"} element={<Test1/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

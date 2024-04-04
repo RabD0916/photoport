@@ -33,6 +33,8 @@ const BoardList = () => {
     return (
         <div>
             <div className="mainboard">
+                <div className={"boardSelect"}></div>
+                <div className={"boardNav"}><button>게시글 생성</button></div>
                 <div className="boardList">
                     {/* 게시글들 */}
                     <div className="boardItem">

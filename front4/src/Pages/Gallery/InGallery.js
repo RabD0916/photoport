@@ -54,7 +54,7 @@ const InGallery = () => {
         return result.data;
     }
     async function RenameCate(cateName) {
-        const result = await axios.Rename(
+        const result = await axios.patch(
             `http://localhost:8080/api/RenameCategory/${cateName}`
         )
         return result.data;

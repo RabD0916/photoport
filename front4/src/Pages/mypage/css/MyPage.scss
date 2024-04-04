@@ -21,9 +21,24 @@
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
+  //background-image: url("../../img/photoport.png");
+  background-size: cover;
 }
 
 
+.pro-name{
+  font-size: 2vw;
+  margin: 10px 5px 5px 10px; /* 적당한 간격 설정 */
+  border: 0.1vw solid black;
+  width: 20vw;
+  height: 3vw;
+  display: inline; /* 내용을 가로로 배열하기 위해 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+.pro-edit{
+  display: inline;
+}
 .follow{
   font-size: 2vw;
   margin-top: 10px; /* 적당한 간격 설정 */
@@ -33,13 +48,6 @@
   display: inline; /* 내용을 가로로 배열하기 위해 */
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
-}
-
-.pro-nick{
-  flex: 1;
-  button{
-
-  }
 }
 
 .content-list{
@@ -54,7 +62,7 @@ flex: 1;
     font-size: 2vw;
     margin: 4% 0 0 0;
     padding: 1vw;
-    width: 10vw;
+    width: 30vw;
     background: none;
   }
 }
