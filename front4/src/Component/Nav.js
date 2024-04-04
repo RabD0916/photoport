@@ -12,6 +12,12 @@ function Nav() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
 
+    //검색창 보이기
+    const[visible,setVisible] = useState(false);
+    //검색창에 들어가는 입력값
+    const [search, setSearch] = useState("");
+
+
     // 로그인 상태 관리
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -48,7 +54,9 @@ function Nav() {
         setUserId('');
         navigate("/");
     }
-
+    const onChangeSearch = (e) => {
+        setSearch(e.target.value);
+    }
 
     return (
         <>
@@ -58,19 +66,32 @@ function Nav() {
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
-                        <Link to={"/"} className="right"><img className={"search_icon"} src={Search} alt="하이"/></Link>
+                        {visible && <input className={"search_bar"} type={"text"} name={search}/>}
+                        <button className="right" onClick={() =>{
+                            setVisible(!visible);
+                        }}><img className={"search_icon"} src={Search} alt="하이"/></button>
                     </div>
                     <div className="otherLinks">
                         <Link to={"/gallery/" + userId} className={"downright main_b"}
                               onClick={isUserIdEmpty}>갤러리</Link>
 
-                        <Link to={"/Board"} className={"downright main_b"}>게시판</Link>
-
-                            {
+                        <div className={"dropdown"}>
+                            <span className="dropbtn downright main_b">게시판</span>
+                            <div className={"dropdown-content"}>
+                                <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
+                                <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
+                            </div>
+                        </div>
+                        {
                                 isLoggedIn ? (
-                                    <button onClick={logoutHandler}>
-                                        <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
-                                    </button>
+                                    <div className={"nav_div"}>
+                                        <Link to={"/Mypage"} className={"drop_a"}>
+                                            <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
+                                        </Link>
+                                        <button className={"mypage_btn"} onClick={logoutHandler}>
+                                            <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
+                                        </button>
+                                    </div>
                                 ) : (
                                     <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
                                 )

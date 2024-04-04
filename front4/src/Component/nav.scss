@@ -27,6 +27,7 @@ $shadowColour: rgba(0, 0, 0, .6);
 .main_a{
     text-decoration: none;
     font-size: 3vw;
+    position: relative;
 }
 .main_b{
     text-decoration: none;
@@ -36,7 +37,7 @@ $shadowColour: rgba(0, 0, 0, .6);
     color: pink;
 }
 .centerLink {
-    padding-top: 20px;
+    padding-top: 1%;
     text-align: center;
 }
 .rightLinks {
@@ -49,8 +50,76 @@ $shadowColour: rgba(0, 0, 0, .6);
     padding: 1%;
     display: block;
     text-align: right; /* 검색하기 링크를 오른쪽 정렬합니다. */
-    margin-bottom: 10px; /* 검색하기 링크 아래 여백을 추가합니다. */
+    margin-bottom: 2%; /* 검색하기 링크 아래 여백을 추가합니다. */
+    button {
+        border: none;
+        background: none;
+        width: 1vw;
+        height: 1vw;
+    }
 }
+
+.dropdown{
+    position : relative;
+    display : inline-block;
+    &:before {
+        pointer-events: none;
+        z-index: -1;
+        content: '';
+        top: 100%;
+        left: 5%;
+        width: 90%;
+        opacity: 0;
+        background: radial-gradient(ellipse at center, rgb(255, 114, 241) 0%,rgba(0,0,0,0) 80%); /* W3C */
+        transition-duration: $defaultDuration;
+        //transition-property: transform opacity;
+    }
+
+    &:hover {
+        transform: translateY(-6px);
+        animation-name: hover;
+        animation-duration: 1.5s;
+        animation-delay: $defaultDuration;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+
+        &:before {
+            opacity: .4;
+            transform: translateY(6px);
+            animation-name: hover-shadow;
+            animation-duration: 1.5s;
+            animation-delay: .3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+    }
+}
+
+.dropdown-content{
+    display : none;
+    position : absolute;
+    z-index : 1; /*다른 요소들보다 앞에 배치*/
+}
+
+.dropdown-content a{
+    display : block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nav_div{
+    display: inline
+}
+
+.drop_a{
+    text-decoration: none;
+    font-size: 1vw;
+}
+
 .otherLinks a {
     display: inline-block;
     padding: 1%;
@@ -68,7 +137,6 @@ $shadowColour: rgba(0, 0, 0, .6);
         content: '';
         top: 100%;
         left: 5%;
-        height: 10px;
         width: 90%;
         opacity: 0;
         background: radial-gradient(ellipse at center, rgb(255, 114, 241) 0%,rgba(0,0,0,0) 80%); /* W3C */
@@ -107,15 +175,61 @@ $shadowColour: rgba(0, 0, 0, .6);
 }
 
 .search_icon{
+    margin: 0 0 0 0;
     width: 2vw;
-    height: 2vw;
 }
 .mypage_icon {
     width: 2vw;
 }
+.mypage_btn{
+    border: none;
+    background: none;
+    &:before {
+        pointer-events: none;
+        z-index: -1;
+        content: '';
+        top: 100%;
+        left: 5%;
+        width: 90%;
+        opacity: 0;
+        background: radial-gradient(ellipse at center, rgb(255, 114, 241) 0%,rgba(0,0,0,0) 80%); /* W3C */
+        transition-duration: $defaultDuration;
+        //transition-property: transform opacity;
+    }
+
+    &:hover {
+        transform: translateY(-6px);
+        animation-name: hover;
+        animation-duration: 1.5s;
+        animation-delay: $defaultDuration;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+
+        &:before {
+            opacity: .4;
+            transform: translateY(6px);
+            animation-name: hover-shadow;
+            animation-duration: 1.5s;
+            animation-delay: .3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+    }
+}
 .downright{
     color: hotpink;
 }
+.search_bar{
+    padding: -1% 0 0 0;
+    width: 30vw;
+    height: 2vw;
+    border-radius: 20px;
+    border: white;
+    background-color: #FC819E;
+}
+
 
 
 

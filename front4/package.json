@@ -9,7 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.15.1",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "framer-motion": "^11.0.22",
     "http-proxy-middleware": "^2.0.6",
     "json2mq": "^0.2.0",
