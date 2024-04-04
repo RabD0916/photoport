@@ -23,7 +23,7 @@ const InCategory = () => {
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
     const accessToken = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("username");
+    const userId = localStorage.getItem("id");
 
     useEffect(() => {
         async function getMediaList() {

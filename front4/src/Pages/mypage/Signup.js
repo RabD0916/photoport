@@ -6,7 +6,7 @@ import axios from "axios";
 const SignUp = ({ onSignUpSuccess }) => {
 
     const [formData, setFormData] = useState({
-        username: '',
+        id: '',
         password: '',
         userNick: '',
         phone: '',
@@ -78,8 +78,8 @@ const SignUp = ({ onSignUpSuccess }) => {
                     <p className="sign_p">*아이디 </p>
                     <input
                         type="text"
-                        name="username"
-                        value={formData.username}
+                        name="id"
+                        value={formData.id}
                         className="sign_input"
                         onChange={handleChange}
                     />

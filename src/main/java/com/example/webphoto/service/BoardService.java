@@ -27,8 +27,11 @@ public class BoardService {
                 board.getTitle(),
                 board.getCreatedAt(),
                 board.getContent(),
-                board.getFileName(),
-                board.getUser().getUsername()
+                board.getView(),
+                board.getLike(),
+                board.getStat(),
+                board.getType(),
+                board.getWriter().getId()
         );
     }
 
@@ -40,7 +43,10 @@ public class BoardService {
                 dto.getTitle(),
                 null,
                 dto.getContent(),
-                dto.getFileName(),
+                0,
+                0,
+                dto.getStat(),
+                dto.getType(),
                 user
         );
     }
@@ -50,12 +56,13 @@ public class BoardService {
         return new AddBoardResponse(
                 board.getTitle(),
                 board.getContent(),
-                board.getFileName()
+                board.getStat(),
+                board.getType()
         );
     }
 
     // 게시글을 추가하는 메소드
-    public AddBoardResponse addBoard(AddBoardRequest dto) {
+    public AddBoardResponse addBoard(AddBoardRequest dto, String[] urls) {
         Board board = boardRepository.save(requestToEntity(dto));
         return entityToResult(board);
     }
@@ -68,7 +75,7 @@ public class BoardService {
             Board board = optionalBoard.get();
             board.setTitle(dto.getTitle());
             board.setContent(dto.getContent());
-            board.setFileName(dto.getFileName());
+//            board.setFileName(dto.getFileName());
 
             boardRepository.save(board);
 
@@ -85,8 +92,8 @@ public class BoardService {
     }
 
     // 특정 사용자의 게시글 목록을 가져오는 메소드
-    public List<GetBoardResponse> getBoardByUser(String username) {
-        return boardRepository.findByUser_usernameOrderByCreatedAtDesc(username).stream()
+    public List<GetBoardResponse> getBoardByUser(String id) {
+        return boardRepository.findByWriter_IdOrderByCreatedAtDesc(id).stream()
                 .map(board -> entityToResponse(board))
                 .collect(Collectors.toList());
     }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AddUserRequest {
 
-    private String username;
+    private String id;
 
     private String password;
 

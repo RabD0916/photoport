@@ -25,12 +25,15 @@ public class BoardController {
     public ResponseEntity<AddBoardResponse> addBoard(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("url") String[] urls,
             Principal user) {
         // 파일 업로드 후 메모 추가
-        String savedName = fileService.uploadFile(file);
-        AddBoardRequest request = new AddBoardRequest(title, content, savedName, user.getName());
-        AddBoardResponse response = boardService.addBoard(request);
+        System.out.println(user.getName());
+        System.out.println(title);
+        System.out.println(content);
+        System.out.println(urls[0]);
+        AddBoardRequest request = new AddBoardRequest(title, content, user.getName());
+        AddBoardResponse response = boardService.addBoard(request, urls);
         return ResponseEntity.ok(response);
 //        boardService.addBoard(new AddBoardRequest(title, content, savedName, user.getName()));
 //        return "작성 완료";

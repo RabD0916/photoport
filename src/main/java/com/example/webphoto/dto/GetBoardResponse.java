@@ -17,7 +17,10 @@ public class GetBoardResponse {
     private String title;
     private LocalDateTime createdAt;
     private String content;
-    private String fileName;
+    private int view;
+    private int like;
+    private int stat;
+    private String type;
     private String username;
 
 }

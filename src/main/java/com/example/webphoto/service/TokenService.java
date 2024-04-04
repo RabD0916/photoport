@@ -22,10 +22,11 @@ public class TokenService {
     private final JwtProperties jwtProperties;
 
     public CreateAccessTokenResponse createAccessToken(CreateAccessTokenRequest request) {
+        System.out.println(request.getId());
+        System.out.println(request.getPassword());
+        if(request.getId() != null && request.getPassword() != null) {
 
-        if(request.getUsername() != null && request.getPassword() != null) {
-
-            User user = userService.findById(request.getUsername());
+            User user = userService.findById(request.getId());
             if(bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return new CreateAccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
@@ -35,8 +36,8 @@ public class TokenService {
         }
         else if(request.getRefreshToken() != null) {
             if(tokenProvider.isValidToken(request.getRefreshToken())) {
-                String username = refreshTokenService.findByRefreshToken(request.getRefreshToken()).getUsername();
-                User user = userService.findById(username);
+                String userId = refreshTokenService.findByRefreshToken(request.getRefreshToken()).getUserId();
+                User user = userService.findById(userId);
                 return new CreateAccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
                         null);
@@ -48,7 +49,7 @@ public class TokenService {
     public String createRefreshToken(User user) throws IllegalArgumentException{
 
         String token = tokenProvider.createToken(user, Duration.ofHours(jwtProperties.getRefreshDuration()));
-        RefreshToken refreshToken = refreshTokenService.findByUsername(user.getUsername());
+        RefreshToken refreshToken = refreshTokenService.findByUserId(user.getId());
         refreshToken.setRefreshToken(token);
         refreshTokenService.save(refreshToken); // save refresh token
         return token;

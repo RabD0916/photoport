@@ -13,6 +13,7 @@ public class AddBoardResponse {
 
     private String title;
     private String content;
-    private String fileName;
+    private int stat;
+    private String type;
 
 }

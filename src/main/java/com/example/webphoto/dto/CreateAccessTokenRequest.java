@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateAccessTokenRequest {
 
-    private String username;
+    private String id;
     private String password;
     private String refreshToken;
 }

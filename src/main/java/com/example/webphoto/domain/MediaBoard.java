@@ -6,21 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@Table(name = "mediaboard")
 @AllArgsConstructor
-@Table(name = "refresh_tokens")
-public class RefreshToken {
-
+@NoArgsConstructor
+public class MediaBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mediaBoard_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "media_id")
+    private Media media;
 
-    @Column(nullable = false)
-    private String refreshToken;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 }

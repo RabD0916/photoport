@@ -14,6 +14,8 @@ public class AddBoardRequest {
     private String title;
     private String content;
     private String fileName;
+    private int stat;
+    private String type;
     private String username;
 
     public AddBoardRequest(String title, String content, String file) {

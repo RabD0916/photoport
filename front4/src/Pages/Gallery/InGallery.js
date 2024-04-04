@@ -7,7 +7,7 @@ import axios from "axios";
 const InGallery = () => {
     //const {userId} = useParams();
     const accessToken = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem('username');
+    const userId = localStorage.getItem('id');
     const [cate, setCate] = useState([]);
 
     useEffect(() => {

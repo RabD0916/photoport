@@ -41,7 +41,7 @@ const FindID=({ handleLogin }) =>{
 
                     <form onSubmit={handleSubmit} method="post">
                         <div className="first-input input__block">
-                            <input type="email" placeholder="이메일을 입력해주세요" className="input1" name="username"  onChange={handleChange}  />
+                            <input type="email" placeholder="이메일을 입력해주세요" className="input1" name="email"  onChange={handleChange}  />
                             <input type="button" className={"input_btn"} value={"버튼"} onClick={handelButton} />
                             {inputVisible &&<input type={"text"} placeholder={"6자리 입력"}/>}
                             {inputVisible &&<p className={"find__p"}>*인증번호를 입력해 주세요</p>}

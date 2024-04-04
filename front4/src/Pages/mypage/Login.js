@@ -10,7 +10,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        username: '',
+        id: '',
         password: '',
     });
 
@@ -31,7 +31,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             console.log("accessToken 값 : " + accessToken);
 
             localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('username', formData.username);
+            localStorage.setItem('id', formData.id);
             navigate("/")
         } catch (error) {
             console.error('Error:', error);
@@ -48,7 +48,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
                 <form onSubmit={handleSubmit} method="post">
                     <div className="first-input input__block first-input__block">
-                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="username" value={formData.username} onChange={handleChange}   />
+                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="id" value={formData.id} onChange={handleChange}   />
                     </div>
                     <div className="input__block">
                         <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />

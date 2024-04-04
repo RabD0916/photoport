@@ -34,6 +34,7 @@ public class UserController {
     public ResponseEntity<CreateAccessTokenResponse> postSignin(
             @RequestBody CreateAccessTokenRequest request) {
         try {
+
             CreateAccessTokenResponse response = tokenService.createAccessToken(request);
             return ResponseEntity.ok(response);
         }catch (IllegalArgumentException e) {

@@ -18,7 +18,7 @@ function Nav() {
     useEffect(() => {
         // 로그인 상태 확인
         const token = localStorage.getItem("accessToken");
-        const storedUsername = localStorage.getItem("username");
+        const storedUsername = localStorage.getItem("id");
         if (token) {
             setIsLoggedIn(true);
             if (storedUsername) {

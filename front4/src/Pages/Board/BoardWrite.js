@@ -10,12 +10,12 @@ const BoardWrite = () => {
 
     const [board, setBoard] = useState({
         title: '',
-        Tag: '',
+        tag: '',
         contents: '',
-        Picture : '',
+        picture : '',
     });
 
-    const { title, Tag, contents,Picture } = board; //비구조화 할당
+    const { title, tag, contents,picture } = board; //비구조화 할당
 
     const onChange = (event) => {
         const { value, name } = event.target; //event.target에서 name과 value만 가져오기
@@ -26,6 +26,10 @@ const BoardWrite = () => {
     };
 
     const saveBoard = async () => {
+        console.log(board.title);
+        console.log(board.tag);
+        console.log(board.picture);
+        console.log(board.contents);
         await axios.post(`http://localhost:8080/api/boards`, board, {
             headers : {
                 Authorization : `Bearer ${accessToken}`
@@ -52,8 +56,8 @@ const BoardWrite = () => {
                     <span className="content">태그</span>
                     <input
                         type="text"
-                        name="Tag"
-                        value={Tag}
+                        name="tag"
+                        value={tag}
                         onChange={onChange}
                     />
                 </div>

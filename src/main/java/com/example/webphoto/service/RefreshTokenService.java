@@ -15,9 +15,9 @@ public class RefreshTokenService {
         return repository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new IllegalArgumentException());
     }
-    public RefreshToken findByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseGet(() -> new RefreshToken(null, username, null));
+    public RefreshToken findByUserId(String userId) {
+        return repository.findByUserId(userId)
+                .orElseGet(() -> new RefreshToken(null, userId, null));
     }
     public RefreshToken save(RefreshToken refreshToken) {
         return repository.save(refreshToken);

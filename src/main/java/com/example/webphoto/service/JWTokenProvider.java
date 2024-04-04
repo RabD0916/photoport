@@ -40,7 +40,7 @@ public class JWTokenProvider {
                 .claims() // 토큰 클레임에 정보 추가
                 .issuedAt(now) // 토큰 발행 시간 추가
                 .issuer(jwtProperties.getIssuer()) // 토큰 발행자 정보 추가
-                .subject(user.getUsername()) // 토큰 주제 정보 추가
+                .subject(user.getId()) // 토큰 주제 정보 추가
                 .expiration(exp).and() // 토큰 만료 시간 추가
                 .signWith(getKey(), Jwts.SIG.HS256) // 토큰 서명에 사용할 키 설정
                 .compact();

@@ -26,18 +26,18 @@ public class UserService {
     // dto를 user엔티티로 저장
     private User requestToEntity(AddUserRequest dto) {
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
-        if (dto.getUsername().equals("ADMIN")) {
-            return new User(dto.getUsername(), password, dto.getUserNick(),
+        if (dto.getId().equals("ADMIN")) {
+            return new User(dto.getId(), password, dto.getUserNick(),
                     dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.ADMIN, true);
         } else {
-            return new User(dto.getUsername(), password, dto.getUserNick(),
+            return new User(dto.getId(), password, dto.getUserNick(),
                     dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.USER, true);
         }
     }
 
     // user 엔티티를 AddUserResponse Dto로 변환
     private AddUserResponse entityToResponse(User user) {
-        return new AddUserResponse(user.getUsername(), "ok",  true, "성공적으로 처리하였습니다.");
+        return new AddUserResponse(user.getId(), "ok",  true, "성공적으로 처리하였습니다.");
     }
 
 

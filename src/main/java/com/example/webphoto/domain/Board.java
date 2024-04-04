@@ -12,30 +12,39 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "boards")
+@Table(name = "board_")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Board {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="board_id")
     private Long id;
 
-    @Column(length = 100)
+    @Column(name="board_title", length = 100)
     private String title;
 
     @CreationTimestamp
-    @Column(length = 100)
+    @Column(name="board_createAt", length = 100)
     private LocalDateTime createdAt;
 
-    @Column(length = 100)
+    @Column(name="board_content", length = 100)
     private String content;
 
-    @Column(length = 100)
-    private String fileName;
+    @Column(name="board_view", length = 100)
+    private int view;
+
+    @Column(name="board_like", length = 100)
+    private int like;
+
+    @Column(name="board_status", length = 100)
+    private int stat;
+
+    @Column(name="board_type", length = 100)
+    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
 }
