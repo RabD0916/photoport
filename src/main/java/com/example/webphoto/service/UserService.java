@@ -7,6 +7,7 @@ import com.example.webphoto.dto.AddUserResponse;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -21,6 +23,17 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    // 이메일을 이용하여 사용자의 아이디를 찾는 메소드
+    public String findUserIdByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            User res = user.get();
+            return res.getId();
+        } else {
+            return null;
+        }
     }
 
     // dto를 user엔티티로 저장

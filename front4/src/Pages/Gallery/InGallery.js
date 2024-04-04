@@ -10,6 +10,7 @@ const InGallery = () => {
     const userId = localStorage.getItem('id');
     const [cate, setCate] = useState([]);
 
+
     useEffect(() => {
         console.log(userId);
         console.log(accessToken);

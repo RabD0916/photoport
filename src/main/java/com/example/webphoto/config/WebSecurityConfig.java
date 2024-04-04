@@ -58,18 +58,18 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests ->
                         requests
                                 .requestMatchers(HttpMethod.GET, "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll() // static files
-                                .requestMatchers("/signin", "/signout", "/join", "/").permitAll() // All method
+                                .requestMatchers("/signin", "/signout", "/join", "/", "/h2-console/**").permitAll() // All method
                                 .anyRequest().authenticated())
-                .formLogin(login ->
-                        login
-                                .loginPage("/")
-                                .defaultSuccessUrl("/memos")
-                                .failureForwardUrl("/"))
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/signout")
-                                .logoutSuccessUrl("/")
-                                .invalidateHttpSession(true))
+//                .formLogin(login ->
+//                        login
+//                                .loginPage("/")
+//                                .defaultSuccessUrl("/memos")
+//                                .failureForwardUrl("/"))
+//                .logout(logout ->
+//                        logout
+//                                .logoutUrl("/signout")
+//                                .logoutSuccessUrl("/")
+//                                .invalidateHttpSession(true))
                 .build();
     }
 

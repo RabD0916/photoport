@@ -22,7 +22,7 @@ public class TokenService {
     private final JwtProperties jwtProperties;
 
     public CreateAccessTokenResponse createAccessToken(CreateAccessTokenRequest request) {
-        System.out.println(request.getId());
+
         System.out.println(request.getPassword());
         if(request.getId() != null && request.getPassword() != null) {
 
