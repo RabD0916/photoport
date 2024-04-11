@@ -12,7 +12,12 @@ import FindID from "./Pages/mypage/FindID";
 import FindPW from "./Pages/mypage/FindPW";
 import Join from "./Pages/mypage/Join"
 import Eventpage from "./Pages/Event/Event";
-import Noticepage from "./Pages/Notice/Notice";
+import Notice from "./Pages/Notice/Notice";
+import NoticeDetail from "./Pages/Notice/NoticeDetail";
+import NoticeWrite from "./Pages/Notice/NoticeWrite";
+import NoticeShow from "./Pages/Notice/NoticeShow";
+import NoticeUpdate from "./Pages/Notice/NoticeUpdate";
+import FQ from "./Pages/Notice/FQ";
 import Create from "./Pages/CreateCut/Create";
 import MyPage from "./Pages/mypage/MyPage";
 import BoardList from "./Pages/Board/BoardList";
@@ -44,7 +49,12 @@ function App() {
                   <Route path={"/Boardwrite"} element={<BoardWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
                   <Route path={"/Event"} element={<Eventpage/>}></Route>
-                  <Route path={"/Notice"} element={<Noticepage/>}></Route>
+                  <Route path={"/Notice"} element={<Notice/>}></Route>
+                  <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
+                  <Route path={"/NoticeShow"} element={<NoticeShow/>}></Route>
+                  <Route path={"/NoticeUpdate"} element={<NoticeUpdate/>}></Route>
+                  <Route path={"/NoticeWrite"} element={<NoticeWrite/>}></Route>
+                  <Route path={"/FQ"} element={<FQ/>}></Route>
                   <Route path={"/signup"} element={<Signup/>}></Route>
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>

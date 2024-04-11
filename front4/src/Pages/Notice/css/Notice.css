@@ -1,0 +1,133 @@
+.container{
+    width : 90%;
+    max-width: 1200px; /* 최대 너비를 설정할 수도 있습니다. */
+    margin: 0 auto; /* 가운데 정렬을 위해 필요합니다. */
+    border: 4px solid #87CEEB;
+    border-radius: 30px;
+    overflow: hidden; /* 모서리가 둥근 테이블 컨테이너를 만들기 위해 필요합니다. */
+}
+
+
+#title_input{
+    width: 1500px;
+    height: 32px;
+    font-size: 20px;
+    border: 0;
+    border-radius: 0px;
+    outline: none;
+    padding-left: 10px;
+    border-top: 1px solid #87CEEB;
+    border-bottom: 1px solid #87CEEB;
+}
+
+#contents_area{
+    border: none;
+    font-size: 20px;
+    width: 100%; /* 부모 요소에 대한 상대적인 너비를 가집니다. */
+    height: 500px; /* 고정된 높이를 설정합니다. */
+    resize: none; /* 사용자가 크기를 조정하지 못하도록 합니다. */
+    resize : vertical;
+}
+
+#cancle_save_btn{
+    width: 150px;
+    height: 60px;
+    background: #87CEEB;
+    border: 2px solid #87CEEB;
+    border-radius: 20px;
+    margin: 20px 100px;
+    color: white;
+    font-size: 20px;
+}
+
+#cancle_save_btn:hover{
+    background: white;
+    border: 2px solid #87CEEB;
+    color: #87CEEB;
+
+}
+
+#add_img_btn{
+    width: 100px;
+    height: 30px;
+    background: #87CEEB;
+    border: 2px solid #87CEEB;
+    border-radius: 10px;
+    color : white;
+
+}
+
+#add_img_btn:hover{
+    background: white;
+    border: 2px solid #87CEEB;
+    color: #87CEEB;
+
+}
+
+#del_img_btn{
+    width: 50px;
+    height: 30px;
+    background: red;
+    border: 2px solid red;
+    border-radius: 10px;
+    color : white;
+    margin: 10px 20px;
+}
+#del_img_btn:hover{
+    color : red;
+    background: white;
+}
+
+#paging_btn{
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 2px solid #87CEEB;
+    border-radius: 10px;
+    color : #87CEEB;
+}
+#paging_btn:hover{
+    color:white;
+    background: #87CEEB;
+
+}
+
+#write_btn{
+    width: 100px;
+    height: 30px;
+    background: white;
+    border: 2px solid #87CEEB;
+    border-radius: 8px;
+    color : #87CEEB;
+}
+#write_btn:hover{
+    color:white;
+    background: #87CEEB;
+}
+
+#select{
+    width: 100px;
+    height: 30px;
+    background: white;
+    border: 2px solid #87CEEB;
+    border-radius: 8px;
+    color : #87CEEB;
+}
+#select:hover{
+    background: #87CEEB;
+    border: 2px solid #87CEEB;
+    border-radius: 8px;
+    color : white;
+
+}
+
+.searchbox{
+    width: 500px;
+    height: 25px;
+    font-size: 20px;
+    border-radius: 0px;
+    border: 2px solid #87CEEB;
+
+}
+
+
