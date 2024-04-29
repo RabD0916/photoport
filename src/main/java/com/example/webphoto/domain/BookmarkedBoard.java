@@ -9,18 +9,18 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "mediaboard_")
+@Table(name = "bookmarked_")
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaBoard {
+public class BookmarkedBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mediaboard_id")
+    @Column(name = "bookmarked_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_id")
-    private Media media;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")

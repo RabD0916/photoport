@@ -1,5 +1,7 @@
 package com.example.webphoto.dto;
 
+import com.example.webphoto.domain.BoardShare;
+import com.example.webphoto.domain.BoardType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +21,8 @@ public class GetBoardResponse {
     private String content;
     private int view;
     private int like;
-    private int stat;
-    private String type;
+    private BoardShare share;
+    private BoardType type;
     private String username;
 
 }

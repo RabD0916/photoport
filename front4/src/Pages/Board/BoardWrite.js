@@ -5,7 +5,7 @@ import "./BoardCss/BoardWrite.css"
 
 const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem('username');
+    const userId = localStorage.getItem('id');
     const navigate = useNavigate();
 
     const [board, setBoard] = useState({

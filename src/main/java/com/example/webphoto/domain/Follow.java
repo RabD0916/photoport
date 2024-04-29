@@ -9,20 +9,20 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "mediaboard_")
+@Table(name = "follow_")
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaBoard {
+public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mediaboard_id")
+    @Column(name = "follow_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_id")
-    private Media media;
+    @JoinColumn(name = "follower_id")
+    private User follower;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "followed_id")
+    private User followed;
 }

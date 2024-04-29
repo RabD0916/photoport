@@ -7,34 +7,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "media_")
+@Table(name = "lookedBoard_")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Media {
+public class LookedBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="media_id")
+    @Column(name = "looked_id")
     private Long id;
 
-    @Column(name="media_name")
-    private String name;
-
-    @Column(name="media_date")
+    @Column(name = "looked_date")
     private LocalDateTime date;
-
-    @Column(name="media_cate_name")
-    private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User owner;
+    private User user;
 
-    @OneToMany(mappedBy = "media")
-    private List<MediaBoard> boards = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 }

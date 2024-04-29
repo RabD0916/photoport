@@ -6,23 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "mediaboard_")
+@Table(name = "tag_")
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaBoard {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mediaboard_id")
+    @Column(name="tag_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_id")
-    private Media media;
+    @Column(name="tag_name", length = 100)
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @OneToMany(mappedBy = "tag")
+    private List<BoardTag> boards = new ArrayList<>();
 }

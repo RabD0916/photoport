@@ -29,7 +29,7 @@ public class BoardService {
                 board.getContent(),
                 board.getView(),
                 board.getLike(),
-                board.getStat(),
+                board.getShare(),
                 board.getType(),
                 board.getWriter().getId()
         );
@@ -45,7 +45,8 @@ public class BoardService {
                 dto.getContent(),
                 0,
                 0,
-                dto.getStat(),
+                0,
+                dto.getShare(),
                 dto.getType(),
                 user
         );
@@ -56,7 +57,7 @@ public class BoardService {
         return new AddBoardResponse(
                 board.getTitle(),
                 board.getContent(),
-                board.getStat(),
+                board.getShare(),
                 board.getType()
         );
     }

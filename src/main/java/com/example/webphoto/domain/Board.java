@@ -8,12 +8,13 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "board_")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Board {
     @Id
@@ -37,14 +38,49 @@ public class Board {
     @Column(name="board_like", length = 100)
     private int like;
 
-    @Column(name="board_status", length = 100)
-    private int stat;
+    @Column(name="board_bookmark", length = 100)
+    private int bookmark;
 
-    @Column(name="board_type", length = 100)
-    private String type;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="board_share")
+    private BoardShare share;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="board_type")
+    private BoardType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private User writer;
 
+    @OneToMany(mappedBy = "board")
+    private List<MediaBoard> medias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<BoardTag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<LookedBoard> lookedBoards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<LikedBoard> likedBoards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
+
+    public Board(Long id, String title, LocalDateTime createdAt, String content, int view, int like, int bookmark, BoardShare share, BoardType type, User writer) {
+        this.id = id;
+        this.title = title;
+        this.createdAt = createdAt;
+        this.content = content;
+        this.view = view;
+        this.like = like;
+        this.bookmark = bookmark;
+        this.share = share;
+        this.type = type;
+        this.writer = writer;
+    }
 }

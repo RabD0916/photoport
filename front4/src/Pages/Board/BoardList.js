@@ -5,7 +5,7 @@ import "./BoardCss/Board.css";
 
 const BoardList = () => {
     const accessToken = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem('username');
+    const userId = localStorage.getItem('id');
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState([]);
 
