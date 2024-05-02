@@ -22,6 +22,7 @@ public class BoardService {
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
     private GetBoardResponse entityToResponse(Board board) {
+
         return new GetBoardResponse(
                 board.getId(),
                 board.getTitle(),
@@ -70,6 +71,11 @@ public class BoardService {
 
     // 게시글을 수정하는 메소드
     public GetBoardResponse updateBoard(Long id, AddBoardRequest dto) {
+
+        // 코드 리펙터링(by 시영이형)
+//        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+        // 여기서부터 아래부분 해당 메소드 코드 고쳐야함
         Optional<Board> optionalBoard = boardRepository.findById(id);
 
         if (optionalBoard.isPresent()) {
@@ -98,4 +104,5 @@ public class BoardService {
                 .map(board -> entityToResponse(board))
                 .collect(Collectors.toList());
     }
+
 }

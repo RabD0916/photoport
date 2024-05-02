@@ -7,19 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddUserResponse {
+@NoArgsConstructor
+public class CheckUserRequest {
 
     private String id;
-
-    private String res = "ok";
-
-    private boolean success;
-
-    private String message;
-
-    private String userProfile;
-
-    private String userNick;
 }

@@ -39,6 +39,7 @@ public class BoardController {
 //        return "작성 완료";
     }
 
+
     // 사용자가 작성한 게시글 전체 가져오기
     @GetMapping("/boards")
     public List<GetBoardResponse> getBoards(Principal user) {

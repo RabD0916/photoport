@@ -35,7 +35,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 특정 API 경로에 대해 인증 없이 허용
-                                .requestMatchers("/api/join", "/api/signin", "/api/token", "/api/hello","/api/mailSend", "/api/mailauthCheck", "/", "/h2-console/**").permitAll()
+                                .requestMatchers("/api/join", "/api/signin", "/api/token", "/api/hello","/api/mailSend", "/api/mailauthCheck", "/", "/h2-console/**", "/front4/public/**", "/api/checkUserId","/api/newPw","/api/newPwUpdate").permitAll()
                                 // 그 외의 모든 요청은 인증이 필요함
                                 .anyRequest().authenticated()
                 )

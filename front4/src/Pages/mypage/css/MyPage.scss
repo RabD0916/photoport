@@ -13,6 +13,8 @@
   align-items: center; /* 가로 중앙 정렬 */
 }
 
+
+
 .pro-image {
   position: relative;
   width: 14vw; /* 적당한 크기로 조정하세요 */
@@ -33,6 +35,14 @@
     background-color: #f0f0f0;
 }
 }
+
+.pro-image .profile-img {
+  width: 100%; /* 컨테이너 크기에 맞게 설정 */
+  height: 100%; /* 컨테이너 크기에 맞게 설정 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞게 조정 */
+  border-radius: 50%; /* 이미지를 원형으로 만듭니다 */
+}
+
 .input_container {
   width: 30vw;
   display: flex;

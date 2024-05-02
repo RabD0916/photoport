@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./BoardCss/BoardWrite.css"
+import inGallery from "../Gallery/InGallery";
 
 const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
@@ -12,10 +13,10 @@ const BoardWrite = () => {
         title: '',
         tag: '',
         contents: '',
-        picture : '',
+        fileName : '',
     });
 
-    const { title, tag, contents,picture } = board; //비구조화 할당
+    const { title, tag, contents,fileName } = board; //비구조화 할당
 
     const onChange = (event) => {
         const { value, name } = event.target; //event.target에서 name과 value만 가져오기
@@ -28,7 +29,7 @@ const BoardWrite = () => {
     const saveBoard = async () => {
         console.log(board.title);
         console.log(board.tag);
-        console.log(board.picture);
+        console.log(board.fileName);
         console.log(board.contents);
         await axios.post(`http://localhost:8080/api/boards`, board, {
             headers : {
@@ -64,15 +65,18 @@ const BoardWrite = () => {
                 <br/>
                 <div>
                     <span className="content">사진</span>
-                    <div className="picture">
-                        안녕
-                    </div>
+                    <input
+                        type="file"
+                        name="fileName"
+                        value={fileName}
+                        onChange={onChange}
+                    />
                 </div>
                 <div>
                     <span className="content">내용</span>
                     <textarea className="text"
-                        name="contents"
-                        value={contents}
+                              name="contents"
+                              value={contents}
                         onChange={onChange}
                     ></textarea>
                 </div>

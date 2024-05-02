@@ -18,10 +18,12 @@ public class Follow {
     @Column(name = "follow_id")
     private Long id;
 
+    // 변수명 수정(테이블 컬럼명 수정)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")
     private User follower;
 
+    // 변수명 수정(테이블 컬럼명 수정)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followed_id")
     private User followed;

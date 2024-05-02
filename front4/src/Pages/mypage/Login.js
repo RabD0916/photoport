@@ -29,15 +29,15 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             const response = await axios.post('http://localhost:8080/api/signin', formData);
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
-            const expiresIn = response.data.expiresIn;
 
-            const expirationTime = new Date().getTime() + expiresIn * 1000;
 
             console.log("accessToken 값 : " + accessToken);
-            console.log("accessToken 값 : " + refreshToken);
+            console.log("refreshToken 값 : " + refreshToken);
 
             localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('id', formData.id);
+            // localStorage.setItem('userNick', response.data.userNick);
             navigate("/")
         } catch (error) {
             console.error('Error:', error);

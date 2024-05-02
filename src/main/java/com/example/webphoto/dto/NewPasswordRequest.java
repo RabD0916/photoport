@@ -9,17 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddUserResponse {
+public class NewPasswordRequest {
 
     private String id;
-
-    private String res = "ok";
-
-    private boolean success;
-
-    private String message;
-
-    private String userProfile;
-
-    private String userNick;
+    private String password;
 }

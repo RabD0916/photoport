@@ -71,9 +71,9 @@ function Nav() {
     // 로그아웃 핸들러
     const logoutHandler = () => {
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("username");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("expirationTime");
+        localStorage.removeItem("id");
+        localStorage.removeItem("userNick");
         setIsLoggedIn(false);
         setUserId('');
         navigate("/");

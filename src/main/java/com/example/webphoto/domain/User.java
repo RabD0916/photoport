@@ -1,7 +1,6 @@
 package com.example.webphoto.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,6 +49,9 @@ public class User {
     @Column(name = "user_agree")
     private boolean userAgree; // 알림 수신 여부
 
+    @Column(name = "profile")
+    private String userProfile;
+
     @OneToMany(mappedBy = "owner")
     private List<Media> medias = new ArrayList<>();
 
@@ -68,9 +70,11 @@ public class User {
     @OneToMany(mappedBy = "writer")
     private List<Comment> comments = new ArrayList<>();
 
+    // 변수명 수정(테이블 컬럼명 수정)
     @OneToMany(mappedBy = "followed")
     private List<Follow> followingUsers = new ArrayList<>();
 
+    // 변수명 수정(테이블 컬럼명 수정)
     @OneToMany(mappedBy = "follower")
     private List<Follow> followerUsers = new ArrayList<>();
 
@@ -80,7 +84,7 @@ public class User {
     @OneToMany(mappedBy = "sender")
     private List<Alarm> sendAlarms = new ArrayList<>();
 
-    public User(String id, String password, String userNick, String phone, String birth, String email, LocalDateTime userConn, UserType userType, boolean userAgree) {
+    public User(String id, String password, String userNick, String phone, String birth, String email, LocalDateTime userConn, UserType userType, boolean userAgree, String userProfile) {
         this.id = id;
         this.password = password;
         this.userNick = userNick;
@@ -90,5 +94,6 @@ public class User {
         this.userConn = userConn;
         this.userType = userType;
         this.userAgree = userAgree;
+        this.userProfile = userProfile;
     }
 }

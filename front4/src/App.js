@@ -24,6 +24,7 @@ import BoardList from "./Pages/Board/BoardList";
 import BoardWrite from "./Pages/Board/BoardWrite";
 import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
+import NewPw from "./Pages/mypage/NewPw";
 
 /*
 function Eventpage() {
@@ -62,6 +63,7 @@ function App() {
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
                   <Route path={"/compotest"} element={<Test1/>}></Route>
+                  <Route path={"/newPw"} element={<NewPw/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

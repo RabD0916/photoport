@@ -1,5 +1,6 @@
 package com.example.webphoto.controller;
 
+import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.*;
 import com.example.webphoto.service.TokenService;
 import com.example.webphoto.service.UserService;
@@ -7,7 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 
 @RestController
@@ -15,6 +22,7 @@ import java.security.Principal;
 @RequestMapping("/api")
 public class UserController {
 
+    private final String path = "./front4/public/images/";
     private final UserService userService;
     private final TokenService tokenService;
 
@@ -43,7 +51,6 @@ public class UserController {
     }
 
 
-
     // ?? 이건 잘 모름
     @PostMapping("/token")
     public ResponseEntity<CreateAccessTokenResponse> postToken(
@@ -58,12 +65,14 @@ public class UserController {
         }
     }
 
-
-    // 회원정보 수정
-    @PostMapping("/update")
-    public ResponseEntity<AddUserResponse> updateUser(Principal user, @RequestBody AddUserRequest dto) {
-        AddUserResponse updateUser = userService.updateUser(user.getName(), dto);
-        return ResponseEntity.ok(updateUser);
+    // 회원 아이디 조회(됨)
+    @PostMapping("/checkUserId")
+    public CheckUserResponse selectUser(@RequestBody CheckUserRequest dto) {
+        User user = userService.findById(dto.getId());
+        if (user != null) {
+            return new CheckUserResponse("아이디 확인 완료!");
+        }
+        return null;
     }
 
 
@@ -71,6 +80,54 @@ public class UserController {
     @PostMapping("/delete")
     public String deleteUser(Principal user) {
         userService.deleteUser(user.getName());
-        return "회원 탈퇴";
+        return "delete User";
+    }
+
+    // 마이페이지 회원 프로필 가져오기
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<GetProfileResponse> addProfile(@PathVariable String userId) {
+        User user = userService.findById(userId);
+
+        GetProfileResponse response = new GetProfileResponse(user.getUserProfile(), user.getUserNick());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profileUpdate/{userId}")
+    public ResponseEntity<GetProfileResponse> updateProfile(@PathVariable String userId, @RequestParam("file") MultipartFile file) {
+        String dir = path + userId + "/profile";
+        File folder = new File(dir);
+
+        // 해당 디렉토리가 없다면 디렉토리를 생성
+        if (!folder.exists()) {
+            boolean created = folder.mkdirs(); // 폴더 생성
+            if (!created) {
+                return ResponseEntity.internalServerError().body(new GetProfileResponse(null, userId));
+            }
+            System.out.println("폴더 생성완료");
+        } else {
+            System.out.println("폴더가 이미 존재합니다.");
+        }
+
+        try {
+            Path filePath = Paths.get(folder.getAbsolutePath() + "/" + file.getOriginalFilename());
+
+
+            // 파일 저장
+            byte[] bytes = file.getBytes();
+            Files.write(filePath, bytes);
+
+            // 사용자 프로필 이미지 경로 업데이트
+            User user = userService.findById(userId);
+            String fileURL = "/images/" + userId + "/profile/" + file.getOriginalFilename();
+            userService.updateUserProfile(userId, fileURL);
+
+            // 파일 이름을 포함한 DTO 반환
+            return ResponseEntity.ok(new GetProfileResponse(file.getOriginalFilename(), user.getUserNick()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(new GetProfileResponse(null, userId));
+        }
     }
 }

@@ -36,21 +36,22 @@ public class UserService {
         }
     }
 
+
     // dto를 user엔티티로 저장
     private User requestToEntity(AddUserRequest dto) {
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         if (dto.getId().equals("ADMIN")) {
             return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.ADMIN, true);
+                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.ADMIN, true, "/images/profile.png");
         } else {
             return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.USER, true);
+                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.USER, true, "/images/profile.png");
         }
     }
 
     // user 엔티티를 AddUserResponse Dto로 변환
     private AddUserResponse entityToResponse(User user) {
-        return new AddUserResponse(user.getId(), "ok",  true, "성공적으로 처리하였습니다.");
+        return new AddUserResponse(user.getId(), "ok",  true, "성공적으로 처리하였습니다.", user.getUserProfile(), user.getUserNick());
     }
 
 
@@ -60,32 +61,50 @@ public class UserService {
         return entityToResponse(user);
     }
 
-    // 사용자 정보를 수정하는 메소드
-    public AddUserResponse updateUser(String username, AddUserRequest dto) {
-        Optional<User> res = userRepository.findById(username);
+
+    // 사용자 프로필을 수정하는 메소드
+    public AddUserResponse updateUserProfile(String userId, String fileURL) {
+        Optional<User> res = userRepository.findById(userId);
         if (!res.isPresent()) {
-            throw new EntityNotFoundException("회원정보가 없습니다.");
+            throw new EntityNotFoundException("해당 프로필이 없습니다.");
         }
 
         User user = res.get();
-        user.setUserNick(dto.getUserNick());
-        user.setEmail(dto.getEmail());
-        user.setPhone(dto.getPhone());
+        user.setUserProfile(fileURL);
         User newUser = userRepository.save(user);
         return entityToResponse(newUser);
     }
 
     // 사용자를 삭제하는 메소드
-    public void deleteUser(String username) {
-        userRepository.deleteById(username);
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
     }
 
     // 유저 아이디로 검색
-    public User findById(String username) {
+    public User findById(String id) {
         System.out.println("유저 이름 :");
-        System.out.println(username);
-        Optional<User> res = userRepository.findById(username);
+        System.out.println(id);
+        Optional<User> res = userRepository.findById(id);
         if (res.isPresent()) return res.get();
         return null;
     }
+
+    // 사용자 비밀번호 재설정
+    public AddUserResponse findByNewPw(String id, String password) {
+        log.info("user id={}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을수 없습니다."));
+
+        String newPassword = bCryptPasswordEncoder.encode(password);
+        user.setPassword(newPassword);
+        User newUser = userRepository.save(user);
+        return entityToResponse(newUser);
+    }
+
+
+//    // 사용자의 프로필 이미지를 변경하는 메소드
+//    public String updateProfile(String userId, String fileName) {
+//
+//    }
+
 }

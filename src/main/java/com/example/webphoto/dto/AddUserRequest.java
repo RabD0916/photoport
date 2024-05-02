@@ -26,4 +26,6 @@ public class AddUserRequest {
     private String email;
 
     private LocalDateTime userConn;
+
+    private String userProfile;
 }
