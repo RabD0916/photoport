@@ -15,9 +15,9 @@ const frameInAnimation = keyframes`
 
 export const Container = styled.div`
   &.frame-in {
-    animation: ${frameInAnimation} 2s forwards;
+    animation: ${frameInAnimation} 2s;
+    font-size: 50px;
   }
   flex: 1;
-  font-size: 3vw;
   margin: auto;
 `;

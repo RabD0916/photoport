@@ -1,5 +1,5 @@
 import React from "react";
-import "./footer.css";
+import "./css/footer.scss";
 import Mainlogo from '../img/photoport.png';
 function Footer(){
 
@@ -12,6 +12,8 @@ function Footer(){
                     <p>조원 : 정재헌 ,김영우,신철규,권혁,유현수</p>
                     <p>문의:wogjs@naver.com</p>
                     <hr className="Line"/>
+                </div>
+                <div className={"footer_center"}>
                     <div className={"application"}>
                         <img className="app_logo" src={Mainlogo} alt="인생네컷어플"/>
                         <img className="google_button" src="/googleplay.png" alt="다운로드버튼"/>
@@ -19,13 +21,8 @@ function Footer(){
                 </div>
                 <div className="footer_right">
                     <img className="naver_map" src="/map.jpg" alt="지도"/>
-                    {/*<div className={"linkiss"}>링크들</div>*/}
-                </div>
-                <div className={"footer_right"}>
-
                 </div>
             </div>
-
         </div>
     )
 }

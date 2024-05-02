@@ -44,7 +44,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
         }
     };
     return (
-        <div>
+        <div className="legend_box">
             <div className="container">
                 <ul className="links">
                     <li>
@@ -60,7 +60,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                         <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />
                     </div>
                     <button className="signin__btn">
-                        Sign in
+                        로그인
                     </button>
                 </form>
 
@@ -68,8 +68,8 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                     <p>OR</p>
                 </div>
 
-                <button className="google__btn">
-                    <i className="fa fa-google"></i>
+                <button className="github__btn">
+                    <i className="fa fa-github"></i>
                     <a href="src={Kakao">카카오</a>
                 </button>
 
@@ -83,9 +83,9 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                     <a href="src={Kakao">카카오</a>
                 </button>
                 <p className={"id_role"}>
-                    <Link to={"/join"}>SIGN UP</Link>
-                    <Link to={"/findID"}>FIND ID</Link>
-                    <Link to={"/findPW"}>FIND PW</Link>
+                    <Link to={"/join"}>가입하기</Link>
+                    <Link to={"/findID"}>아이디 찾기</Link>
+                    <Link to={"/findPW"}>비밀번호 찾기</Link>
                 </p>
             </div>
 

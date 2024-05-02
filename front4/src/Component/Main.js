@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './main.css';
+import './css/main.scss';
 import Mainlogo from '../img/photoport.png';
 import {Link} from "react-router-dom";
 import Frame1 from "../img/frame1.jpg"
@@ -110,7 +110,7 @@ const Main = (props) => {
                     </ScrollAnimation>
                     </div>
                 <ScrollAnimation className={"font_font"}>
-                <div ref={textRef} className={isVisible2 ? "first_right" : ""}>간편하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요</div>
+                <div ref={textRef} className={isVisible2 ? "first_right" : ""}>간단하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요</div>
                 </ScrollAnimation>
             </div>
             <p className={"font_font"}>르세라핌과 사진 콜라보 이벤트!!</p>

@@ -1,13 +1,18 @@
+@import '~bootstrap/scss/bootstrap';
 body{
     font-family: 'Montserrat', sans-serif;
     background:white;
+}
+
+.legend_box{
+    margin-bottom: 100px;
+
 }
 
 .container{
     display:block;
     max-width:680px;
     width:80%;
-    margin:120px auto;
 }
 
 h1{
@@ -23,14 +28,13 @@ h1{
     display: flex;
     font-size: 10px;
     color: red;
-    padding: 0 0 0 4%;
 }
 
 .links{
+    padding: 0;
     list-style-type:none;
     li{
         display:inline-block;
-        margin:0 20px 0 0;
         transition:.2s linear;
         &:nth-child(2){
             opacity : .6;
@@ -174,11 +178,9 @@ form{
     }
 }
 
-.google__btn,
 .github__btn{
     display:block;
     width:90%;
-    max-width:680px;
     margin:20px auto;
     height:50px;
     cursor:pointer;
@@ -187,21 +189,6 @@ form{
     border-radius:8px;
     border:none;
     line-height:40px;
-    &.google__btn{
-        background:#5b90f0;
-        color:white;
-        transition:.2s linear;
-        .fa{
-            font-size:20px;
-            padding:0 5px 0 0 ;
-        }
-        &:hover{
-            background-color: #080808;
-        }
-        a{
-            text-decoration:none;
-        }
-    }
     &.github__btn{
         background:#5b90f0;
         color:white;
@@ -227,26 +214,10 @@ form{
         margin-right: 5%;
     }
 }
-
-
-.next_input{
-    background-color: #ace2f1;
-    color: #000000;
-    margin-bottom: 30px;
-    width: 95%;
-    height: 50px;
-    text-decoration: none;
-    border-radius: 10px;
-    font-size: 0.5vw;
-}
-.next_input:hover{
-    background-color: #7696a4;
-}
-
 .next_button:link, .next_button:visited{
     background-color: #ace2f1;
     color: #000000;
-    padding: 10vw 4vw;
+    padding: 20px 15px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -256,20 +227,4 @@ form{
 }
 .next_button:hover, .next_button:active {
     background-color: #7696a4;
-}
-.sign_font{
-    font-size: 100%;
-}
-.sign_p{
-    font-size: 60%;
-    text-align: left;
-    width: 100%;
-    height: auto;
-}
-.sign_input{
-    font-size: 60%;
-    display: inline-block;
-    margin-bottom: 60px;
-    height: 50px;
-    width: 95%;
 }

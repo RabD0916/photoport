@@ -24,14 +24,10 @@ $shadowColour: rgba(0, 0, 0, .6);
     /*z-index: 1;*/
     /*width: 100%;*/ /*상단바 고정 */
 }
-.main_a{
-    text-decoration: none;
-    font-size: 3vw;
-    position: relative;
-}
+
 .main_b{
     text-decoration: none;
-    font-size: 2vw;
+    font-size: 50px;
 }
 .center{
     color: pink;
@@ -73,6 +69,11 @@ $shadowColour: rgba(0, 0, 0, .6);
         background: radial-gradient(ellipse at center, rgb(255, 114, 241) 0%,rgba(0,0,0,0) 80%); /* W3C */
         transition-duration: $defaultDuration;
         //transition-property: transform opacity;
+    }
+    .main_b{
+        &:hover{
+            color:red;
+        }
     }
 
     &:hover {
@@ -117,7 +118,7 @@ $shadowColour: rgba(0, 0, 0, .6);
 
 .drop_a{
     text-decoration: none;
-    font-size: 1vw;
+    font-size: 20px;
 }
 
 .otherLinks a {
@@ -179,7 +180,7 @@ $shadowColour: rgba(0, 0, 0, .6);
     width: 2vw;
 }
 .mypage_icon {
-    width: 2vw;
+    width: 70px;
 }
 .mypage_btn{
     border: none;
@@ -223,13 +224,35 @@ $shadowColour: rgba(0, 0, 0, .6);
 }
 .search_bar{
     padding: -1% 0 0 0;
-    width: 30vw;
-    height: 2vw;
+    width: 300px;
+    height: 30px;
     border-radius: 20px;
     border: white;
     background-color: #FC819E;
 }
+/* 600px 이상일 때 */
+@media (min-width: 600px) {
+    /* 화면의 폭이 600px 이상일 때 적용되는 스타일 */
+    .main_a{
+        text-decoration: none;
+        font-size: 50px;
+        position: relative;
+    }
+}
 
+/* 600px 미만일 때 */
+@media (max-width: 599px) {
+    /* 화면의 폭이 600px 미만일 때 적용되는 스타일 */
+    .main_a{
+        text-decoration: none;
+        font-size: 20px;
+        position: relative;
+    }
+    .list_icon{
+        width: 20px;
+        margin-right: 10px;
+    }
+}
 
 
 

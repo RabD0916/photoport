@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./css/login.scss";
+import "./css/signup.scss";
 import axios from "axios";
 
 const SignUp = ({ onSignUpSuccess }) => {
@@ -71,7 +71,7 @@ const SignUp = ({ onSignUpSuccess }) => {
     };
 
     return (
-        <div>
+        <div className={"main_body"}>
             <h1 className="sign_font">회원가입</h1>
             <div className="join_style">
                 <form onSubmit={handleSubmit}>
