@@ -1,7 +1,7 @@
 package com.example.webphoto.service;
 
 import com.example.webphoto.domain.User;
-import com.example.webphoto.domain.UserType;
+import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.AddUserRequest;
 import com.example.webphoto.dto.AddUserResponse;
 import com.example.webphoto.repository.UserRepository;

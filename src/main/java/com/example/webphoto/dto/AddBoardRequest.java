@@ -1,7 +1,7 @@
 package com.example.webphoto.dto;
 
-import com.example.webphoto.domain.BoardShare;
-import com.example.webphoto.domain.BoardType;
+import com.example.webphoto.domain.enums.BoardShare;
+import com.example.webphoto.domain.enums.BoardType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

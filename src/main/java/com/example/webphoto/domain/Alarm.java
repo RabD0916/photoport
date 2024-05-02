@@ -1,5 +1,6 @@
 package com.example.webphoto.domain;
 
+import com.example.webphoto.domain.enums.AlarmType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

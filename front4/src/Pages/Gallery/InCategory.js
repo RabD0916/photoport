@@ -142,11 +142,11 @@ const InCategory = () => {
             )}
 
             <GalleryContainer className={"Media-list"}>
-                <div className={"cate-list"}>{media.map((mediaName) => (
+                <div className={"cate-list"}>{media.map((media) => (
                     //<Link key={index} to={"/gallery/" + userId + "/" + cateId + "/" + mediaName} className={"cate"}>
-                    <img src={"/images/" + userId + "/" + cateId + "/" + mediaName}
-                         alt={mediaName} className={"incate-image"}
-                         onClick={() => handleImageClick(mediaName)}
+                    <img src={"/images/" + userId + "/" + cateId + "/" + media["name"]}
+                         alt={media["name"]} className={"incate-image"}
+                         onClick={() => handleImageClick(media["name"])}
                     ></img>
                     //</Link>
                 ))}

@@ -25,7 +25,12 @@ const InGallery = () => {
             );
             return result.data;
         }
-        getCategoryList().then(r => setCate(r));
+        getCategoryList().then(r => {
+            // r.map(category => cate.push(category))
+            setCate(r);
+            console.log(r)
+            console.log(cate)
+        });
     }, [userId]);
 
     async function createCate(cateName) {
@@ -168,15 +173,15 @@ const InGallery = () => {
             <div className={"rowbar"}/>
 
             <div className={"cate-list"}>
-                {cate.map((cateId) => (
-                    <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>
-                        {cateId[1] !== "Empty" ?
-                            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}
-                                 alt={cateId[1]}
+                {cate.map((category) => (
+                    <Link key={category["name"]} to={"/gallery/" + userId + "/" + category["name"]} className={"cate"}>
+                        {category["thumbnail"] !== "Empty" ?
+                            <img className={"cate-image"} src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
+                                 alt={category["thumbnail"]}
                             ></img>
                             : <div className={"not_box"}></div>}
                         <div
-                            className={"cate-name"}>{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}</div>
+                            className={"cate-name"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
                     </Link>
                 ))}
             </div>

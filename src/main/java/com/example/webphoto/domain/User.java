@@ -1,5 +1,6 @@
 package com.example.webphoto.domain;
 
+import com.example.webphoto.domain.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -70,11 +71,9 @@ public class User {
     @OneToMany(mappedBy = "writer")
     private List<Comment> comments = new ArrayList<>();
 
-    // 변수명 수정(테이블 컬럼명 수정)
     @OneToMany(mappedBy = "followed")
     private List<Follow> followingUsers = new ArrayList<>();
 
-    // 변수명 수정(테이블 컬럼명 수정)
     @OneToMany(mappedBy = "follower")
     private List<Follow> followerUsers = new ArrayList<>();
 
