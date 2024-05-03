@@ -1,14 +1,36 @@
 /* 글씨 크기와 테두리를 적용할 클래스 */
 .big-font {
+    margin-top: 100px;
     font-size: 20px;
-    border: 5px solid black;
+    .text_area{
+        resize: none;
+        width: 80%;
+        height: 300px;
+    }
 }
-
-/* 가운데 정렬을 적용할 클래스 */
+.content_div{
+    input{
+        height: 50px;
+        width: 80%;
+    }
+    div{
+        width: 500px;
+        margin: auto;
+        .slider_img{
+            height: 400px;
+        }
+    }
+    span{
+        display: flex;
+        margin: 5% auto auto 10%;
+    }
+}
 .center-align {
     background-image: url("../../../../public/594.jpg");
-    text-align: center;
-    margin: 10px;
+    margin: auto auto 50px auto;
+    height: auto;
+    width: 80%;
+    border: 5px solid black;
 }
 .button-style {
     font-weight: bold;
@@ -35,10 +57,4 @@
     display: inline-block;
     border: 2px solid black;
     margin: 10px;
-}
-.content{
-    margin :10px;
-}
-.text{
-    width: 50%;
 }

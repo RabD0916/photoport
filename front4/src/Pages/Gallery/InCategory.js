@@ -1,4 +1,4 @@
-import './InCategory.css';
+import './InCategory.scss';
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
@@ -117,9 +117,6 @@ const InCategory = (props) => {
             setSelectedMediaNames([...selectedMediaNames, newMediaName])              // add
         }
     };
-    const setParentText = () =>{
-        props.getStarRating(5);
-    }
     return (
         <>
             <div className={"five"}>
@@ -140,7 +137,6 @@ const InCategory = (props) => {
                     {selectedMediaNames.map((mediaName) => (
                         <img src={"/images/" + userId + "/" + cateId + "/" +mediaName} alt="Selected"/>
                     ))}
-                    <input type="button" value="전달" onclick={setParentText} />
                 </div>
             )}
 

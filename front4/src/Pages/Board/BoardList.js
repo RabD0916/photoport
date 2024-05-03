@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import "./BoardCss/Board.css";
+import "./BoardCss/Board.scss";
 
 const BoardList = () => {
     const accessToken = localStorage.getItem("accessToken");

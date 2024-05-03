@@ -1,4 +1,4 @@
-import './InGallery.css';
+import './InGallery.scss';
 import '../../Component/css/nav.scss';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";

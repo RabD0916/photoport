@@ -1,4 +1,4 @@
-import './InCategory.css';
+import './HiddenCategory.scss';
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
@@ -22,7 +22,6 @@ const Media = ({onChildClick}) => {
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
-    // const [accessToken, setAccessToken] = useState("");
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("id");
 
@@ -40,7 +39,7 @@ const Media = ({onChildClick}) => {
             return result.data;
         }
         getMediaList().then(r => setMedia(r));
-    }, [cateId]);
+    },[cateId]);
 
     const handleImageClick = (newMediaName) => {
         if(selectedMediaNames.some((mediaName) => mediaName === newMediaName)) {
@@ -50,10 +49,9 @@ const Media = ({onChildClick}) => {
         }
     };
     const sendDataToParent = () => {
-        const data = selectedMediaNames;
+        const data = [cateId, selectedMediaNames];
         window.opener.postMessage(data, '*');
     };
-
     return (
         <>
             <div className={"rowbar"}></div>

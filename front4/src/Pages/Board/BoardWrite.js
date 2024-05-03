@@ -1,14 +1,43 @@
-import React, { useState,useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import "./BoardCss/BoardWrite.css"
-import Media from "../Gallery/hidden/Media";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./BoardCss/BoardWrite.scss"
+
 const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
-    const [childWindowReady, setChildWindowReady] = useState(false);
-    const [receivedData, setReceivedData] = useState('');
+    const [key,setKey] =useState([]);
+    const [value,setValue]=useState([]);
+    const settings = {
+        dots: true,
+        fade: true,
+        arrows : true, 		// 옆으로 이동하는 화살표 표시 여부
+        infinite: true,
+        draggable : true, 	//드래그 가능 여부
+        speed: 100,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        responsive: [ // 반응형 웹 구현 옵션
+            {
+                breakpoint: 960, //화면 사이즈 960px일 때
+                settings: {
+                    //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+                    slidesToShow:3
+                }
+            },
+            {
+                breakpoint: 768, //화면 사이즈 768px일 때
+                settings: {
+                    //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+                    slidesToShow:2
+                }
+            }
+        ]
+    };
     useEffect(() => {
         window.addEventListener('message', handleMessage);
         return () => {
@@ -16,16 +45,14 @@ const BoardWrite = () => {
         };
     }, []);
     const handleMessage = (event) => {
-        if (event.data) {
-            if (typeof event.data === 'object') {
-                setReceivedData(JSON.stringify(event.data));
-            } else {
-                // 객체가 아닌 경우 그대로 설정
-                setReceivedData(event.data);
-            }
+        if (typeof event.data === 'object' && event.data[0] !== undefined && event.data[1] !== undefined) {
+            const newData = event.data[1];
+            const newKeys = newData.map((item) => event.data[0]);
+            setKey(prevKey => [...prevKey, ...newKeys]);
+            setValue(prevValue => [...prevValue, ...newData]);
+            console.log(key);
         }
     };
-
 
     const [board, setBoard] = useState({
         title: '',
@@ -60,45 +87,51 @@ const BoardWrite = () => {
     const backToList=() =>{
         window.open("gallery/hidden/"+userId,"_blank","width=100");
     }
-
+    const remove_index=(index)=>{
+        const newKey = [...key.slice(0, index), ...key.slice(index + 1)];
+        const newValue = [...value.slice(0, index), ...value.slice(index + 1)];
+        setKey(newKey);
+        setValue(newValue);
+    }
     return (
         <div className="center-align">
             <div className="big-font">
-                <div>
-                    <span className="content">제목</span>
+                <div className={"content_div"}>
+                    <span>사진</span>
+                    <div>
+                    <Slider {...settings}>
+                    {key.map((item, index) => (
+                        <img
+                            className={"slider_img"}
+                            key={index}
+                            src={"/images/" + userId + "/" + item + "/" + value[index]}
+                            alt={item}
+                            onClick={() => remove_index(index)}
+                        />
+                    ))}
+                    </Slider>
+                    </div>
+                    <h1>값:{key[0]}{value[0]}</h1>
+                    <button onClick={backToList}>사진추가</button>
+                    <span>제목</span>
                     <input type="text" name="title" value={title} onChange={onChange}/>
-                </div>
                 <br/>
-                <div>
-                    <span className="content">태그</span>
+                    <span>태그</span>
                     <input
                         type="text"
                         name="tag"
                         value={tag}
                         onChange={onChange}
                     />
-                </div>
                 <br/>
-                <div>
-                    <span className="content">사진</span>
-                    <p>부모 창에서 받은 데이터: {receivedData}</p>
-                    <button onClick={backToList}>클릭</button>
-                    {/*<input*/}
-                    {/*    type="file"*/}
-                    {/*    name="fileName"*/}
-                    {/*    value={fileName}*/}
-                    {/*    onChange={onChange}*/}
-                    {/*/>*/}
-                </div>
-                <div>
-                    <span className="content">내용</span>
-                    <textarea className="text"
+                    <span>내용</span>
+                    <textarea className="text_area"
                               name="contents"
                               value={contents}
                         onChange={onChange}
-                    ></textarea>
-                </div>
+                    />
                 <br/>
+                </div>
                 <div>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>
                     <button className="button-style" onClick={backToList}>취소</button>
