@@ -2,12 +2,10 @@ import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./BoardCss/BoardWrite.css"
-import Media from "../Gallery/hidden/Media";
 const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
-    const [childWindowReady, setChildWindowReady] = useState(false);
     const [receivedData, setReceivedData] = useState('');
     useEffect(() => {
         window.addEventListener('message', handleMessage);
@@ -25,8 +23,6 @@ const BoardWrite = () => {
             }
         }
     };
-
-
     const [board, setBoard] = useState({
         title: '',
         tag: '',

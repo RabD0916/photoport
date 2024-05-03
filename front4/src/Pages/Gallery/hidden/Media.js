@@ -1,4 +1,4 @@
-import './InCategory.css';
+import './HiddenCategory.scss';
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
@@ -40,7 +40,7 @@ const Media = ({onChildClick}) => {
             return result.data;
         }
         getMediaList().then(r => setMedia(r));
-    }, [cateId]);
+    },[cateId]);
 
     const handleImageClick = (newMediaName) => {
         if(selectedMediaNames.some((mediaName) => mediaName === newMediaName)) {
