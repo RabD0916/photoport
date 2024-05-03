@@ -18,7 +18,7 @@ const GalleryContainer = styled.div`
 //   cursor: pointer;
 // `;
 
-const InCategory = () => {
+const InCategory = (props) => {
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
@@ -117,7 +117,9 @@ const InCategory = () => {
             setSelectedMediaNames([...selectedMediaNames, newMediaName])              // add
         }
     };
-
+    const setParentText = () =>{
+        props.getStarRating(5);
+    }
     return (
         <>
             <div className={"five"}>
@@ -138,6 +140,7 @@ const InCategory = () => {
                     {selectedMediaNames.map((mediaName) => (
                         <img src={"/images/" + userId + "/" + cateId + "/" +mediaName} alt="Selected"/>
                     ))}
+                    <input type="button" value="전달" onclick={setParentText} />
                 </div>
             )}
 

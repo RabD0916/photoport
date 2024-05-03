@@ -179,30 +179,21 @@ form{
 }
 
 .github__btn{
+    background: #5297dc;
+    color:white;
     display:block;
-    width:90%;
-    margin:20px auto;
+    width:92.5%;
+    max-width:680px;
     height:50px;
+    border-radius:8px;
+    margin:0 auto 20px auto;
+    border:none;
     cursor:pointer;
     font-size:14px;
     font-family: 'Montserrat', sans-serif;
-    border-radius:8px;
-    border:none;
-    line-height:40px;
-    &.github__btn{
-        background:#5b90f0;
-        color:white;
-        transition:.2s linear;
-        .fa{
-            font-size:20px;
-            padding:0 5px 0 0 ;
-        }
-        &:hover{
-            background-color: #080808;
-        }
-        a{
-            text-decoration:none;
-        }
+    transition:.2s linear;
+    &:hover{
+        background-color: #080808;
     }
 }
 .id_role{

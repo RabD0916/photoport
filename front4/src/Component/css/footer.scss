@@ -9,7 +9,7 @@
         box-sizing: border-box;
     }
     .google_button{
-        border: 0px solid;
+        border:solid;
         width: 51%;
         box-sizing: border-box;
         height: auto;
@@ -43,6 +43,9 @@
 }
 @media (max-width: 600px) {
     /* 화면의 폭이 600px 미만일 때 적용되는 스타일 */
+    .application{
+        width: 200px;
+    }
     .app_logo{
         border: 1px solid;
         width: 51%;
@@ -58,8 +61,13 @@
         display: flex;
         font-size: 10px;
     }
+    .footer_center{
+        display: flex;
+    }
+    .footer_center .footer_right{
+        flex: 1;
+    }
     .naver_map{
-        margin: 10px auto auto auto;
         width: 80px;
     }
     .main_footer {

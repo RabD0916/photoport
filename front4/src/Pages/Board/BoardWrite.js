@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./BoardCss/BoardWrite.css"
-import inGallery from "../Gallery/InGallery";
-
+import Media from "../Gallery/hidden/Media";
 const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
+    const [childWindowReady, setChildWindowReady] = useState(false);
+    const [receivedData, setReceivedData] = useState('');
+    useEffect(() => {
+        window.addEventListener('message', handleMessage);
+        return () => {
+            window.removeEventListener('message', handleMessage);
+        };
+    }, []);
+    const handleMessage = (event) => {
+        if (event.data) {
+            if (typeof event.data === 'object') {
+                setReceivedData(JSON.stringify(event.data));
+            } else {
+                // 객체가 아닌 경우 그대로 설정
+                setReceivedData(event.data);
+            }
+        }
+    };
+
 
     const [board, setBoard] = useState({
         title: '',
@@ -16,7 +34,7 @@ const BoardWrite = () => {
         fileName : '',
     });
 
-    const { title, tag, contents,fileName } = board; //비구조화 할당
+    const { title, tag, contents} = board; //비구조화 할당
 
     const onChange = (event) => {
         const { value, name } = event.target; //event.target에서 name과 value만 가져오기
@@ -25,7 +43,6 @@ const BoardWrite = () => {
             [name]: value,
         });
     };
-
     const saveBoard = async () => {
         console.log(board.title);
         console.log(board.tag);
@@ -40,10 +57,9 @@ const BoardWrite = () => {
             navigate('/board');
         });
     };
-
-    const backToList = () => {
-        navigate("/gallery/" + userId);
-    };
+    const backToList=() =>{
+        window.open("gallery/hidden/"+userId,"_blank","width=100");
+    }
 
     return (
         <div className="center-align">
@@ -65,12 +81,14 @@ const BoardWrite = () => {
                 <br/>
                 <div>
                     <span className="content">사진</span>
-                    <input
-                        type="file"
-                        name="fileName"
-                        value={fileName}
-                        onChange={onChange}
-                    />
+                    <p>부모 창에서 받은 데이터: {receivedData}</p>
+                    <button onClick={backToList}>클릭</button>
+                    {/*<input*/}
+                    {/*    type="file"*/}
+                    {/*    name="fileName"*/}
+                    {/*    value={fileName}*/}
+                    {/*    onChange={onChange}*/}
+                    {/*/>*/}
                 </div>
                 <div>
                     <span className="content">내용</span>
@@ -82,7 +100,6 @@ const BoardWrite = () => {
                 </div>
                 <br/>
                 <div>
-                    <button className="button-style" onClick={backToList}>사진가져오기</button>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>
                     <button className="button-style" onClick={backToList}>취소</button>
                 </div>
