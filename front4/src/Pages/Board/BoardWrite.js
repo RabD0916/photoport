@@ -97,12 +97,11 @@ const BoardWrite = () => {
         <div className="center-align">
             <div className="big-font">
                 <div className={"content_div"}>
-                    <span>사진</span>
+                    <span className={"p_name"}>사진</span>
                     <div>
                     <Slider {...settings}>
                     {key.map((item, index) => (
                         <img
-                            className={"slider_img"}
                             key={index}
                             src={"/images/" + userId + "/" + item + "/" + value[index]}
                             alt={item}
@@ -110,9 +109,9 @@ const BoardWrite = () => {
                         />
                     ))}
                     </Slider>
-                    </div>
+                </div>
                     {/*<h1>값:{key[0]}{value[0]}</h1>*/}
-                    <button onClick={backToList}>사진추가</button>
+                    <button className={"plus_button"} onClick={backToList}>사진추가</button>
                     <span>제목</span>
                     <input type="text" name="title" value={title} onChange={onChange}/>
                 <br/>

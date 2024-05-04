@@ -1,39 +1,111 @@
-/* 글씨 크기와 테두리를 적용할 클래스 */
-.big-font {
-    font-size: 20px;
-    .text_area{
-        resize: none;
-        width: 80%;
-        height: 300px;
-    }
-}
-.content_div{
-    border: black solid;
-    margin: 20px auto;
-    width: 80%;
-    input{
-        height: 50px;
-        width: 80%;
-    }
-    div{
-        width: 90%;
-        margin: auto;
-        .slider_img{
-            height: auto;
+
+/* 600px 이상일 때 */
+@media (min-width: 600px) {
+    /* 화면의 폭이 600px 이상일 때 적용되는 스타일 */
+    /* 글씨 크기와 테두리를 적용할 클래스 */
+    .big-font {
+        font-size: 20px;
+        .text_area{
+            resize: none;
+            width: 80%;
+            height: 100px;
         }
     }
-    span{
-        display: flex;
-        margin: 0.5% auto auto 10%;
+    .content_div{
+        border: black solid;
+        margin: 20px auto;
+        width: 80%;
+        .slick-prev {
+            background-color: #282c34;
+            &:hover{
+                background-color: black;
+            }
+        }
+        .slick-next {
+            background-color: #282c34;
+            &:hover{
+                background-color: black;
+            }
+        }
+        input{
+            height: 30px;
+            width: 80%;
+        }
+        div{
+            width: 80%;
+            display: flex;
+            margin: auto;
+            align-items: center; /* 세로 가운데 정렬 */
+        }
+        span{
+            display: flex;
+            margin: 0.5% auto auto 10%;
+        }
+        .plus_button{
+            margin-top: 30px;
+            font-size: 5px;
+        }
+    }
+    .center-align {
+        background-image: url("../../../../public/594.jpg");
+        margin: 5% auto 50px auto;
+        height: auto;
+        width: 400px;/*콘텐트 전체 사이즈*/
+        border: 5px solid black;
     }
 }
-.center-align {
-    background-image: url("../../../../public/594.jpg");
-    margin: auto auto 50px auto;
-    height: auto;
-    width: 80%;
-    border: 5px solid black;
+/* 600px 미만일 때 */
+@media (max-width: 599px) {
+    /* 글씨 크기와 테두리를 적용할 클래스 */
+    .big-font {
+        font-size: 20px;
+        .text_area{
+            resize: none;
+            width: 80%;
+            height: 100px;
+        }
+    }
+    .content_div{
+        border: black solid;
+        margin: 20px auto;
+        width: 80%;
+        .p_name{
+            margin-bottom: 10px;
+        }
+        .slick-arrow button{
+            width: 0px;
+            &:hover{
+                width: 100px;
+            }
+        }
+        input{
+            height: 30px;
+            width: 80%;
+        }
+        div{
+            width: 80%;
+            display: flex;
+            margin: auto;
+            align-items: center; /* 세로 가운데 정렬 */
+        }
+        span{
+            display: flex;
+            margin: 0.5% auto auto 10%;
+        }
+        .plus_button{
+            margin-top: 30px;
+            font-size: 5px;
+        }
+    }
+    .center-align {
+        background-image: url("../../../../public/594.jpg");
+        margin: 5% auto 50px auto;
+        height: auto;
+        width: 60%;/*콘텐트 전체 사이즈*/
+        border: 5px solid black;
+    }
 }
+
 .button-style {
     font-weight: bold;
     border-radius: 10px;
