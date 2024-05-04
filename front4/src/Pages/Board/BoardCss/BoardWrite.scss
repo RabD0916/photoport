@@ -1,6 +1,5 @@
 /* 글씨 크기와 테두리를 적용할 클래스 */
 .big-font {
-    margin-top: 100px;
     font-size: 20px;
     .text_area{
         resize: none;
@@ -9,12 +8,15 @@
     }
 }
 .content_div{
+    border: black solid;
+    margin: 20px auto;
+    width: 80%;
     input{
         height: 50px;
         width: 80%;
     }
     div{
-        width: 500px;
+        width: 90%;
         margin: auto;
         .slider_img{
             height: auto;
