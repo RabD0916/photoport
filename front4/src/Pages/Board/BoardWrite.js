@@ -111,7 +111,7 @@ const BoardWrite = () => {
                     ))}
                     </Slider>
                     </div>
-                    <h1>값:{key[0]}{value[0]}</h1>
+                    {/*<h1>값:{key[0]}{value[0]}</h1>*/}
                     <button onClick={backToList}>사진추가</button>
                     <span>제목</span>
                     <input type="text" name="title" value={title} onChange={onChange}/>
