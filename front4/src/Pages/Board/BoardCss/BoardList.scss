@@ -1,0 +1,35 @@
+.main_board{
+  flex: 0 0 25%; /* 각 항목이 4개가 나열될 수 있도록 25%의 너비를 설정 */
+  width: 94%;
+  margin: auto;
+  .board_list{
+    margin: 15px auto 30px auto;
+    width: 300px;
+    .board_item{
+      border: 1px solid;
+      .img_box{
+        margin: 10px auto auto auto;
+        width: 200px;
+        img{
+          width: 92%;
+        }
+      }
+      .click_evt{
+        margin-left: 4%;
+        text-align: left;
+      }
+      .content_box{
+        .content_font{
+          font-size: 10px;
+          margin-left: 4%;
+          text-align: left;
+        }
+        .content_name{
+          font-size: 10px;
+        }
+      }
+    }
+
+  }
+}
+

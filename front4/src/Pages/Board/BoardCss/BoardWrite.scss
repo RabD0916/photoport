@@ -5,6 +5,7 @@
     /* 글씨 크기와 테두리를 적용할 클래스 */
     .big-font {
         .text_area{
+            font-size: 7px;
             resize: none;
             width: 80%;
             height: 100px;
@@ -15,6 +16,7 @@
         margin: 20px auto;
         width: 80%;
         input{
+            font-size: 7px;
             height: 30px;
             width: 80%;
         }
