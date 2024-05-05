@@ -1,92 +1,63 @@
-
-
-.main-mypage {
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
+.main-myPage {
+  border: 1px solid;
+  width: 50%;
+  margin: 10px auto 10px auto;
 }
 
-.myprofile {
-  text-align: center; /* 텍스트 가운데 정렬 */
+.myPro_file {
   display: flex; /* 수정 버튼과 닉네임을 가로로 배열하기 위해 */
   flex-direction: column; /* 세로로 정렬되도록 설정 */
   align-items: center; /* 가로 중앙 정렬 */
+  .pro-image {
+    position: relative;
+    width: 200px; /* 적당한 크기로 조정하세요 */
+    height: 200px;
+    border: 0.1px solid black;
+    border-radius: 50%; /* 동그란 모양을 위해 반지름 50%로 설정 */
+    background-size: cover;
+    .img_btn{
+      padding: 0;
+      margin-right: 10%;
+      width: 25%;
+      height: 30px;
+      font-size: 10px;
+      border: 0.1vw solid black;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: #f0f0f0;
+    }
+  }
+  h3{
+    margin: 0;
+  }
+  button{
+    margin: 0;
+    width: 70px;
+    border: 1px solid;
+    font-size: 12px;
+  }
 }
-
-
-
-.pro-image {
-  position: relative;
-  width: 14vw; /* 적당한 크기로 조정하세요 */
-  height: 14vw; /* 적당한 크기로 조정하세요 */
-  border: 0.1vw solid black;
-  border-radius: 50%; /* 동그란 모양을 위해 반지름 50%로 설정 */
-  background-size: cover;
-  .img_btn{
-    padding: 0;
-    margin-right: 10%;
-    width: 4vw;
-    height: 2vw;
-    font-size: 0.5vw;
-    border: 0.1vw solid black;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #f0f0f0;
-}
-}
-
 .pro-image .profile-img {
   width: 100%; /* 컨테이너 크기에 맞게 설정 */
   height: 100%; /* 컨테이너 크기에 맞게 설정 */
   object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞게 조정 */
   border-radius: 50%; /* 이미지를 원형으로 만듭니다 */
 }
-
-.input_container {
-  width: 30vw;
-  display: flex;
-  align-items: center; /* h2를 세로로 중앙 정렬 */
-  font-size: 1vw;
-}
-
-
-.input_container h2 {
-
-  margin: 4% 3% 0 44%;
-}
-
-.input_container button {
-  margin-top: 4%;
-  padding: 0;
-  font-size: 1vw;
-  border: 0.1vw solid black;
-  width: 3vw;
-  height: 2vw;
-}
-
-.follow{
-  position: relative;
-  font-size: 1vw;
-  margin-top: 1%; /* 적당한 간격 설정 */
-  border: 0.1vw solid black;
-  width: 10vw;
-  height: 2vw;
-}
-
 .content-list{
   display: flex;
   flex-wrap: wrap; /* 요소들이 넘치면 다음 줄로 이동 */
   justify-content: center; /* 가로 중앙 정렬 */
 }
+
 .my-pageNav{
 flex: 1;
   button{
-    border: 0.1vw solid black;
-    font-size: 2vw;
-    margin: 4% 0 0 0;
-    padding: 1vw;
-    width: 30vw;
+    border: 1px solid black;
+    font-size: 20px;
+    margin: 4% 1% 0 1%;
+    width: 150px;
+    height: auto;
     background: none;
   }
 }

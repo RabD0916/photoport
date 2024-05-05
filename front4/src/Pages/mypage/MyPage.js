@@ -96,8 +96,8 @@ function MyPage() {
 
     return (
         <>
-            <div className={"main-mypage"}>
-                <div className={"myprofile"}>
+            <div className={"main-myPage"}>
+                <div className={"myPro_file"}>
                     <div className={"pro-image"}>
                         {/* 미리보기 이미지가 있으면 미리보기 이미지를, 없으면 기존 프로필 이미지를 보여줍니다 */}
                         <img src={previewImage || profileImage} alt="Profile" className="profile-img" />
@@ -105,11 +105,8 @@ function MyPage() {
                         {selectedFile && <button onClick={handleFileUpload} className={"img_btn"}>사진 수정</button>}
                     </div>
                     <input type={"file"} onChange={handleChange} ref={fileInput} style={{ display: "none" }} />
-                    <div className={"input_container"}>
-                        <h2>{userId}</h2>
-                        {/*<button>수정</button>*/}
-                    </div>
-                    <button className={"follow"}>팔로우</button>
+                    <h3>{userId}</h3>
+                    <button>팔로우</button>
                     <div className={"my-pageNav"}>
                         <Container>
                             {MAIN_DATA.map(data => (
@@ -131,12 +128,12 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 20vh;
+    height: auto;
+    margin-bottom: 10px;
 `;
 
 const Button = styled.button`
-  padding: 1rem 2rem;
-  margin-right: 1rem;
+  height: 20px;
   color: #111111;
   background-color: #eeeeee;
   border-radius: 2rem;
