@@ -13,7 +13,7 @@ import Signup from "./Pages/mypage/Signup";
 import FindID from "./Pages/mypage/FindID";
 import FindPW from "./Pages/mypage/FindPW";
 import Join from "./Pages/mypage/Join"
-import Eventpage from "./Pages/Event/Event";
+import EventPage from "./Pages/Event/Event";
 import Notice from "./Pages/Notice/Notice";
 import NoticeDetail from "./Pages/Notice/NoticeDetail";
 import NoticeWrite from "./Pages/Notice/NoticeWrite";
@@ -24,6 +24,7 @@ import Create from "./Pages/CreateCut/Create";
 import MyPage from "./Pages/mypage/MyPage";
 import BoardList from "./Pages/Board/BoardList";
 import BoardWrite from "./Pages/Board/BoardWrite";
+import BoardDetail from "./Pages/Board/BoardDetail"
 import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
@@ -48,14 +49,13 @@ function App() {
                   <Route path={"/Create"} element={<Create/>}></Route>
                   <Route path={"/gallery/:userId"} element={<InGallery />}></Route>
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
-
                   <Route path={"/gallery/hidden/:userId"} element={<HiddenGallery />}></Route>
                   <Route path={"/gallery/hidden/:userId/:cateId"} element={<HiddenCategory />}></Route>
-
                   <Route path={"/Board"} element={<BoardList/>}></Route>
-                  <Route path={"/Boardwrite"} element={<BoardWrite/>}></Route>
+                  <Route path={"/BoardDetail"} element={<BoardDetail/>}></Route>
+                  <Route path={"/BoardWrite"} element={<BoardWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
-                  <Route path={"/Event"} element={<Eventpage/>}></Route>
+                  <Route path={"/Event"} element={<EventPage/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
                   <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
                   <Route path={"/NoticeShow"} element={<NoticeShow/>}></Route>
@@ -68,7 +68,7 @@ function App() {
                   <Route path={"/join"} element={<Join/>}></Route>
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
-                  <Route path={"/compotest"} element={<Test1/>}></Route>
+                  <Route path={"/compoTest"} element={<Test1/>}></Route>
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
               </Routes>
           </BrowserRouter>

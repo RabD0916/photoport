@@ -12,16 +12,19 @@ function Nav() {
     // const queryParams = new URLSearchParams(location.search);
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
-
     //검색창 보이기
     const[visible,setVisible] = useState(false);
     //검색창에 들어가는 입력값
     const [search, setSearch] = useState("");
-
-
     // 로그인 상태 관리
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isWidth, setIsWidth] = useState(false);
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
+
+    const toggleSidebar = () => {
+        setSidebarVisible(!isSidebarVisible);
+    };
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -84,9 +87,9 @@ function Nav() {
 
     return (
         <>
-            <nav className="main_navbar">
+            <nav className="main_navBar">
                 <div className="centerLink">
-                    <Link to={"/"} className={"center main_a"}>포토포트</Link>
+                    <Link to={"/"} className={"main_a"}>포토포트</Link>
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
@@ -95,8 +98,6 @@ function Nav() {
                             setVisible(!visible);
                         }}><img className={"search_icon"} src={Search} alt="하이"/></button>
                     </div>
-
-
                     {
                         isWidth ? (
                     <div className="otherLinks">
@@ -112,7 +113,7 @@ function Nav() {
                         {
                                 isLoggedIn ? (
                                     <div className={"nav_div"}>
-                                        <Link to={"/Mypage"} className={"drop_a"}>
+                                        <Link to={"/Mypage"}>
                                             <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
                                         </Link>
                                         <button className={"mypage_btn"} onClick={logoutHandler}>
@@ -126,7 +127,30 @@ function Nav() {
                             {/*<Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="하이"/></Link>*/}
                     </div>
                         ) : (
-                            <img className={"list_icon"} src={ListIcon} alt="#" />
+                            <div>
+                                <div className={`sidebar ${isSidebarVisible ? 'active' : ''}`}>
+                                    <button className="toggle_button" onClick={toggleSidebar}>
+                                        <img className={"list_icon"} src={ListIcon} alt="#" />
+                                    </button>
+                                    {
+                                        isLoggedIn ? (
+                                            <div className={"nav_div"}>
+                                                <Link to={"/Mypage"}>
+                                                    <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
+                                                </Link>
+                                                <button className={"mypage_btn"} onClick={logoutHandler}>
+                                                    <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
+                                        )
+                                    }
+                                </div>
+                                <div className="content">
+                                    {/* Content */}
+                                </div>
+                            </div>
                         )
                     }
                 </div>

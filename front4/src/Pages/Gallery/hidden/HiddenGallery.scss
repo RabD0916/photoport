@@ -67,7 +67,7 @@ h1 em {
     height: 90%;
     display: block;
 }
-.cate-image{
+.cate-image2{
     margin: auto;
     border-radius: 15px;
     max-width: 400px;
@@ -76,7 +76,7 @@ h1 em {
     height: 90%;
     display: block;
 }
-.cate {
+.cate2 {
     margin : 2% 0 2% 0;
     display: inline-block;
     text-align: center;
@@ -98,9 +98,10 @@ h1 em {
 }
 
 .cate-list {
+    margin-bottom: 100px;
     display: inline-block;
     width: 98%;
-    height: 90%;
+    height: auto;
     text-align: center; /* 중앙 정렬로 수정 */
 }
 

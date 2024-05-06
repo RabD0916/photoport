@@ -72,12 +72,12 @@ h1 em {
     border-radius: 15px;
     max-width: 400px;
     max-height: 600px;
-    width: 90%;
-    height: 90%;
+    width: 99%;
+    height: 99%;
     display: block;
 }
 .cate {
-    margin : 2% 0 2% 0;
+    margin : 2% 10px 5% 10px;
     display: inline-block;
     text-align: center;
     text-decoration: none;
@@ -98,9 +98,10 @@ h1 em {
 }
 
 .cate-list {
+    margin-bottom: 100px;
     display: inline-block;
     width: 98%;
-    height: 90%;
+    height: auto;
     text-align: center; /* 중앙 정렬로 수정 */
 }
 

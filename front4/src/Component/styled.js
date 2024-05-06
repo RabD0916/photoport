@@ -14,9 +14,14 @@ const frameInAnimation = keyframes`
 `;
 
 export const Container = styled.div`
-  &.frame-in {
-    animation: ${frameInAnimation} 2s;
-    font-size: 50px;
+  @media (max-width: 599px) {
+    font-size: 5px;
+  }
+  @media (min-width: 600px) {
+    &.frame-in {
+      animation: ${frameInAnimation} 2s;
+      font-size: 50px;
+    }
   }
   flex: 1;
   margin: auto;
