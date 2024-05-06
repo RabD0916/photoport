@@ -38,30 +38,21 @@ const BoardWrite = () => {
             }
         ]
     };
+    const [board, setBoard] = useState({
+        title: '',
+        content: '',
+        fileName : [],
+        tag: '',
+        share: 'PUBLIC',
+        type: 'NORMAL',
+        writer: userId
+    });
     useEffect(() => {
         window.addEventListener('message', handleMessage);
         return () => {
             window.removeEventListener('message', handleMessage);
         };
     }, []);
-    const handleMessage = (event) => {
-        if (typeof event.data === 'object' && event.data[0] !== undefined && event.data[1] !== undefined) {
-            const newData = event.data[1];
-            const newKeys = newData.map((item) => event.data[0]);
-            setKey(prevKey => [...prevKey, ...newKeys]);
-            setValue(prevValue => [...prevValue, ...newData]);
-            console.log(key);
-        }
-    };
-
-    const [board, setBoard] = useState({
-        title: '',
-        tag: '',
-        contents: '',
-        fileName : '',
-    });
-
-    const { title, tag, contents} = board; //비구조화 할당
 
     const onChange = (event) => {
         const { value, name } = event.target; //event.target에서 name과 value만 가져오기
@@ -70,12 +61,42 @@ const BoardWrite = () => {
             [name]: value,
         });
     };
+
+    const handleMessage = (event) => {
+        if (typeof event.data === 'object' && event.data[0] !== undefined && event.data[1] !== undefined) {
+            const newData = event.data[1];
+            const newKeys = newData.map((item) => event.data[0]);
+            setKey(prevKey => [...prevKey, ...newKeys]);
+            setValue(prevValue => [...prevValue, ...newData])
+            setBoard({
+                ...board,
+                ["fileName"]: value,
+            });
+            console.log(key);
+        }
+    };
+
+    const { title, tag, content} = board; //비구조화 할당
+
+
     const saveBoard = async () => {
+
         console.log(board.title);
         console.log(board.tag);
-        console.log(board.fileName);
-        console.log(board.contents);
-        await axios.post(`http://localhost:8080/api/boards`, board, {
+        console.log(key);
+        console.log(value);
+        console.log(board.content);
+        console.log(accessToken);
+        await axios.post(`http://localhost:8080/api/boards`, {
+            title: board.title,
+            content: board.content,
+            categories: key,
+            mediaNames: value,
+            tags: board.tag,
+            share: board.share,
+            type: board.type,
+            writerId: board.writer
+        },{
             headers : {
                 Authorization : `Bearer ${accessToken}`
             }
@@ -125,8 +146,8 @@ const BoardWrite = () => {
                 <br/>
                     <span>내용</span>
                     <textarea className="text_area"
-                              name="contents"
-                              value={contents}
+                              name="content"
+                              value={content}
                         onChange={onChange}
                     />
                 <br/>

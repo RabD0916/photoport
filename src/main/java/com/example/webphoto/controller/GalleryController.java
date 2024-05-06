@@ -1,7 +1,7 @@
 package com.example.webphoto.controller;
 
 import com.example.webphoto.dto.Category;
-import com.example.webphoto.dto.Media;
+import com.example.webphoto.dto.GetMedia;
 import com.example.webphoto.service.CategoryService;
 import com.example.webphoto.service.MediaService;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +23,12 @@ public class GalleryController {
     }
 
     @GetMapping("/sendMedia/{cateName}")
-    public List<Media> sendMedia(@PathVariable String cateName) {
-        List<Media> mediaList = mediaService.send(nowUser, cateName);
-        if(!mediaList.isEmpty()) {
+    public List<GetMedia> sendMedia(@PathVariable String cateName) {
+        List<GetMedia> getMediaList = mediaService.send(nowUser, cateName);
+        if(!getMediaList.isEmpty()) {
             nowCate = cateName;
         }
-        return mediaList;
+        return getMediaList;
     }
 
     @PostMapping("/createCategory/{cateName}")

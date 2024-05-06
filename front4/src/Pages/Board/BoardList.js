@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import "./BoardCss/BoardList.scss";
 import styled from 'styled-components';
 import heart from "../../img/heart.png";
-import comment from "../../img/board.png";
-import sub from "../../img/sub.png";
+// import comment from "../../img/board.png";
+// import sub from "../../img/sub.png";
 
 const GalleryContainer = styled.div`
   width: 80%;
@@ -29,7 +29,9 @@ const BoardList = () => {
                 headers : {
                     Authorization : `Bearer ${accessToken}`
                 }
-            }); // 2) 게시글 목록 데이터에 할당
+            });// 2) 게시글 목록 데이터에 할당
+        console.log(resp);
+        console.log(resp.data);
         setBoardList(resp.data); // 3) boardList 변수에 할당
 
         const pngn = resp.pagination;

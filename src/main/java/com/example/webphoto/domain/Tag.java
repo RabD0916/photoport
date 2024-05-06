@@ -26,4 +26,9 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag")
     private List<BoardTag> boards = new ArrayList<>();
+
+    public Tag(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MediaBoardRepository extends JpaRepository<MediaBoard, Long> {
-    public Optional<MediaBoard> findByMedia(Media media);
+    public List<MediaBoard> findByMedia(Media media);
 }

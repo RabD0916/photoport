@@ -1,10 +1,8 @@
 package com.example.webphoto.service;
 
-import com.example.webphoto.dto.Media;
-import com.example.webphoto.repository.MediaRepository;
+import com.example.webphoto.dto.GetMedia;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,17 +21,17 @@ import java.util.List;
 public class MediaService {
     private final String path = "./front4/public/images/";
 
-    public List<Media> send(String nowUser, String cateName) {
+    public List<GetMedia> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
         String[] mediaNames = getFileNames(dir);
-        List<Media> mediaList = new ArrayList<>();
+        List<GetMedia> getMediaList = new ArrayList<>();
 
         if(mediaNames != null) {
             for (String mediaName : mediaNames) {
-                mediaList.add(new Media(mediaName));
+                getMediaList.add(new GetMedia(cateName, mediaName));
             }
         }
-        return mediaList;
+        return getMediaList;
     }
 
     public String move(String nowUser, String nowCate, String selectedMedia, String nextCateName) {

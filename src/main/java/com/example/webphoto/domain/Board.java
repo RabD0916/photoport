@@ -55,7 +55,7 @@ public class Board {
     private User writer;
 
     @OneToMany(mappedBy = "board")
-    private List<MediaBoard> medias = new ArrayList<>();
+    private List<MediaBoard> media = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
@@ -72,16 +72,39 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
 
-    public Board(Long id, String title, LocalDateTime createdAt, String content, int view, int like, int bookmark, BoardShare share, BoardType type, User writer) {
-        this.id = id;
+    public Board(Long id, String title, LocalDateTime createdAt, String content, List<MediaBoard> media, List<BoardTag> tags, int view, int like, int bookmark, BoardShare share, BoardType type, User writer) {
         this.title = title;
         this.createdAt = createdAt;
         this.content = content;
+        setMedia(media);
+        setTags(tags);
         this.view = view;
         this.like = like;
         this.bookmark = bookmark;
         this.share = share;
         this.type = type;
         this.writer = writer;
+    }
+
+    public Board(Long id, String title, LocalDateTime createdAt, String content, List<MediaBoard> media, List<BoardTag> tags, BoardShare share, BoardType type, User writer) {
+        this(id, title, createdAt, content, media, tags, 0, 0, 0, BoardShare.PUBLIC, BoardType.NORMAL, writer);
+    }
+
+    public void setTags(List<BoardTag> list) {
+        for (BoardTag boardTag : list) {
+            if (!this.tags.contains(boardTag)) {
+                this.tags.add(boardTag);
+                boardTag.setBoard(this);
+            }
+        }
+    }
+
+    public void setMedia(List<MediaBoard> list) {
+        for (MediaBoard mediaBoard : list) {
+            if (!this.media.contains(mediaBoard)) {
+                this.media.add(mediaBoard);
+                mediaBoard.setBoard(this);
+            }
+        }
     }
 }
