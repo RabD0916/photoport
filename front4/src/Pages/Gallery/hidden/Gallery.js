@@ -36,9 +36,9 @@ const Gallery = () => {
             <div className={"rowbar"}/>
             <div className={"cate-list"}>
                 {cate.map((category) => (
-                    <Link key={category["name"]} to={"/gallery/hidden/" + userId + "/" + category["name"]} className={"cate"}>
+                    <Link key={category["name"]} to={"/gallery/hidden/" + userId + "/" + category["name"]} className={"cate2"}>
                         {category["thumbnail"] !== "Empty" ?
-                            <img className={"cate-image"} src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
+                            <img className={"cate-image2"} src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
                                  alt={category["thumbnail"]}
                             ></img>
                             : <div className={"not_box"}></div>}

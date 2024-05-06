@@ -87,6 +87,7 @@ function MyPage() {
     const handleClickButton = e => {
         const { name } = e.target;
         setContent(name);
+        console.log(e.target)
     };
 
     const selectComponent = {
@@ -115,7 +116,10 @@ function MyPage() {
                                 </Button>
                             ))}
                         </Container>
-                        {content && <Content>{selectComponent[content]}</Content>}
+                        {content && selectComponent[content] ?
+                            <Content>{selectComponent[content]}</Content> :
+                            <Content><First /></Content>
+                        }
                     </div>
                 </div>
             </div>
@@ -125,13 +129,10 @@ function MyPage() {
 export default MyPage;
 
 const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 300px;
+    margin: auto;
     height: auto;
-    margin-bottom: 10px;
 `;
-
 const Button = styled.button`
   height: 20px;
   color: #111111;
@@ -140,9 +141,8 @@ const Button = styled.button`
 `;
 
 const Content = styled.div`
+    padding: 0;
+    margin: auto;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 90%
 `;

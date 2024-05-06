@@ -44,8 +44,11 @@ const BoardList = () => {
         getBoardList().then(r => console.log(r)); // 1) 게시글 목록 조회 함수 호출
     }, []);
 
+    const open_board =() =>{
+        window.open("boardDetail","_blank","width=100");//url+게시글 아이디 모달창
+    }
     return (
-        <div className={"board_body"}>
+        <div>
             <div>
                 <button onClick={moveToWrite}>글쓰기</button>
             </div>
@@ -70,7 +73,7 @@ const BoardList = () => {
             {/*    </div>*/}
             {/*</div>*/}
             <GalleryContainer>
-            <div className="main_board">
+            <div className="main_board" onClick={open_board}>
                 <div className={"board_select"}></div>
                 <div className="board_list">
                         <div className="board_item">

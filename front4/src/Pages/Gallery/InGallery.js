@@ -1,5 +1,4 @@
 import './InGallery.scss';
-import '../../Component/css/nav.scss';
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
@@ -180,8 +179,7 @@ const InGallery = () => {
                                  alt={category["thumbnail"]}
                             ></img>
                             : <div className={"not_box"}></div>}
-                        <div
-                            className={"cate-name"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
+                        <div className={"cate-name"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
                     </Link>
                 ))}
             </div>

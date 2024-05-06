@@ -3,6 +3,12 @@
     .body{
         height: 300px;
     }
+    .mini_footer{
+        display: flex;
+    }
+    .footer_center, .footer_right{
+        flex: 1;
+    }
     .app_logo{
         border: 0.5px solid;
         width: 51%;
@@ -20,7 +26,6 @@
         font-size: 20px;
     }
     .footer_first{
-        display: flex;
         justify-content: center; /* 가로 중앙 정렬 */
         align-items: center; /* 세로 중앙 정렬 */
     }
@@ -31,18 +36,25 @@
     }
     .naver_map{
         width: 100px;
+        margin-top: 100px;
     }
-    .footer_left, .footer_right, .footer_center{
+    .footer_left{
         flex: 1;
     }
     .main_footer {
         background-color: black;
         color: white;
-        height: 300px;
+        height: 600px;
+    }
+    .footer_center{
+        margin-top: 50px;
     }
 }
 @media (max-width: 600px) {
     /* 화면의 폭이 600px 미만일 때 적용되는 스타일 */
+    .mini_footer{
+        display: flex;
+    }
     .application{
         width: 200px;
     }
@@ -61,19 +73,13 @@
         display: flex;
         font-size: 10px;
     }
-    .footer_center{
-        display: flex;
-    }
-    .footer_center .footer_right{
-        flex: 1;
-    }
     .naver_map{
         width: 80px;
     }
     .main_footer {
         background-color: black;
         color: white;
-        height: 600px;
+        height: 300px;
     }
 }
 

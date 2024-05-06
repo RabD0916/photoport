@@ -1,13 +1,15 @@
 .main-myPage {
   border: 1px solid;
-  width: 50%;
+  width: 70%;
   margin: 10px auto 10px auto;
 }
 
 .myPro_file {
+  margin-top: 50px;
   display: flex; /* 수정 버튼과 닉네임을 가로로 배열하기 위해 */
   flex-direction: column; /* 세로로 정렬되도록 설정 */
   align-items: center; /* 가로 중앙 정렬 */
+  width: 100%;
   .pro-image {
     position: relative;
     width: 200px; /* 적당한 크기로 조정하세요 */
@@ -56,9 +58,14 @@ flex: 1;
     border: 1px solid black;
     font-size: 20px;
     margin: 4% 1% 0 1%;
-    width: 150px;
+    width: 40%;
     height: auto;
     background: none;
+  }
+}
+@media (max-width: 599px) {
+  .board_item{
+    width: 80%;
   }
 }
 

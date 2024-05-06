@@ -22,7 +22,7 @@ const InCategory = (props) => {
     const settings = {
         dots: true,
         fade: true,
-        arrows : true, 		// 옆으로 이동하는 화살표 표시 여부
+        arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
         infinite: true,
         draggable : true, 	//드래그 가능 여부
         speed: 100,

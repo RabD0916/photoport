@@ -13,6 +13,7 @@ function Footer(){
                     <p>문의:wogjs@naver.com</p>
                     <hr className="Line"/>
                 </div>
+                <div className={"mini_footer"}>
                 <div className={"footer_center"}>
                     <div className={"application"}>
                         <img className="app_logo" src={Mainlogo} alt="인생네컷어플"/>
@@ -22,6 +23,7 @@ function Footer(){
                 <div className="footer_right">
                     <img className="naver_map" src="/map.jpg" alt="지도"/>
                 </div>
+            </div>
             </div>
         </div>
     )
