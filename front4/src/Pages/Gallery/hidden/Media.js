@@ -20,11 +20,10 @@ const Media = ({onChildClick}) => {
     const userId = localStorage.getItem("id");
     const settings = {
         dots: true,
-        fade: true,
         arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
         infinite: true,
         draggable : true, 	//드래그 가능 여부
-        speed: 100,
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         responsive: [ // 반응형 웹 구현 옵션
@@ -79,7 +78,7 @@ const Media = ({onChildClick}) => {
                     <Slider {...settings}>
                         {selectedMediaNames && (
                             selectedMediaNames.map((mediaName) => (
-                                <img className={"select_img"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected" />
+                                <img className={"select_img2"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected" />
                             ))
                         )}
                     </Slider>

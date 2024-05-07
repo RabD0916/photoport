@@ -4,21 +4,25 @@
   margin: auto;
   .board_list{
     margin: auto;
-    width: 300px;
     .board_item{
       margin: 50px auto;
       border: 1px solid;
       .img_box{
         margin: 10px auto auto auto;
-        width: 200px;
+        width: 95%;
         .board_img{
           margin: auto;
           width: 92%;
         }
       }
       .click_evt{
-        margin-left: 4%;
+        margin: auto auto 20px auto;
         text-align: left;
+        display: flex; /* Flexbox 사용 */
+        img{
+          width: 35px;
+          margin: auto 2px auto 2px;
+        }
       }
       .content_box{
         .content_font{
@@ -35,3 +39,15 @@
   }
 }
 
+/* 600px 미만일 때 */
+@media (max-width: 599px) {
+  .main_board {
+    flex: 0 0 100%;
+  }
+}
+/* 600px 이상일 때 */
+@media (min-width: 600px) {
+  .board_list {
+    width: 350px;
+  }
+}

@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import styled from 'styled-components';
-import heart from "../../../img/heart.png";
+import heart from "../../../img/like.png";
 import "../Number/First.scss";
+import like from "../../../img/like.png";
+import comment from "../../../img/comment.png";
+import sub from "../../../img/sub.png";
 
 const GalleryContainer = styled.div`
   display: flex;
@@ -57,9 +60,9 @@ const First = () => {
                                 <img className="board_img2" src={heart} alt="#"/>
                             </div>
                             <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
+                                <img src={like} alt={"좋아요"}/>
+                                <img src={comment} alt={"댓글"}/>
+                                <img src={sub} alt={"북마크"}/>
                             </div>
                             <div className={"content_box2"}>
                                 <div className={"content_font2"}>제목</div>
@@ -73,224 +76,6 @@ const First = () => {
                         {/* 필요한 만큼 게시글 추가 */}
                     </div>
                 </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>   <div className="main_board2">
-                <div className={"board_select2"}></div>
-                <div className="board_list2">
-                    <div className="board_item2">
-                        <div className={"img_box2"}>
-                            <img className="board_img2" src={heart} alt="#"/>
-                        </div>
-                        <div className={"click_evt2"}>
-                            <img src="#" alt={"좋아요"}/>
-                            <img src="#" alt={"댓글"}/>
-                            <img src="#" alt={"북마크"}/>
-                        </div>
-                        <div className={"content_box2"}>
-                            <div className={"content_font2"}>제목</div>
-                            <div className="content_name2">제목</div>
-                            <div className={"content_font2"}>태그</div>
-                            <div className="content_name2">태그</div>
-                            <div className={"content_font2"}>내용</div>
-                            <div className="content_name2">내용</div>
-                        </div>
-                    </div>
-                    {/* 필요한 만큼 게시글 추가 */}
-                </div>
-            </div>   <div className="main_board2">
-                <div className={"board_select2"}></div>
-                <div className="board_list2">
-                    <div className="board_item2">
-                        <div className={"img_box2"}>
-                            <img className="board_img2" src={heart} alt="#"/>
-                        </div>
-                        <div className={"click_evt2"}>
-                            <img src="#" alt={"좋아요"}/>
-                            <img src="#" alt={"댓글"}/>
-                            <img src="#" alt={"북마크"}/>
-                        </div>
-                        <div className={"content_box2"}>
-                            <div className={"content_font2"}>제목</div>
-                            <div className="content_name2">제목</div>
-                            <div className={"content_font2"}>태그</div>
-                            <div className="content_name2">태그</div>
-                            <div className={"content_font2"}>내용</div>
-                            <div className="content_name2">내용</div>
-                        </div>
-                    </div>
-                    {/* 필요한 만큼 게시글 추가 */}
-                </div>
-            </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
-                            </div>
-                            <div className={"click_evt2"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
-                            </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
-                        </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
-                </div>
-
-
-
-
                 </GalleryContainer>
         </div>
     )

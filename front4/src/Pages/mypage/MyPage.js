@@ -108,12 +108,6 @@ function MyPage() {
                     </div>
                     <input type={"file"} onChange={handleChange} ref={fileInput} style={{ display: "none" }} />
                     <h3>{userId}</h3>
-                    <button>팔로우</button>
-                    <div className={"input_container"}>
-                        <h2>{userId}</h2>
-                        {/*<button>수정</button>*/}
-                    </div>
-                    <button className={"follow"}>친구</button>
                     <div className={"my-pageNav"}>
                             {MAIN_DATA.map(data => (
                                 <Button onClick={handleClickButton} name={data.name} key={data.id}>

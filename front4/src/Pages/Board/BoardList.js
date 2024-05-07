@@ -3,10 +3,10 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import "./BoardCss/BoardList.scss";
 import styled from 'styled-components';
-import heart from "../../img/heart.png";
-// import comment from "../../img/board.png";
-// import sub from "../../img/sub.png";
-
+import heart from "../../img/like.png";
+import like from "../../img/like.png";
+import sub from "../../img/sub.png";
+import comment from "../../img/comment.png";
 const GalleryContainer = styled.div`
   width: 80%;
   margin: auto;
@@ -83,9 +83,9 @@ const BoardList = () => {
                             <img className="board_img" src={heart} alt="#"/>
                             </div>
                             <div className={"click_evt"}>
-                                <img src="#" alt={"좋아요"}/>
-                                <img src="#" alt={"댓글"}/>
-                                <img src="#" alt={"북마크"}/>
+                                <img src={like} alt={"좋아요"}/>
+                                <img src={comment} alt={"댓글"}/>
+                                <img src={sub} alt={"북마크"}/>
                             </div>
                             <div className={"content_box"}>
                             <div className={"content_font"}>제목</div>

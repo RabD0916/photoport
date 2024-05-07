@@ -1,4 +1,4 @@
-import heart from "../../img/heart.png";
+import heart from "../../img/like.png";
 import React from "react";
 import "./BoardCss/BoardList.scss";
 
