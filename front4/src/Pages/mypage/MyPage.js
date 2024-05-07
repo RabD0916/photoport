@@ -115,16 +115,14 @@ function MyPage() {
                     </div>
                     <button className={"follow"}>친구</button>
                     <div className={"my-pageNav"}>
-                        <Container>
                             {MAIN_DATA.map(data => (
                                 <Button onClick={handleClickButton} name={data.name} key={data.id}>
                                     {data.text}
                                 </Button>
                             ))}
-                        </Container>
                         {content && selectComponent[content] ?
                             <Content>{selectComponent[content]}</Content> :
-                            <Content><First /></Content>
+                           <First />
                         }
                     </div>
                 </div>
@@ -134,18 +132,12 @@ function MyPage() {
 }
 export default MyPage;
 
-const Container = styled.div`
-    width: 300px;
-    margin: auto;
-    height: auto;
-`;
 const Button = styled.button`
   height: 20px;
   color: #111111;
   background-color: #eeeeee;
   border-radius: 2rem;
 `;
-
 const Content = styled.div`
     padding: 0;
     margin: auto;
