@@ -15,6 +15,7 @@ function MyPage() {
     const [userId, setUserId] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [friendsList, setFriendsList] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -108,6 +109,11 @@ function MyPage() {
                     <input type={"file"} onChange={handleChange} ref={fileInput} style={{ display: "none" }} />
                     <h3>{userId}</h3>
                     <button>팔로우</button>
+                    <div className={"input_container"}>
+                        <h2>{userId}</h2>
+                        {/*<button>수정</button>*/}
+                    </div>
+                    <button className={"follow"}>친구</button>
                     <div className={"my-pageNav"}>
                         <Container>
                             {MAIN_DATA.map(data => (

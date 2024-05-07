@@ -4,15 +4,17 @@ import com.example.webphoto.dto.Category;
 import com.example.webphoto.dto.GetMedia;
 import com.example.webphoto.service.CategoryService;
 import com.example.webphoto.service.MediaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class GalleryController {
     private final CategoryService categoryService = new CategoryService();
-    private final MediaService mediaService = new MediaService();
+    private final MediaService mediaService;
     private String nowUser = "";
     private String nowCate = "";
 

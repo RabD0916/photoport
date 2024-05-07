@@ -5,6 +5,7 @@ import com.example.webphoto.dto.*;
 import com.example.webphoto.service.TokenService;
 import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Slf4j
 public class UserController {
 
     private final String path = "./front4/public/images/";
@@ -51,7 +54,7 @@ public class UserController {
     }
 
 
-    // ?? 이건 잘 모름
+    // 토큰 재발급(리프레시 토큰을 이용해서 액세스 토큰 재발급)
     @PostMapping("/token")
     public ResponseEntity<CreateAccessTokenResponse> postToken(
             @RequestBody CreateAccessTokenRequest request
@@ -128,6 +131,17 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new GetProfileResponse(null, userId));
+        }
+    }
+
+    @GetMapping("/user/search")
+    public ResponseEntity<List<UserSearchResult>> searchUsersByEmail(@RequestParam("email") String email, Principal user) {
+        try {
+            List<UserSearchResult> searchResults = userService.searchUsersByEmail(email, user.getName());
+            return new ResponseEntity<>(searchResults, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("찾을 수 없는 유저 : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

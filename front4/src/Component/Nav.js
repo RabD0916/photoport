@@ -110,6 +110,7 @@ function Nav() {
                                 <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
                             </div>
                         </div>
+                        <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>
                         {
                                 isLoggedIn ? (
                                     <div className={"nav_div"}>

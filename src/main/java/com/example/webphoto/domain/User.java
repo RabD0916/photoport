@@ -71,11 +71,8 @@ public class User {
     @OneToMany(mappedBy = "writer")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "followed")
-    private List<Follow> followingUsers = new ArrayList<>();
-
-    @OneToMany(mappedBy = "follower")
-    private List<Follow> followerUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "users")
+    private List<Friendship> friendshipList = new ArrayList<>();
 
     @OneToMany(mappedBy = "receiver")
     private List<Alarm> receiveAlarms = new ArrayList<>();

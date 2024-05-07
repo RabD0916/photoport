@@ -28,6 +28,7 @@ import BoardDetail from "./Pages/Board/BoardDetail"
 import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
+import FindFriend from "./Pages/mypage/FindFriend";
 
 /*
 function Eventpage() {
@@ -51,6 +52,8 @@ function App() {
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
                   <Route path={"/gallery/hidden/:userId"} element={<HiddenGallery />}></Route>
                   <Route path={"/gallery/hidden/:userId/:cateId"} element={<HiddenCategory />}></Route>
+
+                  <Route path={"/FindFriend"} element={<FindFriend/>}></Route>
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/BoardDetail"} element={<BoardDetail/>}></Route>
                   <Route path={"/BoardWrite"} element={<BoardWrite/>}></Route>

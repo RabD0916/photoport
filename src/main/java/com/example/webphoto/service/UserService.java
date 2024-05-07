@@ -1,17 +1,25 @@
 package com.example.webphoto.service;
 
+import com.example.webphoto.domain.Friendship;
+import com.example.webphoto.domain.FriendshipStatus;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.AddUserRequest;
 import com.example.webphoto.dto.AddUserResponse;
+import com.example.webphoto.dto.UserSearchResult;
+import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +27,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FriendshipRepository friendshipRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByUserNick(String userNick) {
+        return userRepository.findByUserNick(userNick)
+                .orElseThrow(() -> new NotFoundException("User not found with usreNick" + userNick));
     }
 
     // 이메일을 이용하여 사용자의 아이디를 찾는 메소드
@@ -39,19 +49,23 @@ public class UserService {
 
     // dto를 user엔티티로 저장
     private User requestToEntity(AddUserRequest dto) {
+        Optional<User> existingUser = userRepository.findById(dto.getId());
+        if (existingUser.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
+        }
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         if (dto.getId().equals("ADMIN")) {
             return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.ADMIN, true, "/images/profile.png");
+                    dto.getPhone(), dto.getBirth(), dto.getEmail(), LocalDateTime.now(), UserType.ADMIN, true, "/images/profile.png");
         } else {
             return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(),  dto.getBirth(), dto.getEmail(), dto.getUserConn(), UserType.USER, true, "/images/profile.png");
+                    dto.getPhone(), dto.getBirth(), dto.getEmail(), LocalDateTime.now(), UserType.USER, true, "/images/profile.png");
         }
     }
 
     // user 엔티티를 AddUserResponse Dto로 변환
     private AddUserResponse entityToResponse(User user) {
-        return new AddUserResponse(user.getId(), "ok",  true, "성공적으로 처리하였습니다.", user.getUserProfile(), user.getUserNick());
+        return new AddUserResponse(user.getId(), "ok", true, "성공적으로 처리하였습니다.", user.getUserProfile(), user.getUserNick());
     }
 
 
@@ -101,10 +115,38 @@ public class UserService {
         return entityToResponse(newUser);
     }
 
+    // 사용자 이메일로 유저 찾기(친구 검색)
+    public List<UserSearchResult> searchUsersByEmail(String email, String id) throws Exception {
+        // 현재 사용자 불러움
+        User currentUser = userRepository.findById(id).orElse(null);
 
-//    // 사용자의 프로필 이미지를 변경하는 메소드
-//    public String updateProfile(String userId, String fileName) {
-//
-//    }
+        // 현재 사용자의 친구 관계 및 친구 요청 목록을 가져옴
+        List<Friendship> friendshipList = currentUser.getFriendshipList();
 
+        // 이메일로 모든 유저 검색
+        List<User> userList = userRepository.findByEmailStartingWith(email);
+        if (userList.isEmpty()) {
+            throw new Exception("검색 결과가 없습니다.");
+        }
+
+        // 필터링: 자기 자신, 이미 친구이거나 친구 요청을 보낸 유저 제외
+        List<UserSearchResult> resultDtoList = userList.stream()
+                .filter(user -> !user.getId().equals(id)) // 자기 자신 제외
+                .filter(user -> friendshipList.stream()
+                        .noneMatch(friendship ->
+                                (friendship.getFriendEmail().equals(user.getEmail()) &&
+                                        (friendship.getStatus().equals(FriendshipStatus.ACCEPT) ||
+                                                friendship.getStatus().equals(FriendshipStatus.WAITING))))
+                ) // 이미 친구이거나 친구 요청을 보낸 유저 제외
+                .map(user -> {
+                    UserSearchResult dto = new UserSearchResult();
+                    dto.setUserId(user.getId());
+                    dto.setUserEmail(user.getEmail());
+                    dto.setUserNick(user.getUserNick());
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return resultDtoList;
+
+    }
 }

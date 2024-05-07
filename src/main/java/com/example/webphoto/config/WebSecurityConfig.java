@@ -5,6 +5,7 @@ import com.example.webphoto.service.JWTokenProvider;
 import com.example.webphoto.service.UserDetailsServiceImpl;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -32,10 +34,12 @@ public class WebSecurityConfig {
                 // API 경로에 대한 보안 설정
                 .securityMatcher("/**")
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 특정 API 경로에 대해 인증 없이 허용
-                                .requestMatchers("/api/join", "/api/signin", "/api/token", "/api/hello","/api/mailSend", "/api/mailauthCheck", "/", "/h2-console/**", "/front4/public/**", "/api/checkUserId","/api/newPw","/api/newPwUpdate").permitAll()
+                                .requestMatchers("/api/join", "/api/signin", "/api/token", "/api/hello", "/api/mailSend", "/api/mailauthCheck", "/", "/h2-console/**", "/front4/public/**", "/api/checkUserId", "/api/newPw", "/api/newPwUpdate").permitAll()
+                                .requestMatchers(PathRequest.toH2Console()).permitAll()
                                 // 그 외의 모든 요청은 인증이 필요함
                                 .anyRequest().authenticated()
                 )
