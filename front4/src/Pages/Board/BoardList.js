@@ -78,7 +78,6 @@ const BoardList = () => {
                                         alt={`사진 ${index + 1}`}
                                     />
                                 ))}
-
                                 <p>내용: {selectedPost.content}</p>
                                 {/* 게시글의 다른 필드들을 여기에 추가 */}
                             </div>

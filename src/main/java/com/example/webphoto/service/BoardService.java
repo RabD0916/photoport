@@ -28,6 +28,7 @@ public class BoardService {
     private final MediaRepository mediaRepository;
     private final MediaBoardRepository mediaBoardRepository;
     private final CommentRepository commentRepository;
+    private final CommentService commentService;
     private final TagRepository tagRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
@@ -63,8 +64,7 @@ public class BoardService {
                 board.getType(),
                 board.getWriter().getId(),
                 mediaList,               // 아직 해결 못함
-//                commentRepository.findByBoard(board),
-                new ArrayList<>(),
+                commentService.findAllComments(board.getId()), // 이곳도 서비스에서 해당 게시글에 등록된 모든 댓글 가져오는 dto 반환하는걸로 수정
                 tagList                    // 아직 해결 못함
         );
     }
