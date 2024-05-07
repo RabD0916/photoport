@@ -137,14 +137,16 @@ function Nav() {
                                         isLoggedIn ? (
                                             <div className={"nav_div"}>
                                                 <Link to={"/Mypage"}>
-                                                    <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
+                                                    <div className={"in_text"}>마이페이지</div>
                                                 </Link>
-                                                <button className={"mypage_btn"} onClick={logoutHandler}>
-                                                    <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
+                                                <button className={"in_button"} onClick={logoutHandler}>
+                                            <div>로그아웃</div>
                                                 </button>
                                             </div>
                                         ) : (
-                                            <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
+                                            <Link to={"/login"}>
+                                            <div className={"in_text"}>로그인</div>
+                                        </Link>
                                         )
                                     }
                                 </div>

@@ -20,8 +20,8 @@ $shadowColour: rgba(0, 0, 0, .6);
 .sidebar {
     position: fixed;
     top: 0;
-    right: -300px; /* 사이드바가 오른쪽에서 시작하도록 설정 */
-    width: 300px;
+    right: -100px; /* 사이드바가 오른쪽에서 시작하도록 설정 */
+    width: 100px;
     height: 100%;
     background-color: #333;
     transition: right 0.3s ease; /* 오른쪽 위치에 대한 애니메이션 효과 */
@@ -45,8 +45,6 @@ $shadowColour: rgba(0, 0, 0, .6);
     top: 10px;
     left: -40px; /* 왼쪽에 버튼을 위치시킴 */
 }
-
-
 .main_navBar{
     margin-bottom: 30px;
 }
@@ -242,6 +240,29 @@ $shadowColour: rgba(0, 0, 0, .6);
     .list_icon{
         width: 20px;
         margin-right: 10px;
+    }
+    .rightLinks a{
+        text-decoration: none;
+    }
+    .in_button{
+        margin: 0 auto auto 4px;
+        float: left;
+        border: none;
+        background: none;
+        font-size: 10px;
+        &:hover{
+            color: #56a7f3;
+    }
+    }
+    .in_text{
+        margin: 10px auto auto 10px;
+        float: left;
+        font-size: 10px;
+        color: #5297dc;
+        text-decoration: none;
+        &:hover{
+            color: #244cd9;
+        }
     }
 }
 
