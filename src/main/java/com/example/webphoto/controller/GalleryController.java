@@ -25,6 +25,7 @@ public class GalleryController {
     @GetMapping("/sendMedia/{cateName}")
     public List<GetMedia> sendMedia(@PathVariable String cateName) {
         List<GetMedia> getMediaList = mediaService.send(nowUser, cateName);
+        System.out.println(getMediaList);
         if(!getMediaList.isEmpty()) {
             nowCate = cateName;
         }

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,14 +24,16 @@ public class MediaService {
 
     public List<GetMedia> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
+        System.out.println(dir);
         String[] mediaNames = getFileNames(dir);
+        System.out.println(Arrays.asList(mediaNames));
         List<GetMedia> getMediaList = new ArrayList<>();
-
         if(mediaNames != null) {
             for (String mediaName : mediaNames) {
-                getMediaList.add(new GetMedia(cateName, mediaName));
+                getMediaList.add(new GetMedia(mediaName, cateName));
             }
         }
+        System.out.println(getMediaList);
         return getMediaList;
     }
 
