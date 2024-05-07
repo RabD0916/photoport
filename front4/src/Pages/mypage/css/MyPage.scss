@@ -53,19 +53,23 @@
 }
 
 .my-pageNav{
-flex: 1;
+  width: 80%;
+  margin: auto;
+  flex: 1;
   button{
     border: 1px solid black;
     font-size: 20px;
-    margin: 4% 1% 0 1%;
     width: 40%;
     height: auto;
     background: none;
   }
 }
 @media (max-width: 599px) {
-  .board_item{
+  .board_list{
     width: 80%;
+  }
+  .board_item{
+    width: 67%;
   }
 }
 

@@ -1,6 +1,36 @@
-.board_item{
-  margin: auto 5px auto 5px;
-}
-.main_board{
-  margin: auto 5px auto 5px;
+.main_board2{
+  flex: 0 0 10%; /* 각 항목이 4개가 나열될 수 있도록 25%의 너비를 설정 */
+  width: 94%;
+  margin: auto;
+  .board_list2{
+    margin: auto;
+    width: 300px;
+    .board_item2{
+      margin: 50px auto;
+      border: 1px solid;
+      .img_box2{
+        margin: 10px auto auto auto;
+        width: 200px;
+        .board_img2{
+          margin: auto;
+          width: 92%;
+        }
+      }
+      .click_evt2{
+        margin-left: 4%;
+        text-align: left;
+      }
+      .content_box2{
+        .content_font2{
+          font-size: 10px;
+          margin-left: 4%;
+          text-align: left;
+        }
+        .content_name2{
+          font-size: 10px;
+        }
+      }
+    }
+
+  }
 }
