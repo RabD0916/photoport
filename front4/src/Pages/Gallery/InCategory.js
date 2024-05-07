@@ -154,7 +154,8 @@ const InCategory = (props) => {
                 <Slider {...settings}>
                     {selectedMediaNames && (
                         selectedMediaNames.map((mediaName) => (
-                            <img className={"select_img"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected" />
+                            <img className={"select_img"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected"
+                                 onClick={() => handleImageClick(mediaName)}/>
                                 ))
                     )}
                 </Slider>

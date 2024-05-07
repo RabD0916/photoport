@@ -59,7 +59,7 @@ public class BoardService {
     private Board requestToEntity(AddBoardRequest dto) {
         User user = userService.findById(dto.getWriterId());
 
-        String[] tagNames = dto.getTags().split("[%@]");
+        String[] tagNames = dto.getTags().split("[#@]");
         List<Tag> tags = tagService.addTag(tagNames);
         List<BoardTag> boardTags = new ArrayList<>();
         for(Tag tag : tags) {
