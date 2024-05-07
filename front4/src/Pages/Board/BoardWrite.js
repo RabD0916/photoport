@@ -108,6 +108,9 @@ const BoardWrite = () => {
     const backToList=() =>{
         window.open("gallery/hidden/"+userId,"_blank","width=100");
     }
+    const go_back=() =>{
+        navigate('/board')
+    }
     const remove_index=(index)=>{
         const newKey = [...key.slice(0, index), ...key.slice(index + 1)];
         const newValue = [...value.slice(0, index), ...value.slice(index + 1)];
@@ -154,7 +157,7 @@ const BoardWrite = () => {
                 </div>
                 <div>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>
-                    <button className="button-style" onClick={backToList}>취소</button>
+                    <button className="button-style" onClick={go_back}>취소</button>
                 </div>
             </div>
         </div>

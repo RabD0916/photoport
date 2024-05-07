@@ -2,11 +2,8 @@
   flex: 0 0 10%; /* 각 항목이 4개가 나열될 수 있도록 25%의 너비를 설정 */
   width: 94%;
   margin: auto;
-  .board_list{
-    margin: auto;
     .board_item{
       margin: 50px auto;
-      border: 1px solid;
       .img_box{
         margin: 10px auto auto auto;
         width: 95%;
@@ -19,10 +16,6 @@
         margin: auto auto 20px auto;
         text-align: left;
         display: flex; /* Flexbox 사용 */
-        img{
-          width: 35px;
-          margin: auto 2px auto 2px;
-        }
       }
       .content_box{
         .content_font{
@@ -35,9 +28,7 @@
         }
       }
     }
-
   }
-}
 
 /* 600px 미만일 때 */
 @media (max-width: 599px) {
@@ -50,4 +41,14 @@
   .board_list {
     width: 350px;
   }
+}
+
+.nav-img {
+  width: 35px;
+  margin: auto 2px auto 2px;
+}
+
+.detail_img{
+  width: 200px;
+  height: 200px;
 }

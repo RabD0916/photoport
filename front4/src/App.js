@@ -29,6 +29,7 @@ import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
 import FindFriend from "./Pages/mypage/FindFriend";
+import Report from "./Pages/Board/Report";
 
 /*
 function Eventpage() {

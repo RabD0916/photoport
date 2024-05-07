@@ -63,7 +63,8 @@ public class BoardService {
                 board.getType(),
                 board.getWriter().getId(),
                 mediaList,               // 아직 해결 못함
-                commentRepository.findByBoard(board),
+//                commentRepository.findByBoard(board),
+                new ArrayList<>(),
                 tagList                    // 아직 해결 못함
         );
     }
