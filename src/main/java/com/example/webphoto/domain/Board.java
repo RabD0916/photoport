@@ -2,6 +2,8 @@ package com.example.webphoto.domain;
 
 import com.example.webphoto.domain.enums.BoardShare;
 import com.example.webphoto.domain.enums.BoardType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,21 +56,27 @@ public class Board {
     @JoinColumn(name = "writer_id")
     private User writer;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<MediaBoard> media = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<BoardTag> tags = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<LookedBoard> lookedBoards = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<LikedBoard> likedBoards = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board")
     private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
 

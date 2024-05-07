@@ -60,6 +60,19 @@ const InCategory = (props) => {
         getMediaList().then(r => setMedia(r));
     }, [cateId]);
 
+    async function createM(mediaNames) {
+        const result = await axios.post(
+            `http://localhost:8080/api/createMedia`,
+            {mediaNames: mediaNames},
+            {
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            }
+        )
+        return result.data;
+    }
+
     async function moveM(mediaNames, nextCateName) {
         const result = await axios.patch(
             `http://localhost:8080/api/moveMedia/${mediaNames}/${nextCateName}`,
@@ -90,7 +103,17 @@ const InCategory = (props) => {
     }
 
     const createMedia =e => {
-
+        if(selectedMediaNames.length < 1) {
+            alert("사진을 선택하지 않으셨습니다.");
+            return;
+        }
+        const mediaNameString = selectedMediaNames.join(",");
+        createM(selectedMediaNames, cateId).then(r => {
+            switch (r) {
+                case "Success": alert("미디어 생성 완료"); window.location.reload(); break;
+                default: alert("미디어 생성 오류");
+            }
+        })
     }
     const moveMedia = e => {
         if(selectedMediaNames.length < 1) {

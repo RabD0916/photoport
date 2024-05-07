@@ -1,5 +1,7 @@
 package com.example.webphoto.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +26,7 @@ public class Tag {
     @Column(name="tag_name", length = 100)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<BoardTag> boards = new ArrayList<>();
 

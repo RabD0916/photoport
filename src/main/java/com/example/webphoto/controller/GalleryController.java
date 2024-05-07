@@ -18,6 +18,11 @@ public class GalleryController {
     private String nowUser = "";
     private String nowCate = "";
 
+    @PostMapping("/createMedia")
+    public String createMedia(@RequestBody String mediaNames) {
+        return mediaService.create(nowUser, nowCate, mediaNames);
+    }
+
     @GetMapping("/sendCategory/{userId}")
     public List<Category> sendCategory(@PathVariable String userId) {
         this.nowUser = userId;

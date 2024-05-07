@@ -30,7 +30,7 @@ public class GetBoardResponse {
 //    private List<GetMedia> media;
 //    private List<GetComment> comments;
 //    private List<String> tags;
-    private List<Media> media;
+    private List<GetMedia> media;
     private List<Comment> comments;
-    private List<Tag> tags;
+    private List<String> tags;
 }

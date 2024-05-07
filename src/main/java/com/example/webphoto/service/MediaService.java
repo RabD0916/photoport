@@ -1,6 +1,9 @@
 package com.example.webphoto.service;
 
+import com.example.webphoto.domain.Media;
+import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.GetMedia;
+import com.example.webphoto.repository.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,17 @@ import java.util.List;
 @Slf4j
 public class MediaService {
     private final String path = "./front4/public/images/";
+    private final MediaRepository mediaRepository;
+    private final UserService userService;
+
+    public String create(String nowUser, String nowCate, String selectedMedia) {
+        User user = userService.findById(nowUser);
+        String[] mediaNames = selectedMedia.split("[\\[\\],]");
+        for(int i=1; i<mediaNames.length-2; i++) {
+            mediaRepository.save(new Media(null, mediaNames[i].replaceAll("\"", ""), LocalDateTime.now(), nowCate, user));
+        }
+        return "Success";
+    }
 
     public List<GetMedia> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
