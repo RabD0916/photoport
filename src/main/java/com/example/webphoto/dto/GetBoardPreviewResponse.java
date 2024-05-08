@@ -3,6 +3,7 @@ package com.example.webphoto.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +19,5 @@ public class GetBoardPreviewResponse {
     private int bookmark;
     private String writer;
     private GetMedia media;
+    private List<String> tags;
 }

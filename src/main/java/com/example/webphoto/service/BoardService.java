@@ -32,6 +32,14 @@ public class BoardService {
         List<MediaBoard> mediaBoardList = board.getMedia();
         GetMedia thumbnail = new GetMedia();
         thumbnail.set(mediaBoardList.get(0).getMedia());
+        List<BoardTag> boardTagList = board.getTags();
+        List<String> tagList = new ArrayList<>();
+
+        for(BoardTag boardTag : boardTagList) {
+            Tag tag = boardTag.getTag();
+            tagList.add(tag.getName());
+            System.out.println(tag.getName());
+        }
 
         return new GetBoardPreviewResponse(
                 board.getId(),
@@ -41,7 +49,8 @@ public class BoardService {
                 board.getLike(),
                 board.getBookmark(),
                 board.getWriter().getId(),
-                thumbnail
+                thumbnail,
+                tagList
         );
     }
 
@@ -179,7 +188,6 @@ public class BoardService {
         }
     }
 
-
     // 게시글을 삭제하는 메소드
     public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
@@ -192,4 +200,22 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+    // 키워드로 게시물 검색하는 메소드
+    public List<GetBoardPreviewResponse> getBoardByKeyWord(String keyword) throws Exception {
+        List<Board> boardList;
+        if (keyword.endsWith("#")) {
+            throw new Exception("#로 검색할 수는 없습니다");
+        }
+        if (keyword.startsWith("#")) {
+            // 태그 검색 로직
+            String tagKeyword = keyword.substring(1); // '#' 제거
+            boardList = boardRepository.searchByTitleOrContentOrTag(tagKeyword);
+        } else {
+            // 기본 검색 로직
+            boardList = boardRepository.searchByTitleOrContentOrTag(keyword);
+        }
+        return boardList.stream()
+                .map(this::entityToPreviewResponse)
+                .collect(Collectors.toList());
+    }
 }
