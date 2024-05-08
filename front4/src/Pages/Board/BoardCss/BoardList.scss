@@ -8,10 +8,10 @@
       border: 2px solid #0039f8;
       border-radius: 30px;
       .img_box{
-        margin: 10px auto auto auto;
+        margin: 0 auto auto auto;
         width: 95%;
         .board_img{
-          margin: 20px auto 0 auto;
+          margin: 0 auto 0 auto;
           width: 92%;
         }
       }
@@ -40,7 +40,9 @@
       }
     }
   }
-
+.board_content{
+  text-align: left;
+}
 /* 600px 미만일 때 */
 @media (max-width: 599px) {
   .main_board {
@@ -58,8 +60,12 @@
   .board_item{
     width: 500px;
   }
+  .profile-img{
+    margin: 0 0 10px 30px;
+    width: 30px;
+    border-radius: 50px;
+  }
 }
-
 .nav-img {
   width: 35px;
   margin: auto 2px auto 2px;
