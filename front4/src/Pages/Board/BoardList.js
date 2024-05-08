@@ -1,12 +1,13 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
 import comment from "../../img/board.png";
-import heart from "../../img/heart.png";
+// import heart from "../../img/heart.png";
+// import BoardComment from "../Comment/BoardComment";
 
 const GalleryContainer = styled.div`
     width: 80%;
@@ -25,6 +26,7 @@ const BoardList = () => {
     const [boardList, setBoardList] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newComment, setNewComment] = useState("");
     const getBoardList = async () => {
         try {
             const resp = await axios.get('http://localhost:8080/api/boards', {
@@ -34,18 +36,11 @@ const BoardList = () => {
             });
             console.log(resp);
             console.log(resp.data);
-            console.log(`./images/${id}/${resp.data[0].media.categoryName}/${resp.data[0].media.mediaName}`)
             setBoardList(resp.data);
         } catch (error) {
             console.error("Error fetching board list:", error);
         }
     };
-
-    // boardList 변경 될 때 마다 실행
-    useEffect(() => {
-        if(boardList == null || boardList.length === 0) return;
-        console.log(boardList)
-    }, [boardList]);
 
     const moveToWrite = () => {
         navigate('/Boardwrite');
@@ -69,6 +64,32 @@ const BoardList = () => {
     const close_board = () => {
         setIsModalOpen(false);
     };
+
+    const handleCommentChange = (event) => {
+        setNewComment(event.target.value); // 댓글 내용 변경 시 상태 업데이트
+    };
+    const submitComment = async () => {
+        const data = {
+            content: newComment,
+            writer: id
+        };
+
+        try {
+            const resp = await axios.post(`http://localhost:8080/api/comments/${selectedPost.id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
+            setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
+            getBoardList()
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    };
+
+
 
     useEffect(() => {
         getBoardList();
@@ -104,6 +125,15 @@ const BoardList = () => {
                                             <p>{comment.writer}: {comment.content}</p>
                                         </div>
                                     ))}
+                                </div>
+                                <div className={"comment-write"}>
+                                    <h4>댓글 쓰기</h4>
+                                    <textarea
+                                        value={newComment}
+                                        onChange={handleCommentChange}
+                                        placeholder="댓글을 입력하세요"
+                                    />
+                                    <button onClick={submitComment}>작성</button>
                                 </div>
                             </div>
                         )}

@@ -24,6 +24,10 @@ function AddFriendPage() {
                 },
             });
             setReceivedRequests(response.data.waitingFriendRequests);
+
+            if (response.status !== 200) {
+                alert("친구를 찾을 수 없습니다. 다시 입력해 주세요.")
+            }
         } catch (error) {
             console.error("받은 친구 요청을 불러오는 중 오류가 발생했습니다.", error);
         }
