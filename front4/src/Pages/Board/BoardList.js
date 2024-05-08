@@ -80,11 +80,19 @@ const BoardList = () => {
                                 ))}
                                 <p>내용: {selectedPost.content}</p>
                                 {/* 게시글의 다른 필드들을 여기에 추가 */}
+                                <div className="comments">
+                                    <h4>댓글</h4>
+                                    {selectedPost.dtos.comments.map((comment) => (
+                                        <div key={comment.id}>
+                                            <p>{comment.writer}: {comment.content}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                         {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
                         <Suspense fallback={<div>Loading...</div>}>
-                            <Report selectedPost={selectedPost} />
+                            <Report selectedPost={selectedPost}/>
                         </Suspense>
                         <button type="button" className="close_btn" onClick={close_board}>닫기</button>
                     </div>
@@ -96,7 +104,10 @@ const BoardList = () => {
                         <div key={post.id} className="board_item" onClick={() => open_board(post)}>
                             {/* 게시글 내용 표시 */}
                             <div className={"img_box"}>
-                                <img className="board_img" src={heart} alt="#"/>
+                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
+                                {post.media.length > 0 && (
+                                    <img className="board_img" src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
+                                )}
                             </div>
                             <div className={"click_evt"}>
                                 <img className={"nav-img"} src={like} alt={"좋아요"}/>
