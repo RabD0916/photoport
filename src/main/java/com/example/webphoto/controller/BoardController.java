@@ -2,6 +2,7 @@ package com.example.webphoto.controller;
 
 import com.example.webphoto.dto.AddBoardRequest;
 import com.example.webphoto.dto.AddBoardResponse;
+import com.example.webphoto.dto.GetBoardPreviewResponse;
 import com.example.webphoto.dto.GetBoardResponse;
 import com.example.webphoto.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +37,15 @@ public class BoardController {
 
     // 사용자가 작성한 게시글 전체 가져오기
     @GetMapping("/boards")
-    public List<GetBoardResponse> getBoards() {
+    public List<GetBoardPreviewResponse> getBoards() {
         System.out.println("findAll");
         return boardService.findAll();
+    }
+
+    @GetMapping("/board/{id}")
+    public GetBoardResponse getBoard(@PathVariable String id) {
+        System.out.println(id);
+        return boardService.findById(Long.parseLong(id));
     }
 
     // 사용자가 작성한 게시글 수정하기

@@ -34,19 +34,36 @@ const BoardList = () => {
             });
             console.log(resp);
             console.log(resp.data);
+            console.log(`./images/${id}/${resp.data[0].media.categoryName}/${resp.data[0].media.mediaName}`)
             setBoardList(resp.data);
         } catch (error) {
             console.error("Error fetching board list:", error);
         }
     };
 
+    // boardList 변경 될 때 마다 실행
+    useEffect(() => {
+        if(boardList == null || boardList.length === 0) return;
+        console.log(boardList)
+    }, [boardList]);
+
     const moveToWrite = () => {
         navigate('/Boardwrite');
     };
 
-    const open_board = (post) => {
-        setSelectedPost(post);
-        setIsModalOpen(true);
+    const open_board = async (postId) => {
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/board/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp.data);
+            setSelectedPost(resp.data);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error("Error fetching board list:", error);
+        }
     };
 
     const close_board = () => {
@@ -101,13 +118,11 @@ const BoardList = () => {
             <GalleryContainer>
                 <div className="main_board">
                     {boardList.map(post => (
-                        <div key={post.id} className="board_item" onClick={() => open_board(post)}>
+                        <div key={post.id} className="board_item" onClick={() => open_board(post.id)}>
                             {/* 게시글 내용 표시 */}
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                {post.media.length > 0 && (
-                                    <img className="board_img" src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
-                                )}
+                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"/>
                             </div>
                             <div className={"click_evt"}>
                                 <img className={"nav-img"} src={like} alt={"좋아요"}/>

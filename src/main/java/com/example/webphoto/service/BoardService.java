@@ -1,12 +1,8 @@
 package com.example.webphoto.service;
 
 import com.example.webphoto.domain.*;
-import com.example.webphoto.dto.AddBoardRequest;
-import com.example.webphoto.dto.AddBoardResponse;
-import com.example.webphoto.dto.GetBoardResponse;
-import com.example.webphoto.dto.GetMedia;
+import com.example.webphoto.dto.*;
 import com.example.webphoto.repository.*;
-import com.example.webphoto.repository.records.MediaRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +28,29 @@ public class BoardService {
     private final TagRepository tagRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
+    private GetBoardPreviewResponse entityToPreviewResponse(Board board) {
+        List<MediaBoard> mediaBoardList = board.getMedia();
+        GetMedia thumbnail = new GetMedia();
+        thumbnail.set(mediaBoardList.get(0).getMedia());
+
+        return new GetBoardPreviewResponse(
+                board.getId(),
+                board.getTitle(),
+                board.getCreatedAt(),
+                board.getView(),
+                board.getLike(),
+                board.getBookmark(),
+                board.getWriter().getId(),
+                thumbnail
+        );
+    }
+
     private GetBoardResponse entityToResponse(Board board) {
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
         List<GetMedia> mediaList = new ArrayList<>();
         List<String> tagList = new ArrayList<>();
-        System.out.println("entityToResponse Start");
-        System.out.println(mediaBoardList.size());
-        System.out.println(boardTagList);
+
         for(BoardTag boardTag : boardTagList) {
             Tag tag = boardTag.getTag();
             tagList.add(tag.getName());
@@ -50,7 +61,6 @@ public class BoardService {
             mediaList.add(new GetMedia(media.getName(), media.getCategory()));
             System.out.println(mediaList.get(mediaList.size()-1));
         }
-        System.out.println("entityToResponse End");
 
         return new GetBoardResponse(
                 board.getId(),
@@ -60,12 +70,10 @@ public class BoardService {
                 board.getView(),
                 board.getLike(),
                 board.getBookmark(),
-                board.getShare(),
-                board.getType(),
                 board.getWriter().getId(),
-                mediaList,               // 아직 해결 못함
+                mediaList,
                 commentService.findAllComments(board.getId()), // 이곳도 서비스에서 해당 게시글에 등록된 모든 댓글 가져오는 dto 반환하는걸로 수정
-                tagList                    // 아직 해결 못함
+                tagList
         );
     }
 
@@ -124,10 +132,14 @@ public class BoardService {
         );
     }
 
-    public List<GetBoardResponse> findAll() {
+    public List<GetBoardPreviewResponse> findAll() {
         return boardRepository.findAll().stream()
-                .map(board -> entityToResponse(board))
+                .map(board -> entityToPreviewResponse(board))
                 .collect(Collectors.toList());
+    }
+
+    public GetBoardResponse findById(Long id) {
+        return entityToResponse(boardRepository.findById(id).orElse(null));
     }
 
     // 게시글을 추가하는 메소드
