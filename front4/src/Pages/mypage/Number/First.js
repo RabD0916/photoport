@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import styled from 'styled-components';
-import heart from "../../../img/like.png";
 import "../Number/First.scss";
 import like from "../../../img/like.png";
 import comment from "../../../img/comment.png";

@@ -115,4 +115,8 @@ public class Board {
             }
         }
     }
+
+    public void updateView(int view) {
+        this.view = view;
+    }
 }

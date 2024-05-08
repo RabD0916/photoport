@@ -218,4 +218,13 @@ public class BoardService {
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
+
+    // 조회수 증가(사용자가 해당 게시글 클릭 시)
+    public Board updateVisit(Board board) {
+        Board target = boardRepository.findById(board.getId()).orElseThrow(() ->
+                new IllegalStateException("해당 게시글이 존재하지 않습니다"));
+        target.setView(target.getView() + 1);
+        boardRepository.save(target);
+        return target;
+    }
 }
