@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
-import comment from "../../img/comment.png";
-import heart from "../../img/heart.png";
+import view from "../../img/view.png";
 
 const GalleryContainer = styled.div`
     width: 80%;
@@ -26,6 +25,7 @@ const BoardList = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
+
     const getBoardList = async () => {
         try {
             const resp = await axios.get('http://localhost:8080/api/boards', {
@@ -87,13 +87,9 @@ const BoardList = () => {
             console.error("Error submitting comment:", error);
         }
     };
-
-
-
     useEffect(() => {
         getBoardList();
     }, []);
-
     return (
         <div>
             <div>
@@ -148,17 +144,23 @@ const BoardList = () => {
             <GalleryContainer>
                 <div className="main_board">
                     {boardList.map(post => (
-                        <div key={post.id} className="board_item" onClick={() => open_board(post.id)}>
+                        <div key={post.id} className="board_item">
                             {/* 게시글 내용 표시 */}
-                            <div className={"content"}>{post.title}</div>
+                            <div className={"board_content"}>{post.title}<br />
+                            {post.writer}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"/>
+                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
+                                     onClick={() => open_board(post.id)}
+                                />
                             </div>
                             <div className={"click_evt"}>
-                                <img className={"nav-img"} src={like} alt={"좋아요"}/>
-                                <img className={"nav-img"} src={comment} alt={"댓글"}/>
-                                <img className={"nav-img"} src={sub} alt={"북마크"}/>
+                                <button><img className={"nav-img"} src={like} alt={"좋아요"}/>{post.like}</button>
+                                <button><img className={"nav-img"} src={sub} alt={"북마크"}/>{post.bookmark}</button>
+                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}</div>
+                            </div>
+                            <div>
+                                {post.tags}
                             </div>
                         </div>
                     ))}
