@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import "./css/find.scss";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,25 @@ const FindID = ({ handleLogin }) => {
     const [authNum, setAuthNum] = useState('');
     const [inputVisible, setInputVisible] = useState(false);
     const navigate = useNavigate();
+    const [timerRunning, setTimerRunning] = useState(false);
+    // 시간을 담을 변수
+    const [count, setCount] = useState(300);
+
+    useEffect(() => {
+        // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
+        let id;
+
+        if (timerRunning) {
+            id = setInterval(() => {
+                setCount((prevCount) => prevCount - 1);
+            }, 1000);
+        }
+
+        return () => clearInterval(id);
+    }, []);
+
+    const minutes = Math.floor(count / 60);
+    const seconds = count % 60;
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -27,6 +46,7 @@ const FindID = ({ handleLogin }) => {
 
             if (res) {
                 setInputVisible(true); // 인증번호 입력 필드를 보이게 설정
+                setTimerRunning(true);//런닝
             } else {
                 console.error('인증번호 발송 실패!');
             }
@@ -70,6 +90,7 @@ const FindID = ({ handleLogin }) => {
                         <button type="button" className={"input_btn"} onClick={handleSendAuthCode}>인증번호 발송</button>
                         {inputVisible && <input type="text" placeholder="6자리 입력" onChange={handleAuthCodeChange} />}
                         {inputVisible && <p className="find__p">*인증번호를 입력해 주세요</p>}
+                        {inputVisible &&<p className={"time_font"}>{minutes}분 {seconds}초</p>}
                     </div>
                     <button className="signin__btn" type="submit">확인</button>
                 </form>

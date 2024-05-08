@@ -1,6 +1,6 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
@@ -25,6 +25,7 @@ const BoardList = () => {
     const [boardList, setBoardList] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newComment, setNewComment] = useState("");
     const getBoardList = async () => {
         try {
             const resp = await axios.get('http://localhost:8080/api/boards', {
@@ -44,14 +45,50 @@ const BoardList = () => {
         navigate('/Boardwrite');
     };
 
-    const open_board = (post) => {
-        setSelectedPost(post);
-        setIsModalOpen(true);
+    const open_board = async (postId) => {
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/board/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp.data);
+            setSelectedPost(resp.data);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error("Error fetching board list:", error);
+        }
     };
 
     const close_board = () => {
         setIsModalOpen(false);
     };
+
+    const handleCommentChange = (event) => {
+        setNewComment(event.target.value); // 댓글 내용 변경 시 상태 업데이트
+    };
+    const submitComment = async () => {
+        const data = {
+            content: newComment,
+            writer: id
+        };
+
+        try {
+            const resp = await axios.post(`http://localhost:8080/api/comments/${selectedPost.id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
+            setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
+            getBoardList()
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    };
+
+
 
     useEffect(() => {
         getBoardList();
@@ -78,13 +115,31 @@ const BoardList = () => {
                                         alt={`사진 ${index + 1}`}
                                     />
                                 ))}
+
                                 <p>내용: {selectedPost.content}</p>
                                 {/* 게시글의 다른 필드들을 여기에 추가 */}
+                                <div className="comments">
+                                    <h4>댓글</h4>
+                                    {selectedPost.dtos.comments.map((comment) => (
+                                        <div key={comment.id}>
+                                            <p>{comment.writer}: {comment.content}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className={"comment-write"}>
+                                    <h4>댓글 쓰기</h4>
+                                    <textarea
+                                        value={newComment}
+                                        onChange={handleCommentChange}
+                                        placeholder="댓글을 입력하세요"
+                                    />
+                                    <button onClick={submitComment}>작성</button>
+                                </div>
                             </div>
                         )}
                         {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
                         <Suspense fallback={<div>Loading...</div>}>
-                            <Report selectedPost={selectedPost} />
+                            <Report selectedPost={selectedPost}/>
                         </Suspense>
                         <button type="button" className="close_btn" onClick={close_board}>닫기</button>
                     </div>
