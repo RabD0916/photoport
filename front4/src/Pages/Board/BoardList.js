@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
-import comment from "../../img/board.png";
+import comment from "../../img/comment.png";
 import heart from "../../img/heart.png";
 
 const GalleryContainer = styled.div`
@@ -148,22 +148,18 @@ const BoardList = () => {
             <GalleryContainer>
                 <div className="main_board">
                     {boardList.map(post => (
-                        <div key={post.id} className="board_item" onClick={() => open_board(post)}>
+                        <div key={post.id} className="board_item" onClick={() => open_board(post.id)}>
                             {/* 게시글 내용 표시 */}
+                            <div className={"content"}>{post.title}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                {post.media.length > 0 && (
-                                    <img className="board_img" src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
-                                )}
+                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"/>
                             </div>
                             <div className={"click_evt"}>
-                                <img className={"nav-img"} src={like} alt={"좋아요"}/><p>{post.like}</p>
+                                <img className={"nav-img"} src={like} alt={"좋아요"}/>
                                 <img className={"nav-img"} src={comment} alt={"댓글"}/>
-                                <img className={"nav-img"} src={sub} alt={"북마크"}/><p>{post.bookmark}</p>
-                                <p className={"view_"}>view{post.view}</p>
+                                <img className={"nav-img"} src={sub} alt={"북마크"}/>
                             </div>
-                            <div className={"content_box"}>태그<div>{post.tags}</div></div>
-                            <div className={"content_box"}>내용<div>{post.content}</div></div>
                         </div>
                     ))}
                 </div>
