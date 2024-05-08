@@ -54,6 +54,11 @@ public class BoardController {
         return boardService.findById(Long.parseLong(id));
     }
 
+    // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기
+    @GetMapping("/keywordSearch")
+    public List<GetBoardPreviewResponse> getKeywordSearch(@RequestParam(required = false)String keyword) throws Exception {
+        return boardService.getBoardByKeyWord(keyword);
+    }
     // 사용자가 작성한 게시글 수정하기
 //    @PostMapping("/update/board/{id}")
 //    public ResponseEntity<GetBoardResponse> updateBoard(
