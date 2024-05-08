@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
-import comment from "../../img/comment.png";
-import heart from "../../img/heart.png";
 
 const GalleryContainer = styled.div`
     width: 80%;
@@ -69,8 +67,7 @@ const BoardList = () => {
     };
     const submitComment = async () => {
         const data = {
-            content: newComment,
-            writer: id
+            content: newComment
         };
 
         try {
@@ -82,9 +79,10 @@ const BoardList = () => {
             console.log(resp);
             // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
             setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
-            getBoardList()
+            setNewComment(""); //댓글 초기화
+            getBoardList() //게시글리스트 최신
         } catch (error) {
-            console.error("Error submitting comment:", error);
+            console.error("댓글 에러:", error);
         }
     };
 
@@ -153,11 +151,11 @@ const BoardList = () => {
                             <div className={"content"}>{post.title}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"/>
+                                <img className="board_img"
+                                     src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"/>
                             </div>
                             <div className={"click_evt"}>
                                 <img className={"nav-img"} src={like} alt={"좋아요"}/>
-                                <img className={"nav-img"} src={comment} alt={"댓글"}/>
                                 <img className={"nav-img"} src={sub} alt={"북마크"}/>
                             </div>
                         </div>

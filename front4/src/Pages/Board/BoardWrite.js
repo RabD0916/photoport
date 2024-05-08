@@ -12,6 +12,7 @@ const BoardWrite = () => {
     const navigate = useNavigate();
     const [key,setKey] =useState([]);
     const [value,setValue]=useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const settings = {
         dots: true,
         fade: true,
@@ -105,9 +106,24 @@ const BoardWrite = () => {
             navigate('/board');
         });
     };
-    const backToList=() =>{
-        window.open("gallery/hidden/"+userId,"_blank","width=100");
-    }
+    const backToList = async (userId) => {
+
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/"gallery/hidden/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp.data);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error("사진선택실패:", error);
+        }
+    };
+
+    const close_board = () => {
+        setIsModalOpen(false);
+    };
     const go_back=() =>{
         navigate('/board')
     }
@@ -120,6 +136,11 @@ const BoardWrite = () => {
     return (
         <div className="center-align">
             <div className="big-font">
+                <div className={`modal ${isModalOpen ? 'on' : ''}`}>
+                    <div className="report_popup">
+                        사진선택
+                    </div>
+                </div>
                 <div className={"content_div"}>
                     <span className={"p_name"}>사진</span>
                     <div>
