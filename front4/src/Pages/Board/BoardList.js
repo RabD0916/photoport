@@ -1,12 +1,13 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
 import comment from "../../img/board.png";
-import heart from "../../img/heart.png";
+// import heart from "../../img/heart.png";
+// import BoardComment from "../Comment/BoardComment";
 
 const GalleryContainer = styled.div`
     width: 80%;
@@ -25,6 +26,7 @@ const BoardList = () => {
     const [boardList, setBoardList] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newComment, setNewComment] = useState("");
     const getBoardList = async () => {
         try {
             const resp = await axios.get('http://localhost:8080/api/boards', {
@@ -53,6 +55,32 @@ const BoardList = () => {
         setIsModalOpen(false);
     };
 
+    const handleCommentChange = (event) => {
+        setNewComment(event.target.value); // 댓글 내용 변경 시 상태 업데이트
+    };
+    const submitComment = async () => {
+        const data = {
+            content: newComment,
+            writer: id
+        };
+
+        try {
+            const resp = await axios.post(`http://localhost:8080/api/comments/${selectedPost.id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
+            setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
+            getBoardList()
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    };
+
+
+
     useEffect(() => {
         getBoardList();
     }, []);
@@ -79,7 +107,8 @@ const BoardList = () => {
                                     />
                                 ))}
                                 <p>내용: {selectedPost.content}</p>
-                                {/* 게시글의 다른 필드들을 여기에 추가 */}
+                                {/*<BoardComment></BoardComment>*/}
+
                                 <div className="comments">
                                     <h4>댓글</h4>
                                     {selectedPost.dtos.comments.map((comment) => (
@@ -87,6 +116,15 @@ const BoardList = () => {
                                             <p>{comment.writer}: {comment.content}</p>
                                         </div>
                                     ))}
+                                </div>
+                                <div className={"comment-write"}>
+                                    <h4>댓글 쓰기</h4>
+                                    <textarea
+                                        value={newComment}
+                                        onChange={handleCommentChange}
+                                        placeholder="댓글을 입력하세요"
+                                    />
+                                    <button onClick={submitComment}>작성</button>
                                 </div>
                             </div>
                         )}
@@ -106,7 +144,9 @@ const BoardList = () => {
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
                                 {post.media.length > 0 && (
-                                    <img className="board_img" src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
+                                    <img className="board_img"
+                                         src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`}
+                                         alt="#"/>
                                 )}
                             </div>
                             <div className={"click_evt"}>
