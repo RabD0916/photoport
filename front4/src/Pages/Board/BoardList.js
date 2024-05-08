@@ -78,7 +78,6 @@ const BoardList = () => {
                                         alt={`사진 ${index + 1}`}
                                     />
                                 ))}
-
                                 <p>내용: {selectedPost.content}</p>
                                 {/* 게시글의 다른 필드들을 여기에 추가 */}
                             </div>
@@ -97,18 +96,24 @@ const BoardList = () => {
                         <div key={post.id} className="board_item" onClick={() => open_board(post)}>
                             {/* 게시글 내용 표시 */}
                             <div className={"img_box"}>
-                                <img className="board_img" src={heart} alt="#"/>
+                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
+                                {post.media.length > 0 && (
+                                    <img className="board_img" src={`./images/${id}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
+                                )}
                             </div>
                             <div className={"click_evt"}>
-                                <img className={"nav-img"} src={like} alt={"좋아요"}/>
+                                <img className={"nav-img"} src={like} alt={"좋아요"}/><p>{post.like}</p>
                                 <img className={"nav-img"} src={comment} alt={"댓글"}/>
-                                <img className={"nav-img"} src={sub} alt={"북마크"}/>
-                                <div className={"content"}>내용</div>
+                                <img className={"nav-img"} src={sub} alt={"북마크"}/><p>{post.bookmark}</p>
+                                <p className={"view_"}>view{post.view}</p>
                             </div>
+                            <div className={"content_box"}>태그<div>{post.tags}</div></div>
+                            <div className={"content_box"}>내용<div>{post.content}</div></div>
                         </div>
                     ))}
                 </div>
             </GalleryContainer>
+
         </div>
     );
 };

@@ -19,6 +19,7 @@ const First = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const [cate, setCate] = useState([]);
+    const [boardList, setBoardList] = useState([]);
 
     useEffect(() => {
         console.log(userId);
@@ -36,47 +37,51 @@ const First = () => {
         }
         getCategoryList().then(r => setCate(r));
     }, [userId]);
+
+    const getUserBoardList = async () => {
+        try {
+            const resp = await axios.get('http://localhost:8080/api/myBoards', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            console.log(resp.data);
+            setBoardList(resp.data);
+        } catch (error) {
+            console.error("Error fetching board list:", error);
+        }
+    };
+
+    useEffect(() => {
+        getUserBoardList();
+    }, []);
+
     return(
         <div>
             <GalleryContainer>
-                {/*{cate.map((cateId) => (*/}
-                {/*    <Link key={cateId[0]} to={"/gallery/" + userId + "/" + cateId[0]} className={"cate"}>*/}
-                {/*        {cateId[1] !== "Empty" ?*/}
-                {/*            <img className={"cate-image"} src={"/images/" + userId + "/" + cateId[0] + "/" + cateId[1]}*/}
-                {/*                 alt={cateId[1]}*/}
-                {/*            ></img>*/}
-                {/*            : <div className={"not_box"}></div>}*/}
-                {/*        <div*/}
-                {/*            className={"cate-name"}>*/}
-                {/*            /!*{decodeURI(decodeURIComponent(cateId[0].replaceAll("&", "%")))}*!/*/}
-                {/*        </div>*/}
-                {/*    </Link>*/}
-                {/*))}*/}
-                <div className="main_board2">
-                    <div className={"board_select2"}></div>
-                    <div className="board_list2">
-                        <div className="board_item2">
-                            <div className={"img_box2"}>
-                                <img className="board_img2" src={heart} alt="#"/>
+                <div className="main_board">
+                    {boardList.map(post => (
+                        <div key={post.id} className="board_item">
+                            {/* 게시글 내용 표시 */}
+                            <div className={"img_box"}>
+                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
+                                {post.media.length > 0 && (
+                                    <img className="board_img" src={`./images/${post.writer}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
+                                )}
                             </div>
-                            <div className={"click_evt2"}>
-                                <img src={like} alt={"좋아요"}/>
-                                <img src={comment} alt={"댓글"}/>
-                                <img src={sub} alt={"북마크"}/>
+                            <div className={"click_evt"}>
+                                <img className={"nav-img"} src={like} alt={"좋아요"}/><p>{post.like}</p>
+                                <img className={"nav-img"} src={comment} alt={"댓글"}/>
+                                <img className={"nav-img"} src={sub} alt={"북마크"}/><p>{post.bookmark}</p>
+                                <p className={"view_"}>view{post.view}</p>
                             </div>
-                            <div className={"content_box2"}>
-                                <div className={"content_font2"}>제목</div>
-                                <div className="content_name2">제목</div>
-                                <div className={"content_font2"}>태그</div>
-                                <div className="content_name2">태그</div>
-                                <div className={"content_font2"}>내용</div>
-                                <div className="content_name2">내용</div>
-                            </div>
+                            <div className={"content_box"}>태그<div>{post.tags}</div></div>
+                            <div className={"content_box"}>내용<div>{post.content}</div></div>
                         </div>
-                        {/* 필요한 만큼 게시글 추가 */}
-                    </div>
+                    ))}
                 </div>
-                </GalleryContainer>
+            </GalleryContainer>
         </div>
     )
 

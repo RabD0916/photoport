@@ -41,6 +41,11 @@ public class BoardController {
         System.out.println("findAll");
         return boardService.findAll();
     }
+    // 내가(로그인한 유저) 작성한 게시글 전체 불러오기
+    @GetMapping("/myBoards")
+    public List<GetBoardResponse> getMyBoards(Principal user) {
+        return boardService.getBoardByUser(user.getName());
+    }
 
     // 사용자가 작성한 게시글 수정하기
 //    @PostMapping("/update/board/{id}")

@@ -1,23 +1,34 @@
 .main_board{
   flex: 0 0 10%; /* 각 항목이 4개가 나열될 수 있도록 25%의 너비를 설정 */
-  width: 94%;
+  width: 90%;
   margin: auto;
     .board_item{
       margin: 50px auto;
+      background-color: #a445e5;
+      border: 2px solid #0039f8;
+      border-radius: 30px;
       .img_box{
         margin: 10px auto auto auto;
         width: 95%;
         .board_img{
-          margin: auto;
+          margin: 20px auto 0 auto;
           width: 92%;
         }
       }
       .click_evt{
-        margin: auto auto 20px auto;
+        width: 98%;
+        margin: auto auto 20px 0;
         text-align: left;
         display: flex; /* Flexbox 사용 */
+        .view_{
+          margin-left: 180px;
+        }
       }
       .content_box{
+        text-align: left;
+        div{
+          text-align: center;
+        }
         .content_font{
           font-size: 10px;
           margin-left: 4%;
@@ -35,11 +46,17 @@
   .main_board {
     flex: 0 0 100%;
   }
+  .board_item{
+    width: 200px;
+  }
 }
 /* 600px 이상일 때 */
 @media (min-width: 600px) {
   .board_list {
-    width: 350px;
+    width: 98%;
+  }
+  .board_item{
+    width: 500px;
   }
 }
 

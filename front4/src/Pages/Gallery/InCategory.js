@@ -21,7 +21,7 @@ const InCategory = (props) => {
     const userId = localStorage.getItem("id");
     const settings = {
         dots: true,
-        fade: true,
+        fade: false,
         arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
         infinite: true,
         draggable : true, 	//드래그 가능 여부
