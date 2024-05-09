@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,9 +27,9 @@ public class BoardService {
     private final TagRepository tagRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
-    private GetBoardPreviewResponse entityToPreviewResponse(Board board) {
+    private BoardPreviewResponse entityToPreviewResponse(Board board) {
         List<MediaBoard> mediaBoardList = board.getMedia();
-        GetMedia thumbnail = new GetMedia();
+        MediaResponse thumbnail = new MediaResponse();
         thumbnail.set(mediaBoardList.get(0).getMedia());
         List<BoardTag> boardTagList = board.getTags();
         List<String> tagList = new ArrayList<>();
@@ -41,7 +40,7 @@ public class BoardService {
             System.out.println(tag.getName());
         }
 
-        return new GetBoardPreviewResponse(
+        return new BoardPreviewResponse(
                 board.getId(),
                 board.getTitle(),
                 board.getCreatedAt(),
@@ -58,7 +57,7 @@ public class BoardService {
     private BoardResponse entityToResponse(Board board) {
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
-        List<GetMedia> mediaList = new ArrayList<>();
+        List<MediaResponse> mediaList = new ArrayList<>();
         List<String> tagList = new ArrayList<>();
 
         for(BoardTag boardTag : boardTagList) {
@@ -68,7 +67,7 @@ public class BoardService {
         }
         for(MediaBoard mediaBoard : mediaBoardList) {
             Media media = mediaBoard.getMedia();
-            mediaList.add(new GetMedia(media.getName(), media.getCategory()));
+            mediaList.add(new MediaResponse(media.getName(), media.getCategory()));
             System.out.println(mediaList.get(mediaList.size()-1));
         }
 
@@ -120,7 +119,7 @@ public class BoardService {
         );
     }
 
-    public List<GetBoardPreviewResponse> findAll() {
+    public List<BoardPreviewResponse> findAll() {
         return boardRepository.findAll().stream()
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
@@ -176,7 +175,7 @@ public class BoardService {
     }
 
     // 키워드로 게시물 검색하는 메소드
-    public List<GetBoardPreviewResponse> getBoardByKeyWord(String keyword) throws Exception {
+    public List<BoardPreviewResponse> getBoardByKeyWord(String keyword) throws Exception {
         List<Board> boardList;
         if (keyword.endsWith("#")) {
             throw new Exception("#로 검색할 수는 없습니다");

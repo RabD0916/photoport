@@ -20,7 +20,7 @@ public class BoardResponse {
     private int bookmark;
     private String writerId;
     private String writerName;
-    private List<GetMedia> media;
-    private CommentDtos dtos; // dto로 반환하는 걸로 수정했음(성공 response에 성공적으로 해당 게시글에 등록된 모든 댓글 불러올 수 있음)
+    private List<MediaResponse> media;
+    private CommentsResponse dtos; // dto로 반환하는 걸로 수정했음(성공 response에 성공적으로 해당 게시글에 등록된 모든 댓글 불러올 수 있음)
     private List<String> tags;
 }

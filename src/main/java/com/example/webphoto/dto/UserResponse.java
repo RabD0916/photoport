@@ -7,10 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchResult {
-    private String userId;
-    private String userEmail;
-    private String userNick;
+@NoArgsConstructor
+public class UserResponse {
+    private String id;
+    private String name;
+    private String userProfile;
+    private String email;
 }

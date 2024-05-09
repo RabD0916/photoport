@@ -2,7 +2,7 @@ package com.example.webphoto.controller;
 
 import com.example.webphoto.domain.Board;
 import com.example.webphoto.dto.BoardRequest;
-import com.example.webphoto.dto.GetBoardPreviewResponse;
+import com.example.webphoto.dto.BoardPreviewResponse;
 import com.example.webphoto.dto.BoardResponse;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
@@ -31,7 +31,7 @@ public class BoardController {
 
     // 사용자가 작성한 게시글 전체 가져오기
     @GetMapping("/boards")
-    public List<GetBoardPreviewResponse> getBoards() {
+    public List<BoardPreviewResponse> getBoards() {
         System.out.println("findAll");
         return boardService.findAll();
     }
@@ -53,7 +53,7 @@ public class BoardController {
 
     // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기
     @GetMapping("/keywordSearch")
-    public List<GetBoardPreviewResponse> getKeywordSearch(@RequestParam(required = false)String keyword) throws Exception {
+    public List<BoardPreviewResponse> getKeywordSearch(@RequestParam(required = false)String keyword) throws Exception {
         return boardService.getBoardByKeyWord(keyword);
     }
     // 사용자가 작성한 게시글 수정하기

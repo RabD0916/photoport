@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetBoardPreviewResponse {
+public class BoardPreviewResponse {
     private Long id;
     private String title;
     private LocalDateTime createdAt;
@@ -19,6 +19,6 @@ public class GetBoardPreviewResponse {
     private int bookmark;
     private String writerId;
     private String writerName;
-    private GetMedia media;
+    private MediaResponse media;
     private List<String> tags;
 }

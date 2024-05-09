@@ -1,6 +1,5 @@
 package com.example.webphoto.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAccessTokenResponse {
-    private String accessToken;
-    private String refreshToken;
+public class PasswordRequest {
+
+    private String id;
+    private String password;
 }

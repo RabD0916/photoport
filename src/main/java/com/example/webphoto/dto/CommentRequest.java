@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCommentRequest {
+public class CommentRequest {
 
     private String content; // 댓글 본문
 

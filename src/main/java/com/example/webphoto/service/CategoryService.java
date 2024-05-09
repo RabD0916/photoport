@@ -1,6 +1,6 @@
 package com.example.webphoto.service;
 
-import com.example.webphoto.dto.Category;
+import com.example.webphoto.dto.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,10 +8,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +17,19 @@ import java.util.List;
 public class CategoryService {
     private final String path = "./front4/public/images/";
 
-    public List<Category> send(String userId) {
+    public List<CategoryResponse> send(String userId) {
         String dir = path + userId;
         String[] cateNames = getFileNames(dir);
-        List<Category> categories = new ArrayList<>();
+        List<CategoryResponse> categories = new ArrayList<>();
 
         if(cateNames != null) {
             for (int i=0; i<cateNames.length; i++) {
                 String[] mediaNames;
                 mediaNames = getFileNames(dir + "/" + cateNames[i]);
                 if (mediaNames.length < 1) {
-                    categories.add(new Category(cateNames[i], "Empty"));
+                    categories.add(new CategoryResponse(cateNames[i], "Empty"));
                 } else {
-                    categories.add(new Category(cateNames[i], mediaNames[0]));
+                    categories.add(new CategoryResponse(cateNames[i], mediaNames[0]));
                 }
             }
         }

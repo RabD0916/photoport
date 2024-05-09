@@ -1,4 +1,4 @@
-package com.example.webphoto.dto;
+package com.example.webphoto.dto.Friend;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

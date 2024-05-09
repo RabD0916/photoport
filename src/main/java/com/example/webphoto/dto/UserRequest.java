@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddUserRequest {
+public class UserRequest {
 
     private String id;
 

@@ -1,16 +1,16 @@
-package com.example.webphoto.dto;
+package com.example.webphoto.dto.Friend;
 
 import com.example.webphoto.domain.FriendshipStatus;
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WaitingFriendList {
+@Builder
+public class FriendshipApprovalResponse {
     private Long friendshipId;
-    private String friendEmail;
     private String friendName;
     private FriendshipStatus status;
+    private String message; // 요청 승인 메시지
 }
