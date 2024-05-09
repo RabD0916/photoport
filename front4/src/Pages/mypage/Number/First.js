@@ -58,7 +58,7 @@ const First = () => {
     }, []);
     useEffect(() => {
         {boardList.map(post => (
-            axios.get(`http://localhost:8080/api/profile/${post.writer}`, {
+            axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'application/json'
@@ -80,11 +80,11 @@ const First = () => {
                             {post.title}
                             <div className={"board_content2"}>
                                 <img src={profileImage} alt="Profile" className="profile2" />
-                                {post.writer}</div>
+                                {post.writerName}</div>
                             <div className={"img_box2"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
                                 {post.media.length > 0 && (
-                                    <img className="board_img2" src={`./images/${post.writer}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
+                                    <img className="board_img2" src={`./images/${post.writerId}/${post.media[0].categoryName}/${post.media[0].mediaName}`} alt="#"/>
                                 )}
                             </div>
                             <div className={"click_evt2"}>

@@ -23,9 +23,10 @@ function MyPage() {
         if (token) {
             setIsLoggedIn(true);
             if (storedUsername) {
+                console.log(storedUsername);
                 setUserId(storedUsername);
 
-                axios.get(`http://localhost:8080/api/profile/${userId}`, {
+                axios.get(`http://localhost:8080/api/profile/${storedUsername}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                         'Content-Type': 'application/json'

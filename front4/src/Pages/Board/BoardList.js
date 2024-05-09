@@ -109,7 +109,7 @@ const BoardList = () => {
 
     useEffect(() => {
         {boardList.map(post => (
-            axios.get(`http://localhost:8080/api/profile/${post.writer}`, {
+            axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ const BoardList = () => {
                             {/* 게시글 내용 표시 */}
                             {post.title}
                             <div className={"board_content"}>
-                                <img src={profileImage} alt="Profile" className="profile-img" />
+                                <img src={profileImage} alt="Profile" className="profile" />
                             {post.writerName}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}

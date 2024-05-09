@@ -26,6 +26,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
         e.preventDefault();
 
         try {
+            console.log(formData);
             const response = await axios.post('http://localhost:8080/api/signin', formData);
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
