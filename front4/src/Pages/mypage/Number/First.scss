@@ -2,29 +2,37 @@
   flex: 0 0 10%; /* 각 항목이 4개가 나열될 수 있도록 25%의 너비를 설정 */
   width: 95%;
   margin: auto;
-  .board_list2{
-    margin: auto;
     .board_item2{
       margin: 50px auto;
-      border: 1px solid;
-      width: 95%;
+      background-color: #a445e5;
+      border: 2px solid #0039f8;
+      border-radius: 30px;
       .img_box2{
-        margin: 10px auto auto auto;
+        margin: 0 auto auto auto;
+        width: 95%;
         .board_img2{
-          margin: auto;
-          width: 90%;
+          margin: 0 auto 0 auto;
+          width: 92%;
         }
       }
       .click_evt2{
-        margin: auto auto 20px auto;
+        width: 98%;
+        margin: auto auto 20px 0;
         text-align: left;
         display: flex; /* Flexbox 사용 */
-        img{
-          width: 35px;
-          margin: auto 2px auto 2px;
+        .view_2{
+          margin-left: 280px;
+        }
+        .nav-img2{
+          width: 30px;
+          height: 30px;
         }
       }
       .content_box2{
+        text-align: left;
+        div{
+          text-align: center;
+        }
         .content_font2{
           font-size: 10px;
           margin-left: 4%;
@@ -35,18 +43,31 @@
         }
       }
     }
-
-  }
+}
+.board_content2{
+  text-align: left;
 }
 /* 600px 미만일 때 */
 @media (max-width: 599px) {
   .main_board2 {
     flex: 0 0 100%;
   }
+  .board_item{
+    width: 200px;
+  }
 }
 /* 600px 이상일 때 */
 @media (min-width: 600px) {
   .board_list2 {
     width: 350px;
+  }
+  .board_item{
+    width: 500px;
+  }
+  .profile2{
+    margin: 0 0 10px 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
   }
 }

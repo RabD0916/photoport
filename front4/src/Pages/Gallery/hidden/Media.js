@@ -21,8 +21,8 @@ const Media = ({onChildClick}) => {
     const settings = {
         dots: true,
         arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
+        fade:true,
         infinite: true,
-        fade: false,
         draggable : true, 	//드래그 가능 여부
         speed: 1000,
         slidesToShow: 1,

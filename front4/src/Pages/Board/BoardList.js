@@ -8,10 +8,10 @@ import sub from "../../img/sub.png";
 import view from "../../img/view.png";
 
 const GalleryContainer = styled.div`
-    width: 80%;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 // Report 컴포넌트를 동적으로 로드하기 위한 Lazy 로딩
@@ -84,8 +84,7 @@ const BoardList = () => {
     };
     const submitComment = async () => {
         const data = {
-            content: newComment,
-            writer: id
+            content: newComment
         };
 
         try {
@@ -97,9 +96,10 @@ const BoardList = () => {
             console.log(resp);
             // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
             setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
-            getBoardList()
+            setNewComment(""); //댓글 초기화
+            getBoardList() //게시글리스트 최신
         } catch (error) {
-            console.error("Error submitting comment:", error);
+            console.error("댓글 에러:", error);
         }
     };
     useEffect(() => {
@@ -109,16 +109,16 @@ const BoardList = () => {
 
     useEffect(() => {
         {boardList.map(post => (
-        axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                setProfileImage(response.data.userProfile);
+            axios.get(`http://localhost:8080/api/profile/${post.writer}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type': 'application/json'
+                }
             })
-            .catch(error => console.error("Failed to load profile image", error))
+                .then(response => {
+                    setProfileImage(response.data.userProfile);
+                })
+                .catch(error => console.error("Failed to load profile image", error))
         ))}
     })
 
@@ -194,9 +194,7 @@ const BoardList = () => {
                                 <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}</div>
                             </div>
                             <div>
-                                {post.tags}
-
-                                {}
+                                태그: {post.tags}
                             </div>
                         </div>
                     ))}
