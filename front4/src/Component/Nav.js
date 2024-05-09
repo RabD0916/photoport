@@ -106,7 +106,9 @@ function Nav() {
                         <div className={"dropdown"}>
                             <span className="dropbtn downright main_b">게시판</span>
                             <div className={"dropdown-content"}>
+
                                 <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
+
                                 <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
                             </div>
                         </div>
