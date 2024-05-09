@@ -70,6 +70,7 @@ const Media = ({onChildClick}) => {
     const sendDataToParent = () => {
         const data = [cateId, selectedMediaNames];
         window.opener.postMessage(data, '*');
+        window.close();
     };
     return (
         <>
@@ -85,8 +86,7 @@ const Media = ({onChildClick}) => {
                     </Slider>
                 </div>
             </div>
-            <button onClick={sendDataToParent}>부모 창으로 데이터 전송</button>
-
+            <button className={"send_button"} onClick={sendDataToParent}>부모 창으로 데이터 전송</button>
             <GalleryContainer className={"Media-list"}>
                 <div className={"cate-list"}>{media.map((media) => (
                     <img src={"/images/" + userId + "/" + cateId + "/" + media["mediaName"]}
