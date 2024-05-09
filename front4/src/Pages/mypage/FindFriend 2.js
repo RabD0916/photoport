@@ -42,12 +42,12 @@ function AddFriendPage() {
                     Authorization: `Bearer ${accessToken}`,
                 }
             });
+            console.log(response);
             setSearchResults(response.data); // 검색 결과를 업데이트합니다.
         } catch (error) {
             console.error("검색 중 오류가 발생했습니다.", error);
         }
     };
-
     // 친구 추가 요청 처리 함수
     const handleAddFriend = async (email) => {
         try {
@@ -103,7 +103,7 @@ function AddFriendPage() {
             <button onClick={handleSearch}>검색</button>
             <ul>
                 {searchResults.map((user) => (
-                    <li key={user.id}>{user.userId} - {user.userNick} <button onClick={() => handleAddFriend(user.userEmail)}>친구 추가</button></li>
+                    <li key={user.id}>{user.name} - {user.email} <button onClick={() => handleAddFriend(user.email)}>친구 추가</button></li>
                 ))}
             </ul>
             <h2>받은 친구 요청</h2>

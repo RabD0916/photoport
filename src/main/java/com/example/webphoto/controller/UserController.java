@@ -137,6 +137,7 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> searchUsersByEmail(@RequestParam("email") String email, Principal user) {
         try {
             List<UserResponse> searchResults = userService.searchUsersByEmail(email, user.getName());
+            System.out.println(searchResults.get(0).getName());
             return new ResponseEntity<>(searchResults, HttpStatus.OK);
         } catch (Exception e) {
             log.error("찾을 수 없는 유저 : {}", e.getMessage());

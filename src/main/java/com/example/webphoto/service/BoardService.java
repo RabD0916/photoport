@@ -1,9 +1,12 @@
 package com.example.webphoto.service;
 
+import com.example.webphoto.config.CustomException;
 import com.example.webphoto.domain.*;
 import com.example.webphoto.dto.*;
 import com.example.webphoto.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,9 +25,8 @@ public class BoardService {
     private final BoardTagRepository boardTagRepository;
     private final MediaRepository mediaRepository;
     private final MediaBoardRepository mediaBoardRepository;
-    private final CommentRepository commentRepository;
     private final CommentService commentService;
-    private final TagRepository tagRepository;
+    private final LikeRepository likeRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
@@ -196,9 +198,28 @@ public class BoardService {
     // 조회수 증가(사용자가 해당 게시글 클릭 시)
     public Board updateVisit(Board board) {
         Board target = boardRepository.findById(board.getId()).orElseThrow(() ->
-                new IllegalStateException("해당 게시글이 존재하지 않습니다"));
+                new CustomException("게시글을 찾을 수없습니다.", HttpStatus.NOT_FOUND));
         target.setView(target.getView() + 1);
         boardRepository.save(target);
         return target;
+    }
+
+    // 좋아요 기능
+    @Transactional
+    public Board addLike(Long id, User user) {
+
+        Board board = boardRepository.findById(id).orElse(null);
+        if (!likeRepository.existsByUserAndBoard(user, board)) {
+            // 호출되면 board에 like 증가
+            board.setLike(board.getLike() + 1);
+            likeRepository.save(new LikedBoard(null, user, board));
+        }
+        else{
+            // 같은 유저가 좋아요를 누르면 좋아요 개수 하나 감소
+            board.setLike(board.getLike() - 1);
+            likeRepository.deleteByUserAndBoard(user, board);
+        }
+        Board updatedBoard = boardRepository.save(board);
+        return updatedBoard;
     }
 }

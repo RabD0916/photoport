@@ -1,11 +1,14 @@
 package com.example.webphoto.controller;
 
+import com.example.webphoto.config.CustomException;
 import com.example.webphoto.domain.Board;
+import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.BoardRequest;
 import com.example.webphoto.dto.BoardPreviewResponse;
 import com.example.webphoto.dto.BoardResponse;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
+import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +18,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api" )
 public class BoardController {
     private final BoardService boardService;
     private final BoardRepository boardRepository;
+    private final UserService userService;
 
     // 게시글 추가
     @PostMapping("/boards")
@@ -47,6 +51,24 @@ public class BoardController {
         Board updatedBoard = boardService.updateVisit(board); // 추가 코드
 
         return boardService.findById(updatedBoard.getId());
+    }
+
+    // 게시물 좋아요
+    @PostMapping("like/{id}")
+    public ResponseEntity<?> like(@PathVariable Long id, Principal user) {
+        try {
+            User target = userService.findById(user.getName());
+            Board updateBoard = boardService.addLike(id, target);
+
+            BoardResponse response = boardService.findById(updateBoard.getId());
+            return ResponseEntity.ok(response);
+        } catch (CustomException e) {
+            return ResponseEntity
+                    .status(e.getStatus())
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("NOT FOUND BOARD");
+        }
     }
 
     // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기
