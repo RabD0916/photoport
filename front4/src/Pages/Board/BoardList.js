@@ -35,6 +35,12 @@ const BoardList = () => {
             mediaName: null,
             categoryName: null
         },
+        commentsDto: {
+            id: null,
+            content: null,
+            writerId: null,
+            writerName: null
+        },
         tags: null
     }]);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -95,7 +101,7 @@ const BoardList = () => {
             });
             console.log(resp);
             // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
-            setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
+            setSelectedPost({ ...selectedPost, commentsDto: { comments: [...selectedPost.commentsDto.comments, resp.data] } });
             setNewComment(""); //댓글 초기화
             getBoardList() //게시글리스트 최신
         } catch (error) {
@@ -148,9 +154,9 @@ const BoardList = () => {
                                 {/* 게시글의 다른 필드들을 여기에 추가 */}
                                 <div className="comments">
                                     <h4>댓글</h4>
-                                    {selectedPost.dtos.comments.map((comment) => (
+                                    {selectedPost.commentsDto.comments.map((comment) => (
                                         <div key={comment.id}>
-                                            <p>{comment.writer}: {comment.content}</p>
+                                            <p>{comment.writerName}: {comment.content}</p>
                                         </div>
                                     ))}
                                 </div>
