@@ -12,5 +12,6 @@ import lombok.Setter;
 public class CommentResponse {
     private Long id; // 댓글 아이디
     private String content; // 댓글 본문
-    private String writer; // 댓글 작성자
+    private String writerId; // 댓글 작성자
+    private String writerName;
 }

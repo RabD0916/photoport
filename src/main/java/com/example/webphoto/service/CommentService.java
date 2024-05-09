@@ -28,7 +28,7 @@ public class CommentService {
         Comment comment = new Comment(null, LocalDateTime.now(), dto.getContent(), board, writer);
         commentRepository.save(comment);
 
-        return new CommentResponse(comment.getId(), comment.getContent(), comment.getWriter().getId());
+        return new CommentResponse(comment.getId(), comment.getContent(), comment.getWriter().getId(), comment.getWriter().getUserNick());
     }
 
     // 전체 댓글 조회(필요한지는 잘 모르겠음)
@@ -56,7 +56,7 @@ public class CommentService {
         comment.setContent(request.getContent());
         comment.setDate(LocalDateTime.now());
         commentRepository.save(comment);
-        CommentResponse response = new CommentResponse(comment.getId(), comment.getContent(), comment.getWriter().getId());
+        CommentResponse response = new CommentResponse(comment.getId(), comment.getContent(), comment.getWriter().getId(), comment.getWriter().getUserNick());
         return response;
     }
 
@@ -71,7 +71,7 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
-        CommentResponse response = new CommentResponse(commentId, comment.getContent(), writer.getId());
+        CommentResponse response = new CommentResponse(commentId, comment.getContent(), writer.getId(), writer.getUserNick());
         return response;
     }
 }

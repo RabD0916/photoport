@@ -18,7 +18,8 @@ public class CommentsResponse {
         this.comments = comments.stream().map(comment -> new CommentResponse(
                 comment.getId(),
                 comment.getContent(),
-                comment.getWriter().getId()
+                comment.getWriter().getId(),
+                comment.getWriter().getUserNick()
         )).collect(Collectors.toList());
     }
 }
