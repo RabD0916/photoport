@@ -15,4 +15,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b LEFT JOIN b.tags bt LEFT JOIN bt.tag t WHERE b.title LIKE %:keyword% OR b.content LIKE %:keyword% OR t.name LIKE %:keyword%")
     List<Board> searchByTitleOrContentOrTag(String keyword);
 
+
 }

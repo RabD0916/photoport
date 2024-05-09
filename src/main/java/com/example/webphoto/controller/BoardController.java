@@ -1,9 +1,11 @@
 package com.example.webphoto.controller;
 
+import com.example.webphoto.domain.Board;
 import com.example.webphoto.dto.AddBoardRequest;
 import com.example.webphoto.dto.AddBoardResponse;
 import com.example.webphoto.dto.GetBoardPreviewResponse;
 import com.example.webphoto.dto.GetBoardResponse;
+import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class BoardController {
     private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     // 게시글 추가
     @PostMapping("/boards")
@@ -48,10 +51,14 @@ public class BoardController {
         return boardService.getBoardByUser(user.getName());
     }
 
+    // 게시글 조회 시 조회수 증가 기능 추가
     @GetMapping("/board/{id}")
     public GetBoardResponse getBoard(@PathVariable String id) {
         System.out.println(id);
-        return boardService.findById(Long.parseLong(id));
+        Board board = boardRepository.findById(Long.valueOf(id)).orElse(null); // 추가 코드
+        Board updatedBoard = boardService.updateVisit(board); // 추가 코드
+
+        return boardService.findById(updatedBoard.getId());
     }
 
     // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기
