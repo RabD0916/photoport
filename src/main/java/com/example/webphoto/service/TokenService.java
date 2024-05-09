@@ -3,8 +3,8 @@ package com.example.webphoto.service;
 import com.example.webphoto.config.JwtProperties;
 import com.example.webphoto.domain.RefreshToken;
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.CreateAccessTokenRequest;
-import com.example.webphoto.dto.CreateAccessTokenResponse;
+import com.example.webphoto.dto.AccessTokenRequest;
+import com.example.webphoto.dto.AccessTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,14 +21,14 @@ public class TokenService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtProperties jwtProperties;
 
-    public CreateAccessTokenResponse createAccessToken(CreateAccessTokenRequest request) {
+    public AccessTokenResponse createAccessToken(AccessTokenRequest request) {
 
         System.out.println(request.getPassword());
         if(request.getId() != null && request.getPassword() != null) {
 
             User user = userService.findById(request.getId());
             if(bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
-                return new CreateAccessTokenResponse(
+                return new AccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
                         createRefreshToken(user));
 
@@ -38,7 +38,7 @@ public class TokenService {
             if(tokenProvider.isValidToken(request.getRefreshToken())) {
                 String userId = refreshTokenService.findByRefreshToken(request.getRefreshToken()).getUserId();
                 User user = userService.findById(userId);
-                return new CreateAccessTokenResponse(
+                return new AccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
                         null);
             }

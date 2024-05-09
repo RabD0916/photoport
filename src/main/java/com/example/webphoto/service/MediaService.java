@@ -2,7 +2,7 @@ package com.example.webphoto.service;
 
 import com.example.webphoto.domain.Media;
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.GetMedia;
+import com.example.webphoto.dto.MediaResponse;
 import com.example.webphoto.repository.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +37,19 @@ public class MediaService {
         return "Success";
     }
 
-    public List<GetMedia> send(String nowUser, String cateName) {
+    public List<MediaResponse> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
         System.out.println(dir);
         String[] mediaNames = getFileNames(dir);
         System.out.println(Arrays.asList(mediaNames));
-        List<GetMedia> getMediaList = new ArrayList<>();
+        List<MediaResponse> mediaResponseList = new ArrayList<>();
         if(mediaNames != null) {
             for (String mediaName : mediaNames) {
-                getMediaList.add(new GetMedia(mediaName, cateName));
+                mediaResponseList.add(new MediaResponse(mediaName, cateName));
             }
         }
-        System.out.println(getMediaList);
-        return getMediaList;
+        System.out.println(mediaResponseList);
+        return mediaResponseList;
     }
 
     public String move(String nowUser, String nowCate, String selectedMedia, String nextCateName) {

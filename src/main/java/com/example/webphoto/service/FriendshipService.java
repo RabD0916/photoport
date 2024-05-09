@@ -3,7 +3,7 @@ package com.example.webphoto.service;
 import com.example.webphoto.domain.Friendship;
 import com.example.webphoto.domain.FriendshipStatus;
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.*;
+import com.example.webphoto.dto.Friend.*;
 import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
