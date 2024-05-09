@@ -78,7 +78,9 @@ public class UserService {
         User user = userRepository.save(requestToEntity(dto));
         String dir = path + user.getId();
         File folder = new File(dir);
+        File poseFolder = new File(dir + "/pose");
         System.out.println(folder.mkdir());
+        System.out.println(poseFolder.mkdir());
         return entityToResponse(user);
     }
 
