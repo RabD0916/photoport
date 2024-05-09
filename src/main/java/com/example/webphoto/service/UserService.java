@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final String path = "./front4/public/images/";
 
     public User findByUserNick(String userNick) {
         return userRepository.findByUserNick(userNick)
@@ -72,6 +74,9 @@ public class UserService {
     // 사용자를 추가하는 메소드
     public AddUserResponse addUser(AddUserRequest dto) {
         User user = userRepository.save(requestToEntity(dto));
+        String dir = path + user.getId();
+        File folder = new File(dir);
+        System.out.println(folder.mkdir());
         return entityToResponse(user);
     }
 

@@ -1,10 +1,9 @@
 package com.example.webphoto.controller;
 
 import com.example.webphoto.domain.Board;
-import com.example.webphoto.dto.AddBoardRequest;
-import com.example.webphoto.dto.AddBoardResponse;
+import com.example.webphoto.dto.BoardRequest;
 import com.example.webphoto.dto.GetBoardPreviewResponse;
-import com.example.webphoto.dto.GetBoardResponse;
+import com.example.webphoto.dto.BoardResponse;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,10 @@ public class BoardController {
 
     // 게시글 추가
     @PostMapping("/boards")
-    public ResponseEntity<AddBoardResponse> addBoard(@RequestBody AddBoardRequest request) {
+    public ResponseEntity<BoardResponse> addBoard(@RequestBody BoardRequest request) {
         // 파일 업로드 후 메모 추가
-        System.out.println(request.getTitle());
-        System.out.println(request.getContent());
-        System.out.println(request.getTags());
-        System.out.println(request.getCategories()[0] + "category");
-        System.out.println(request.getMediaNames()[0] + "mediaName");
-        System.out.println(request);
-        AddBoardResponse response = boardService.addBoard(request);
-        System.out.println(response);
+        BoardResponse response = boardService.addBoard(request);
         return ResponseEntity.ok(response);
-//        boardService.addBoard(new AddBoardRequest(title, content, savedName, user.getName()));
-//        return "작성 완료";
     }
 
 
@@ -47,13 +37,13 @@ public class BoardController {
     }
     // 내가(로그인한 유저) 작성한 게시글 전체 불러오기
     @GetMapping("/myBoards")
-    public List<GetBoardResponse> getMyBoards(Principal user) {
+    public List<BoardResponse> getMyBoards(Principal user) {
         return boardService.getBoardByUser(user.getName());
     }
 
     // 게시글 조회 시 조회수 증가 기능 추가
     @GetMapping("/board/{id}")
-    public GetBoardResponse getBoard(@PathVariable String id) {
+    public BoardResponse getBoard(@PathVariable String id) {
         System.out.println(id);
         Board board = boardRepository.findById(Long.valueOf(id)).orElse(null); // 추가 코드
         Board updatedBoard = boardService.updateVisit(board); // 추가 코드

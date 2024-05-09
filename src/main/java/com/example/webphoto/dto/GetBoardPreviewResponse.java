@@ -17,7 +17,8 @@ public class GetBoardPreviewResponse {
     private int view;
     private int like;
     private int bookmark;
-    private String writer;
+    private String writerId;
+    private String writerName;
     private GetMedia media;
     private List<String> tags;
 }

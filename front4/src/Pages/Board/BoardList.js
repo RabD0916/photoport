@@ -22,7 +22,21 @@ const BoardList = () => {
     const accessToken = localStorage.getItem("accessToken");
     const id = localStorage.getItem("id");
     const navigate = useNavigate();
-    const [boardList, setBoardList] = useState([]);
+    const [boardList, setBoardList] = useState([{
+        id: null,
+        title: null,
+        createdAt: null,
+        view: null,
+        like: null,
+        bookmark: null,
+        writerId: null,
+        writerName: null,
+        media: {
+            mediaName: null,
+            categoryName: null
+        },
+        tags: null
+    }]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
@@ -95,7 +109,7 @@ const BoardList = () => {
 
     useEffect(() => {
         {boardList.map(post => (
-        axios.get(`http://localhost:8080/api/profile/${post.writer}`, {
+        axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 'Content-Type': 'application/json'
@@ -125,7 +139,7 @@ const BoardList = () => {
                                     <img
                                         key={index}
                                         className={"detail_img"}
-                                        src={`./images/${id}/${media.categoryName}/${media.mediaName}`}
+                                        src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
                                         alt={`사진 ${index + 1}`}
                                     />
                                 ))}
@@ -167,10 +181,10 @@ const BoardList = () => {
                             {post.title}
                             <div className={"board_content"}>
                                 <img src={profileImage} alt="Profile" className="profile-img" />
-                            {post.writer}</div>
+                            {post.writerName}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                <img className="board_img" src={`./images/${id}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
+                                <img className="board_img" src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
                                      onClick={() => open_board(post.id)}
                                 />
                             </div>

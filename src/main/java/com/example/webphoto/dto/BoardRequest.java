@@ -11,11 +11,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddBoardResponse {
-
+public class BoardRequest {
     private String title;
     private String content;
+    private String[] categories;
+    private String[] mediaNames;
+    private String tags;
     private BoardShare share;
     private BoardType type;
-
+    private String writerId;
 }

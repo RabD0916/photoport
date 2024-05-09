@@ -49,12 +49,13 @@ public class BoardService {
                 board.getLike(),
                 board.getBookmark(),
                 board.getWriter().getId(),
+                board.getWriter().getUserNick(),
                 thumbnail,
                 tagList
         );
     }
 
-    private GetBoardResponse entityToResponse(Board board) {
+    private BoardResponse entityToResponse(Board board) {
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
         List<GetMedia> mediaList = new ArrayList<>();
@@ -71,7 +72,7 @@ public class BoardService {
             System.out.println(mediaList.get(mediaList.size()-1));
         }
 
-        return new GetBoardResponse(
+        return new BoardResponse(
                 board.getId(),
                 board.getTitle(),
                 board.getCreatedAt(),
@@ -80,6 +81,7 @@ public class BoardService {
                 board.getLike(),
                 board.getBookmark(),
                 board.getWriter().getId(),
+                board.getWriter().getUserNick(),
                 mediaList,
                 commentService.findAllComments(board.getId()), // 이곳도 서비스에서 해당 게시글에 등록된 모든 댓글 가져오는 dto 반환하는걸로 수정
                 tagList
@@ -87,36 +89,23 @@ public class BoardService {
     }
 
     // AddBoardRequest DTO를 Board 엔티티로 변환
-    private Board requestToEntity(AddBoardRequest dto) {
+    private Board requestToEntity(BoardRequest dto) {
         User user = userService.findById(dto.getWriterId());
-
         String[] tagNames = dto.getTags().split("[#@]");
+        String[] categories = dto.getCategories();
+        String[] mediaNames = dto.getMediaNames();
+
         List<Tag> tags = tagService.addTag(tagNames);
         List<BoardTag> boardTags = new ArrayList<>();
+        List<MediaBoard> mediaBoards = new ArrayList<>();
+
         for(Tag tag : tags) {
             boardTags.add(new BoardTag(null, null, tag));
         }
-        System.out.println("미디어 : " + Arrays.toString(dto.getMediaNames()));
-        System.out.println("미디어 개수 : " + dto.getMediaNames().length);
-        System.out.println("카테고리 개수 : " + dto.getCategories().length);
-
-        String[] categories = dto.getCategories();
-        String[] mediaNames = dto.getMediaNames();
-        List<Media> mediaList = new ArrayList<>();
-        List<MediaBoard> mediaBoards = new ArrayList<>();
-
-        if(categories.length != mediaNames.length) {
-            return null;
-        }
         for(int i=0; i<mediaNames.length; i++) {
-            mediaList.add(mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]));
-            System.out.println(i + " : 유저 : " + user.getId() + " : 카테고리 : " + categories[i] + " : 미디어 : " + mediaNames[i]);
-            System.out.println(i + " : " + mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]));
-        }
-        for(Media media : mediaList) {
+            Media media = mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]);
             mediaBoards.add(new MediaBoard(null, media, null));
         }
-
 
         return new Board(
                 null,
@@ -131,42 +120,28 @@ public class BoardService {
         );
     }
 
-
-    private AddBoardResponse entityToResult(Board board) {
-        return new AddBoardResponse(
-                board.getTitle(),
-                board.getContent(),
-                board.getShare(),
-                board.getType()
-        );
-    }
-
     public List<GetBoardPreviewResponse> findAll() {
         return boardRepository.findAll().stream()
-                .map(board -> entityToPreviewResponse(board))
+                .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
 
-    public GetBoardResponse findById(Long id) {
+    public BoardResponse findById(Long id) {
         return entityToResponse(boardRepository.findById(id).orElse(null));
     }
 
     // 게시글을 추가하는 메소드
-    public AddBoardResponse addBoard(AddBoardRequest dto) {
+    public BoardResponse addBoard(BoardRequest dto) {
         Board saved = boardRepository.save(requestToEntity(dto));
-        List<BoardTag> boardTagList = new ArrayList<>();
-        List<MediaBoard> mediaBoardList = new ArrayList<>();
-        for(MediaBoard mediaBoard : saved.getMedia()) {
-            mediaBoardList.add(mediaBoardRepository.save(mediaBoard));
-        }
-        for(BoardTag boardTag : saved.getTags()) {
-            boardTagList.add(boardTagRepository.save(boardTag));
-        }
-        return entityToResult(saved);
+
+        mediaBoardRepository.saveAll(saved.getMedia());
+        boardTagRepository.saveAll(saved.getTags());
+
+        return entityToResponse(saved);
     }
 
     // 게시글을 수정하는 메소드
-    public GetBoardResponse updateBoard(Long id, AddBoardRequest dto) {
+    public BoardResponse updateBoard(Long id, BoardRequest dto) {
 
         // 코드 리펙터링(by 시영이형)
 //        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
@@ -194,7 +169,7 @@ public class BoardService {
     }
 
     // 특정 사용자의 게시글 목록을 가져오는 메소드
-    public List<GetBoardResponse> getBoardByUser(String id) {
+    public List<BoardResponse> getBoardByUser(String id) {
         return boardRepository.findByWriter_IdOrderByCreatedAtDesc(id).stream()
                 .map(board -> entityToResponse(board))
                 .collect(Collectors.toList());

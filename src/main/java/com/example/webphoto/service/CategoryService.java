@@ -41,8 +41,7 @@ public class CategoryService {
     }
 
     public String create(String nowUser, String cateName) {
-        String dir = null;
-        dir = path + nowUser + "/" + URLEncoder.encode(cateName, StandardCharsets.UTF_8).replaceAll("%", "&");
+        String dir = path + nowUser + "/" + URLEncoder.encode(cateName, StandardCharsets.UTF_8).replaceAll("%", "&");
         File folder = new File(dir);
         String result;
         if(!folder.exists()) {
