@@ -180,9 +180,7 @@ const BoardList = () => {
                                 <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}</div>
                             </div>
                             <div>
-                                {post.tags}
-
-                                {}
+                                태그: {post.tags}
                             </div>
                         </div>
                     ))}

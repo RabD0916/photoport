@@ -31,7 +31,7 @@ public class MediaService {
     public String create(String nowUser, String nowCate, String selectedMedia) {
         User user = userService.findById(nowUser);
         String[] mediaNames = selectedMedia.split("[\\[\\],]");
-        for(int i=1; i<mediaNames.length-2; i++) {
+        for(int i=1; i<mediaNames.length-1; i++) {
             mediaRepository.save(new Media(null, mediaNames[i].replaceAll("\"", ""), LocalDateTime.now(), nowCate, user));
         }
         return "Success";

@@ -109,11 +109,14 @@ const InCategory = (props) => {
         }
         const mediaNameString = selectedMediaNames.join(",");
         createM(selectedMediaNames, cateId).then(r => {
-            switch (r) {
-                case "Success": alert("미디어 생성 완료"); window.location.reload(); break;
-                default: alert("미디어 생성 오류");
+            if (r === "Success") {
+                console.log(selectedMediaNames);
+                alert("미디어 생성 완료");
+                // 여기서 적절한 React 상태 업데이트를 수행할 수 있음
+            } else {
+                alert("미디어 생성 오류");
             }
-        })
+        });
     }
     const moveMedia = e => {
         if(selectedMediaNames.length < 1) {
@@ -175,8 +178,10 @@ const InCategory = (props) => {
             <div>
                 <Slider {...settings}>
                     {selectedMediaNames && (
-                        selectedMediaNames.map((mediaName) => (
-                            <img className={"select_img"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected"
+                        selectedMediaNames.map((mediaName,index) => (
+                            <img
+                            key={index}
+                                className={"select_img"} src={"/images/" + userId + "/" + cateId + "/" + mediaName} alt="Selected"
                                  onClick={() => handleImageClick(mediaName)}/>
                                 ))
                     )}
@@ -184,15 +189,16 @@ const InCategory = (props) => {
             </div>
             </div>
             <GalleryContainer className={"Media-list"}>
-                <div className={"cate-list"}>{media.map((media) => (
-                    <img src={"/images/" + userId + "/" + cateId + "/" + media["mediaName"]}
+                <div className={"cate-list"}>{media.map((media,index) => (
+                    <img
+                    key={index}
+                        src={"/images/" + userId + "/" + cateId + "/" + media["mediaName"]}
                          alt={media["mediaName"]} className={"incate-image"}
                          onClick={() => handleImageClick(media["mediaName"])}
                     ></img>
                 ))}
                 </div>
             </GalleryContainer>
-
         </>
     );
 }
