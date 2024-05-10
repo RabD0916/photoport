@@ -2,21 +2,33 @@ package com.example.webphoto.service;
 
 import com.example.webphoto.config.CustomException;
 import com.example.webphoto.domain.*;
+import com.example.webphoto.domain.enums.BoardType;
 import com.example.webphoto.dto.*;
 import com.example.webphoto.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -27,6 +39,7 @@ public class BoardService {
     private final MediaBoardRepository mediaBoardRepository;
     private final CommentService commentService;
     private final LikeRepository likeRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
@@ -57,6 +70,7 @@ public class BoardService {
     }
 
     private BoardResponse entityToResponse(Board board) {
+
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
         List<MediaResponse> mediaList = new ArrayList<>();
@@ -91,6 +105,7 @@ public class BoardService {
 
     // AddBoardRequest DTO를 Board 엔티티로 변환
     private Board requestToEntity(BoardRequest dto) {
+
         User user = userService.findById(dto.getWriterId());
         String[] tagNames = dto.getTags().split("[#@]");
         String[] categories = dto.getCategories();
@@ -107,6 +122,7 @@ public class BoardService {
             Media media = mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]);
             mediaBoards.add(new MediaBoard(null, media, null));
         }
+        System.out.println("게시글 종류 : " + dto.getType()); // 게시글 종류 : POSE 찍히는데 왜 다 NORMAL로 처들어감
 
         return new Board(
                 null,
@@ -121,6 +137,14 @@ public class BoardService {
         );
     }
 
+    public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType) {
+        return boardRepository.findByType(boardType).stream()
+                .map(this::entityToPreviewResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    // 전체 게시글(종류 상관없이)
     public List<BoardPreviewResponse> findAll() {
         return boardRepository.findAll().stream()
                 .map(this::entityToPreviewResponse)
@@ -144,9 +168,6 @@ public class BoardService {
     // 게시글을 수정하는 메소드
     public BoardResponse updateBoard(Long id, BoardRequest dto) {
 
-        // 코드 리펙터링(by 시영이형)
-//        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
-
         // 여기서부터 아래부분 해당 메소드 코드 고쳐야함
         Optional<Board> optionalBoard = boardRepository.findById(id);
 
@@ -164,15 +185,38 @@ public class BoardService {
         }
     }
 
-    // 게시글을 삭제하는 메소드
-    public void deleteBoard(Long id) {
-        boardRepository.deleteById(id);
+    @Transactional
+    public void deleteBoard(Long id, String userId) throws IOException {
+        Optional<Board> board = boardRepository.findById(id);
+        if (board.isPresent() && board.get().getWriter().getId().equals(userId)) {
+            // 게시글 유형이 포즈(POSE)인 경우에만 파일 삭제 로직 수행
+            if (board.get().getType() == BoardType.POSE) {
+                List<MediaBoard> mediaList = board.get().getMedia();
+
+                // 각 파일을 서버에서 삭제
+                for (MediaBoard mediaBoard : mediaList) {
+                    Media media = mediaBoard.getMedia();
+                    String path = "./front4/public/images/" + userId + "/pose/" + media.getName();
+                    Path filePath = Paths.get(path);
+                    if (Files.exists(filePath)) {
+                        Files.delete(filePath); // 파일 삭제
+                    }
+                    mediaRepository.deleteById(media.getId()); // 미디어 레코드 삭제
+                }
+            }
+
+            // 미디어 파일 처리 후 게시글 삭제
+            boardRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("작성자만 게시글을 삭제할 수 있습니다.");
+        }
     }
+
 
     // 특정 사용자의 게시글 목록을 가져오는 메소드
     public List<BoardResponse> getBoardByUser(String id) {
         return boardRepository.findByWriter_IdOrderByCreatedAtDesc(id).stream()
-                .map(board -> entityToResponse(board))
+                .map(this::entityToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -222,4 +266,46 @@ public class BoardService {
         Board updatedBoard = boardRepository.save(board);
         return updatedBoard;
     }
+
+    // 북마크 기능
+    @Transactional
+    public Board addBookmark(Long id, User user) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 북마크가 이미 존재하는지 확인
+        boolean alreadyBookmarked = bookMarkRepository.existsByUserAndBoard(user, board);
+
+        // 자신의 게시글인 경우 북마크 추가 또는 삭제
+        if (user.equals(board.getWriter())) {
+            if (!alreadyBookmarked) {
+                // 북마크가 없다면 추가
+                board.setBookmark(board.getBookmark() + 1);
+                bookMarkRepository.save(new BookmarkedBoard(null, user, board));
+            } else {
+                // 이미 북마크가 있다면 삭제
+                if (board.getBookmark() > 0) {
+                    board.setBookmark(board.getBookmark() - 1);
+                    bookMarkRepository.deleteByUserAndBoard(user, board);
+                }
+            }
+        } else {
+            // 다른 사용자의 게시글 처리
+            if (!alreadyBookmarked) {
+                board.setBookmark(board.getBookmark() + 1);
+                bookMarkRepository.save(new BookmarkedBoard(null, user, board));
+            } else {
+                if (board.getBookmark() > 0) {
+                    board.setBookmark(board.getBookmark() - 1);
+                    bookMarkRepository.deleteByUserAndBoard(user, board);
+                }
+            }
+        }
+
+        // 게시판 정보 업데이트
+        Board updatedBoard = boardRepository.save(board);
+        return updatedBoard;
+    }
+
+
+
 }

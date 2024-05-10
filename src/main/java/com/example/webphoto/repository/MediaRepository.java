@@ -3,8 +3,10 @@ package com.example.webphoto.repository;
 import com.example.webphoto.domain.Media;
 import com.example.webphoto.domain.MediaBoard;
 import com.example.webphoto.domain.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 

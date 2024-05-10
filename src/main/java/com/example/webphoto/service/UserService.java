@@ -6,6 +6,7 @@ import com.example.webphoto.domain.User;
 import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.UserRequest;
 import com.example.webphoto.dto.UserResponse;
+import com.example.webphoto.dto.UserSearchResult;
 import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -122,7 +123,7 @@ public class UserService {
     }
 
     // 사용자 이메일로 유저 찾기(친구 검색)
-    public List<UserResponse> searchUsersByEmail(String email, String id) throws Exception {
+    public List<UserSearchResult> searchUsersByEmail(String email, String id) throws Exception {
         // 현재 사용자 불러움
         User currentUser = userRepository.findById(id).orElse(null);
 
@@ -136,7 +137,7 @@ public class UserService {
         }
 
         // 필터링: 자기 자신, 이미 친구이거나 친구 요청을 보낸 유저 제외
-        List<UserResponse> resultDtoList = userList.stream()
+        List<UserSearchResult> resultDtoList = userList.stream()
                 .filter(user -> !user.getId().equals(id)) // 자기 자신 제외
                 .filter(user -> friendshipList.stream()
                         .noneMatch(friendship ->
@@ -145,11 +146,10 @@ public class UserService {
                                                 friendship.getStatus().equals(FriendshipStatus.WAITING))))
                 ) // 이미 친구이거나 친구 요청을 보낸 유저 제외
                 .map(user -> {
-                    UserResponse dto = new UserResponse();
-                    dto.setId(user.getId());
-                    dto.setName(user.getUserNick());
-                    dto.setUserProfile(user.getUserProfile());
-                    dto.setEmail(user.getEmail());
+                    UserSearchResult dto = new UserSearchResult();
+                    dto.setUserId(user.getId());
+                    dto.setUserEmail(user.getEmail());
+                    dto.setUserNick(user.getUserNick());
                     return dto;
                 }).collect(Collectors.toList());
 

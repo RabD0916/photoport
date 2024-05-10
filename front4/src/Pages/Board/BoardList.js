@@ -18,8 +18,9 @@ const GalleryContainer = styled.div`
 const Report = React.lazy(() => import('./Report'));
 
 const BoardList = () => {
-    const [profileImage, setProfileImage] = useState(null);
+    const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
+    const boardType = "NORMAL";
     const id = localStorage.getItem("id");
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState([{
@@ -49,7 +50,7 @@ const BoardList = () => {
 
     const getBoardList = async () => {
         try {
-            const resp = await axios.get('http://localhost:8080/api/boards', {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -57,6 +58,7 @@ const BoardList = () => {
             console.log(resp);
             console.log(resp.data);
             setBoardList(resp.data);
+            updateProfileImages(resp.data); // 유저별 프로필 가져오기(수정한거니까 받아주세요 예전에는 공유 게시판 들어가면 현재 로그인한 사용자 프로필로 다떳습니다)
         } catch (error) {
             console.error("Error fetching board list:", error);
         }
@@ -113,20 +115,59 @@ const BoardList = () => {
     }, []);
 
 
-    useEffect(() => {
-        {boardList.map(post => (
-            axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'application/json'
+    const updateProfileImages = async (boards) => {
+        let newImages = {...profileImages};
+        for (const post of boards) {
+            if (!newImages[post.writerId]) { // 이미 로드된 이미지가 없는 경우에만 요청
+                try {
+                    const response = await axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    newImages[post.writerId] = response.data.userProfile;
+                } catch (error) {
+                    console.error("Failed to load profile image", error);
                 }
-            })
-                .then(response => {
-                    setProfileImage(response.data.userProfile);
-                })
-                .catch(error => console.error("Failed to load profile image", error))
-        ))}
-    })
+            }
+        }
+        setProfileImages(newImages);
+    };
+
+    useEffect(() => {
+        getBoardList();
+    }, []); // 의존성 배열을 비워서 컴포넌트 마운트 시에만 호출되도록
+
+    // 좋아요 버튼을 눌렀을 때 실행할 함수
+    const handleLike = async (postId) => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/like/${postId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(response.data);
+            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+        } catch (error) {
+            console.error("좋아요 처리 중 에러 발생:", error);
+        }
+    };
+
+// 북마크 버튼을 눌렀을 때 실행할 함수
+    const handleBookmark = async (postId) => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/bookmark/${postId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(response.data);
+            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+        } catch (error) {
+            console.error("북마크 처리 중 에러 발생:", error);
+        }
+    };
 
     return (
         <div>
@@ -186,18 +227,24 @@ const BoardList = () => {
                             {/* 게시글 내용 표시 */}
                             {post.title}
                             <div className={"board_content"}>
-                                <img src={profileImage} alt="Profile" className="profile" />
-                            {post.writerName}</div>
+                                <img src={profileImages[post.writerId]} alt="Profile" className="profile"/>
+                                {post.writerName}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                <img className="board_img" src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
+                                <img className="board_img"
+                                     src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                     alt="#"
                                      onClick={() => open_board(post.id)}
                                 />
                             </div>
                             <div className={"click_evt"}>
-                                <button><img className={"nav-img"} src={like} alt={"좋아요"}/>{post.like}</button>
-                                <button><img className={"nav-img"} src={sub} alt={"북마크"}/>{post.bookmark}</button>
-                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}</div>
+                                <button onClick={() => handleLike(post.id)}><img className={"nav-img"} src={like}
+                                                                                 alt={"좋아요"}/>{post.like}</button>
+                                <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"} src={sub}
+                                                                                     alt={"북마크"}/>{post.bookmark}
+                                </button>
+                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}
+                                </div>
                             </div>
                             <div>
                                 태그: {post.tags}

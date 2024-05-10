@@ -87,7 +87,9 @@ const BoardWrite = () => {
         console.log(value);
         console.log(board.content);
         console.log(accessToken);
-        await axios.post(`http://localhost:8080/api/boards`, {
+        console.log(key)
+        console.log(value)
+        await axios.post(`http://localhost:8080/api/normalBoard`, {
             title: board.title,
             content: board.content,
             categories: key,

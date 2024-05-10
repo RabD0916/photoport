@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileResponse {
-
-    private String contentType;
-    private byte[] bytes;
+public class UserSearchResult {
+    private String userId;
+    private String userEmail;
+    private String userNick;
 }

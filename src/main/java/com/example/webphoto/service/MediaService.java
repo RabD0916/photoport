@@ -4,6 +4,7 @@ import com.example.webphoto.domain.Media;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.MediaResponse;
 import com.example.webphoto.repository.MediaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -94,5 +96,15 @@ public class MediaService {
         } else {
             return "Not Exist";
         }
+    }
+
+    // 포즈 사진을 저장하는 메소드
+    public MediaResponse addPose(String userId, String fileURL) {
+        User res = userService.findById(userId);
+        if (res == null) {
+            throw new EntityNotFoundException("해당 유저를 찾을 수 없습니다");
+        }
+        mediaRepository.save(new Media(null, fileURL, LocalDateTime.now(), "pose", res));
+        return new MediaResponse(fileURL, "pose");
     }
 }

@@ -110,7 +110,14 @@ public class UserController {
             }
             System.out.println("폴더 생성완료");
         } else {
-            System.out.println("폴더가 이미 존재합니다.");
+            // 폴더가 이미 존재하면 기존 파일들을 삭제
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    f.delete(); // 기존 파일 삭제
+                }
+            }
+            System.out.println("기존 파일 삭제 완료.");
         }
 
         try {
@@ -134,10 +141,9 @@ public class UserController {
     }
 
     @GetMapping("/user/search")
-    public ResponseEntity<List<UserResponse>> searchUsersByEmail(@RequestParam("email") String email, Principal user) {
+    public ResponseEntity<List<UserSearchResult>> searchUsersByEmail(@RequestParam("email") String email, Principal user) {
         try {
-            List<UserResponse> searchResults = userService.searchUsersByEmail(email, user.getName());
-            System.out.println(searchResults.get(0).getName());
+            List<UserSearchResult> searchResults = userService.searchUsersByEmail(email, user.getName());
             return new ResponseEntity<>(searchResults, HttpStatus.OK);
         } catch (Exception e) {
             log.error("찾을 수 없는 유저 : {}", e.getMessage());

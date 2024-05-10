@@ -66,7 +66,15 @@ function Nav() {
 
     const isUserIdEmpty = e => {
         if(userId.length < 1) {
-            alert("로그인 필요");
+            alert("로그인 후에 이용 가능합니다!");
+            navigate("/login")
+            e.preventDefault();
+        }
+    }
+
+    const isAdminEmpty = e => {
+        if (userId !== "ADMIN") {
+            alert("관리자만 작성할 수 있습니다");
             e.preventDefault();
         }
     }
@@ -104,12 +112,14 @@ function Nav() {
                         <Link to={"/gallery/" + userId} className={"downright main_b"}
                               onClick={isUserIdEmpty}>갤러리</Link>
                         <div className={"dropdown"}>
-                            <span className="dropbtn downright main_b">게시판</span>
+                            <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
                             <div className={"dropdown-content"}>
 
-                                <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
+                                <Link to={"/Board"} className={"drop_a"} onClick={isUserIdEmpty}>공유게시판</Link>
 
-                                <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
+                                <Link to={"/Pose"} className={"drop_a"} onClick={isUserIdEmpty}>포즈게시판</Link>
+
+                                <Link to={"/Notice"} className={"drop_a"} onClick={isAdminEmpty}>공지게시판</Link>
                             </div>
                         </div>
                         <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>
