@@ -12,13 +12,12 @@ const BoardWrite = () => {
     const navigate = useNavigate();
     const [key,setKey] =useState([]);
     const [value,setValue]=useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const settings = {
         dots: true,
         fade: true,
-        arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
+        arrows : false,       // 옆으로 이동하는 화살표 표시 여부
         infinite: true,
-        draggable : true, 	//드래그 가능 여부
+        draggable : true,    //드래그 가능 여부
         speed: 100,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -106,24 +105,9 @@ const BoardWrite = () => {
             navigate('/board');
         });
     };
-    const backToList = async (userId) => {
-
-        try {
-            const resp = await axios.get(`http://localhost:8080/api/"gallery/hidden/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-            console.log(resp.data);
-            setIsModalOpen(true);
-        } catch (error) {
-            console.error("사진선택실패:", error);
-        }
-    };
-
-    const close_board = () => {
-        setIsModalOpen(false);
-    };
+    const backToList=() =>{
+        window.open("gallery/hidden/"+userId,"_blank","width=100");
+    }
     const go_back=() =>{
         navigate('/board')
     }
@@ -136,30 +120,25 @@ const BoardWrite = () => {
     return (
         <div className="center-align">
             <div className="big-font">
-                <div className={`modal ${isModalOpen ? 'on' : ''}`}>
-                    <div className="report_popup">
-                        사진선택
-                    </div>
-                </div>
                 <div className={"content_div"}>
                     <span className={"p_name"}>사진</span>
                     <div>
-                    <Slider {...settings}>
-                    {key.map((item, index) => (
-                        <img
-                            key={index}
-                            src={"/images/" + userId + "/" + item + "/" + value[index]}
-                            alt={item}
-                            onClick={() => remove_index(index)}
-                        />
-                    ))}
-                    </Slider>
-                </div>
+                        <Slider {...settings}>
+                            {key.map((item, index) => (
+                                <img
+                                    key={index}
+                                    src={"/images/" + userId + "/" + item + "/" + value[index]}
+                                    alt={item}
+                                    onClick={() => remove_index(index)}
+                                />
+                            ))}
+                        </Slider>
+                    </div>
                     {/*<h1>값:{key[0]}{value[0]}</h1>*/}
                     <button className={"plus_button"} onClick={backToList}>사진추가</button>
                     <span>제목</span>
                     <input type="text" name="title" value={title} onChange={onChange}/>
-                <br/>
+                    <br/>
                     <span>태그</span>
                     <input
                         type="text"
@@ -167,14 +146,14 @@ const BoardWrite = () => {
                         value={tag}
                         onChange={onChange}
                     />
-                <br/>
+                    <br/>
                     <span>내용</span>
                     <textarea className="text_area"
                               name="content"
                               value={content}
-                        onChange={onChange}
+                              onChange={onChange}
                     />
-                <br/>
+                    <br/>
                 </div>
                 <div>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>

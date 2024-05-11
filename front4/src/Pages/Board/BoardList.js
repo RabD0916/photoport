@@ -136,7 +136,7 @@ const BoardList = () => {
                                     <h4>댓글</h4>
                                     {selectedPost.dtos.comments.map((comment) => (
                                         <div key={comment.id}>
-                                            <p>{comment.writer}: {comment.content}</p>
+                                            <p>{comment.writer}: {comment.content} <button>수정</button></p>
                                         </div>
                                     ))}
                                 </div>
