@@ -41,11 +41,15 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final BookMarkRepository bookMarkRepository;
 
-    // Baord 엔티티를 GetMemoResponse DTO로 변환
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
-        List<MediaBoard> mediaBoardList = board.getMedia();
         MediaResponse thumbnail = new MediaResponse();
-        thumbnail.set(mediaBoardList.get(0).getMedia());
+
+        // NOTICE 타입이 아닐 경우에만 썸네일 설정
+        if (board.getType() != BoardType.NOTICE && !board.getMedia().isEmpty()) {
+            List<MediaBoard> mediaBoardList = board.getMedia();
+            thumbnail.set(mediaBoardList.get(0).getMedia());
+        }
+
         List<BoardTag> boardTagList = board.getTags();
         List<String> tagList = new ArrayList<>();
 
@@ -64,12 +68,12 @@ public class BoardService {
                 board.getBookmark(),
                 board.getWriter().getId(),
                 board.getWriter().getUserNick(),
-                thumbnail,
+                thumbnail,  // 이제 thumbnail은 NOTICE 타입에서는 빈 상태일 수 있습니다.
                 tagList
         );
     }
 
-    private BoardResponse entityToResponse(Board board) {
+    public BoardResponse entityToResponse(Board board) {
 
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
@@ -106,24 +110,23 @@ public class BoardService {
 
     // AddBoardRequest DTO를 Board 엔티티로 변환
     private Board requestToEntity(BoardRequest dto) {
-
         User user = userService.findById(dto.getWriterId());
         String[] tagNames = dto.getTags().split("[#@]");
-        String[] categories = dto.getCategories();
-        String[] mediaNames = dto.getMediaNames();
-
         List<Tag> tags = tagService.addTag(tagNames);
-        List<BoardTag> boardTags = new ArrayList<>();
-        List<MediaBoard> mediaBoards = new ArrayList<>();
+        List<BoardTag> boardTags = tags.stream()
+                .map(tag -> new BoardTag(null, null, tag))
+                .collect(Collectors.toList());
 
-        for(Tag tag : tags) {
-            boardTags.add(new BoardTag(null, null, tag));
+        // NOTICE 타입 게시글일 경우 미디어 리스트를 초기화하지 않음
+        List<MediaBoard> mediaBoards = new ArrayList<>();
+        if (dto.getType() != BoardType.NOTICE) {
+            String[] categories = dto.getCategories();
+            String[] mediaNames = dto.getMediaNames();
+            for (int i = 0; i < mediaNames.length; i++) {
+                Media media = mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]);
+                mediaBoards.add(new MediaBoard(null, media, null));
+            }
         }
-        for(int i=0; i<mediaNames.length; i++) {
-            Media media = mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]);
-            mediaBoards.add(new MediaBoard(null, media, null));
-        }
-        System.out.println("게시글 종류 : " + dto.getType()); // 게시글 종류 : POSE 찍히는데 왜 다 NORMAL로 처들어감
 
         return new Board(
                 null,
@@ -160,7 +163,11 @@ public class BoardService {
     public BoardResponse addBoard(BoardRequest dto) {
         Board saved = boardRepository.save(requestToEntity(dto));
 
-        mediaBoardRepository.saveAll(saved.getMedia());
+        // 게시글 타입이 공지사항이 아니면 미디어 저장
+        if (saved.getType() != BoardType.NOTICE) {
+            mediaBoardRepository.saveAll(saved.getMedia());
+        }
+        // 모든 게시글에 대해 태그 저장
         boardTagRepository.saveAll(saved.getTags());
 
         return entityToResponse(saved);
@@ -268,6 +275,12 @@ public class BoardService {
         return updatedBoard;
     }
 
+    // 사용자(내가) 좋아요 누른 게시글 가져오기
+    public List<Board> BoardsLikedByUser(User user) {
+        List<LikedBoard> likeBoards = likeRepository.findByUser(user);
+        return likeBoards.stream().map(LikedBoard::getBoard).collect(Collectors.toList());
+    }
+
     // 북마크 기능
     @Transactional
     public Board addBookmark(Long id, User user) {
@@ -306,7 +319,13 @@ public class BoardService {
         Board updatedBoard = boardRepository.save(board);
         return updatedBoard;
     }
-
-
+    // 사용자가 북마크한 게시판 가져오기
+    public List<Board> getBoardsBookmarkedByUser(User user) {
+        List<BookmarkedBoard> bookmarkedBoards = bookMarkRepository.findByUser(user);
+        return bookmarkedBoards.stream()
+                .map(BookmarkedBoard::getBoard)
+                .filter(board -> !board.getWriter().equals(user)) // 자기 자신이 쓴글 제외
+                .collect(Collectors.toList());
+    }
 
 }

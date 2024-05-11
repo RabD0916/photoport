@@ -20,7 +20,7 @@ function Nav() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isWidth, setIsWidth] = useState(false);
     const [isSidebarVisible, setSidebarVisible] = useState(false);
-    const [AdminLogin, setAdminLogin] = useState(true);
+
     const toggleSidebar = () => {
         setSidebarVisible(!isSidebarVisible);
     };
@@ -73,14 +73,6 @@ function Nav() {
     }
 
 
-    useEffect(() => {
-        if (userId !== "ADMIN") {
-            setAdminLogin(false);
-        }else{
-            setAdminLogin(true);
-        }
-    })
-
     // 로그아웃 핸들러
     const logoutHandler = () => {
         localStorage.removeItem("accessToken");
@@ -115,19 +107,13 @@ function Nav() {
                               onClick={isUserIdEmpty}>갤러리</Link>
                         <div className={"dropdown"}>
                             <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
-                            <div className={"dropdown-content"}>
+                            <div className={"dropdown-content"} onClick={isUserIdEmpty}>
 
-                                <Link to={"/Board"} className={"drop_a"} onClick={isUserIdEmpty}>공유게시판</Link>
+                                <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
 
-                                <Link to={"/Pose"} className={"drop_a"} onClick={isUserIdEmpty}>포즈게시판</Link>
+                                <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
 
-                                { AdminLogin ?(
                                 <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
-                                ):(
-                                    <div className={"hidden"}></div>
-                                )
-                                }
-
                             </div>
                         </div>
                         <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>

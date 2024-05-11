@@ -5,7 +5,7 @@ import './css/Notice.css'
 
 /* createdAt 수정해야함*/
 /*createdBy 도 로그인된 관리자계정으로 수정*/
-const NoticeShow = ({ id, title, contents, createdBy, fileUrl /*createdAt*/}) => {
+const NoticeShow = ({ id, title, createdBy, contents, tags, createdAt}) => {
     const navigate = useNavigate();
 
     const moveToUpdate = () => {
@@ -27,13 +27,19 @@ const NoticeShow = ({ id, title, contents, createdBy, fileUrl /*createdAt*/}) =>
     return (
         <div>
             <div>
-                <h2>{title}</h2>
-                <h5>{createdBy}</h5>
+                <h2>제목 :  {title}</h2>
+                <h5>작성자 :  {createdBy}</h5>
                 <hr/>
-                <p>{contents}
-                    {fileUrl && <img src={fileUrl} alt="첨부 이미지" />}
+                <p>내용  :  {contents}
                 </p>
-
+                <hr/>
+                <p>
+                   태그:  {tags}
+                </p>
+                <hr/>
+                <p>
+                   작성일 :   {createdAt}
+                </p>
             </div>
             <div>
                 <button id='cancle_save_btn' onClick={moveToUpdate}>수정</button>

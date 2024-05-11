@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +35,8 @@ public class BoardController {
 
     // 공통 게시글 추가 로직
     private ResponseEntity<BoardResponse> addBoardCommon(Principal userId, BoardRequest dto, List<MultipartFile> files) {
-        if (files != null && !files.isEmpty()) {
+        // 공지사항 게시글이면 파일 처리 X
+        if (dto.getType() != BoardType.NOTICE && files != null && !files.isEmpty()) {
             String path = "./front4/public/images/";
             String dir = path + userId.getName() + "/pose";
             File folder = new File(dir);
@@ -78,11 +80,11 @@ public class BoardController {
         return addBoardCommon(userId, dto, null);
     }
 
-    // 관리자 게시글 추가
-//    @PostMapping("/adminBoard")
-//    public ResponseEntity<BoardResponse> addAdminBoard(@RequestBody BoardRequest dto, Principal adminId) {
-//        return addBoardCommon(adminId, dto, null);
-//    }
+//     관리자 게시글 추가
+    @PostMapping("/adminBoard")
+    public ResponseEntity<BoardResponse> addAdminBoard(@RequestBody BoardRequest dto, Principal adminId) {
+        return addBoardCommon(adminId, dto, null);
+    }
 
 
     // 사용자가 작성한 게시글 전체 가져오기
@@ -125,6 +127,16 @@ public class BoardController {
             return ResponseEntity.ok(response);
     }
 
+    // 좋아요한 게시판 가져오기
+    @GetMapping("/likedBoards")
+    public ResponseEntity<List<BoardResponse>> getLikedBoards(Principal user) {
+        User target = userService.findById(user.getName());
+        List<Board> boards = boardService.BoardsLikedByUser(target);
+        List<BoardResponse> responses = boards.stream().map(boardService::entityToResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
+    }
+
+
     // 게시물 북마크
     @PostMapping("/bookmark/{id}")
     public ResponseEntity<BoardResponse> bookmark(@PathVariable Long id, Principal user) {
@@ -133,6 +145,15 @@ public class BoardController {
 
         BoardResponse response = boardService.findById(updateBoard.getId());
         return ResponseEntity.ok(response);
+    }
+
+    // 북마크한 게시판 가져오기
+    @GetMapping("/bookmarkedBoards")
+    public ResponseEntity<List<BoardResponse>> getBookmarkedBoards(Principal user) {
+        User target = userService.findById(user.getName());
+        List<Board> boards = boardService.getBoardsBookmarkedByUser(target);
+        List<BoardResponse> responses = boards.stream().map(boardService::entityToResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기

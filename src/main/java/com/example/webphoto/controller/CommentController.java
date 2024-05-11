@@ -34,7 +34,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PatchMapping("/updateComments/{commentId}")
+    @PostMapping("/updateComments/{commentId}")
     public CommentResponse updateComments(@PathVariable Long commentId, @RequestBody CommentRequest request, Principal user) {
         User writer = userService.findById(user.getName());
         CommentResponse response = commentService.updateComment(commentId, request, writer);

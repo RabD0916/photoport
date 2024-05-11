@@ -65,6 +65,7 @@ function App() {
                   <Route path={"/Event"} element={<EventPage/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
                   <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
+                  <Route path={"/Notice/:id"} element={<NoticeDetail/>}></Route>
                   <Route path={"/NoticeShow"} element={<NoticeShow/>}></Route>
                   <Route path={"/NoticeUpdate"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/NoticeWrite"} element={<NoticeWrite/>}></Route>

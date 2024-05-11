@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Suspense} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
@@ -172,18 +172,20 @@ const BoardList = () => {
     };
 
     const comment_update = async (commentId, content) => {
-        console.log(content);
         try {
-            const response = await axios.patch(`http://localhost:8080/api/updateComments/${commentId}`, {
+            const data = {content:content}
+            const response = await axios.post(`http://localhost:8080/api/updateComments/${commentId}`, data,{
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
-                    content: content
                 }
-
             });
             // 게시글 삭제 후 모달 닫기 및 새로 고침'
-
-            alert("업데이트 완료.");
+            if (response.status === 200) {
+                alert("업데이트 완료.");
+                await open_board(selectedPost.id);
+                setupComment(false); // 댓글 수정 폼을 비활성화
+                setContent(''); // 수정 입력 폼을 비웁니다.
+            }
         } catch (error) {
             console.error("Error updating post:", error);
         }
@@ -196,6 +198,7 @@ const BoardList = () => {
                 }
             });
             console.log("Post deleted:", response);
+            await open_board(selectedPost.id);
             // 게시글 삭제 후 모달 닫기 및 새로 고침
             alert("해당 댓글이 삭제되었습니다.");
         } catch (error) {

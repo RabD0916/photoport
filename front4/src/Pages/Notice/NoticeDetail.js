@@ -3,34 +3,51 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import NoticeShow from './NoticeShow';
 
-const NoticeDetail =()=> {
-    const {id} = useParams();
+const NoticeDetail = () => {
+    const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [notice, setNotice] = useState({});
+    const accessToken = localStorage.getItem("accessToken");
+
     const getNotice = async () => {
-        /*axios url 주소 수정 필요함*/
-        try{ const resp = await (await axios.get(`http://localhost:8080/Notice/${id}`)).data;
-            setNotice(resp.data);
-            setLoading(false);}
-        catch(error){
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/board/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            // 날짜 포매팅
+            const date = new Date(...resp.data.createdAt);
+            const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+
+            // 데이터 세팅
+            setNotice({
+                ...resp.data,
+                createdAt: formattedDate,
+                tags: resp.data.tags.filter(tag => tag).join(', ') // 빈 문자열 제거 후 문자열로 변환
+            });
+            setLoading(false);
+        } catch (error) {
             console.error('공지사항 불러오기 실패 : ', error);
         }
     };
+
     useEffect(() => {
         getNotice();
-    }, []);
+    }, [id]); // id 값이 변경될 때마다 getNotice 함수를 호출
+
     return (
         <div>
             {loading ? (
-                <h2>loading...</h2>
+                <h2>Loading...</h2>
             ) : (
                 <NoticeShow
-                    idx={NoticeShow.id}
-                    title={NoticeShow.title}
-                    contents={NoticeShow.contents}
-                    createdBy={NoticeShow.createdBy}
-                    /*createdAt*/
-                    fileUrl={NoticeShow.fileUrl}
+                    idx={notice.id}
+                    title={notice.title}
+                    contents={notice.content}
+                    createdBy={notice.writerId}
+                    tags={notice.tags}
+                    createdAt={notice.createdAt}
                 />
             )}
         </div>
