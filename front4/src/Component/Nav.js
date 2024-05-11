@@ -20,7 +20,7 @@ function Nav() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isWidth, setIsWidth] = useState(false);
     const [isSidebarVisible, setSidebarVisible] = useState(false);
-
+    const [AdminLogin, setAdminLogin] = useState(true);
     const toggleSidebar = () => {
         setSidebarVisible(!isSidebarVisible);
     };
@@ -72,12 +72,14 @@ function Nav() {
         }
     }
 
-    const isAdminEmpty = e => {
+
+    useEffect(() => {
         if (userId !== "ADMIN") {
-            alert("관리자만 작성할 수 있습니다");
-            e.preventDefault();
+            setAdminLogin(false);
+        }else{
+            setAdminLogin(true);
         }
-    }
+    })
 
     // 로그아웃 핸들러
     const logoutHandler = () => {
@@ -119,7 +121,13 @@ function Nav() {
 
                                 <Link to={"/Pose"} className={"drop_a"} onClick={isUserIdEmpty}>포즈게시판</Link>
 
-                                <Link to={"/Notice"} className={"drop_a"} onClick={isAdminEmpty}>공지게시판</Link>
+                                { AdminLogin ?(
+                                <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
+                                ):(
+                                    <div className={"hidden"}></div>
+                                )
+                                }
+
                             </div>
                         </div>
                         <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>

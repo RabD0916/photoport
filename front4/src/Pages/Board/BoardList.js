@@ -20,9 +20,14 @@ const Report = React.lazy(() => import('./Report'));
 const BoardList = () => {
     const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('id');
     const boardType = "NORMAL";
-    const id = localStorage.getItem("id");
     const navigate = useNavigate();
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newComment, setNewComment] = useState("");
+    const [upComment, setupComment] = useState(false);
+    const [content, setContent] = useState('');
     const [boardList, setBoardList] = useState([{
         id: null,
         title: null,
@@ -44,9 +49,6 @@ const BoardList = () => {
         },
         tags: null
     }]);
-    const [selectedPost, setSelectedPost] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newComment, setNewComment] = useState("");
 
     const getBoardList = async () => {
         try {
@@ -169,6 +171,38 @@ const BoardList = () => {
         }
     };
 
+    const comment_update = async (commentId, content) => {
+        console.log(content);
+        try {
+            const response = await axios.patch(`http://localhost:8080/api/updateComments/${commentId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    content: content
+                }
+
+            });
+            // 게시글 삭제 후 모달 닫기 및 새로 고침'
+
+            alert("업데이트 완료.");
+        } catch (error) {
+            console.error("Error updating post:", error);
+        }
+    };
+    const comment_delete = async (postId) => {
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/deleteComments/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log("Post deleted:", response);
+            // 게시글 삭제 후 모달 닫기 및 새로 고침
+            alert("해당 댓글이 삭제되었습니다.");
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+
+    };
     return (
         <div>
             <div>
@@ -198,6 +232,22 @@ const BoardList = () => {
                                     {selectedPost.commentsDto.comments.map((comment) => (
                                         <div key={comment.id}>
                                             <p>{comment.writerName}: {comment.content}</p>
+                                            {comment.writerId === userId && (
+                                                <div>
+                                                    {comment.writerId === userId && (
+                                                        <>
+                                                            {upComment ? (
+                                                                <>
+                                                                    <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
+                                                                </>
+                                                            ) : (
+                                                                <button onClick={() => setupComment(true)}>수정</button>
+                                                            )}
+                                                            <button onClick={() => comment_delete(comment.id)}>삭제</button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
