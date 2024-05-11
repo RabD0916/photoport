@@ -2,8 +2,9 @@ package com.example.webphoto.service;
 
 import com.example.webphoto.domain.Media;
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.GetMedia;
+import com.example.webphoto.dto.MediaResponse;
 import com.example.webphoto.repository.MediaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,25 +33,25 @@ public class MediaService {
     public String create(String nowUser, String nowCate, String selectedMedia) {
         User user = userService.findById(nowUser);
         String[] mediaNames = selectedMedia.split("[\\[\\],]");
-        for(int i=1; i<mediaNames.length-2; i++) {
+        for(int i=1; i<mediaNames.length-1; i++) {
             mediaRepository.save(new Media(null, mediaNames[i].replaceAll("\"", ""), LocalDateTime.now(), nowCate, user));
         }
         return "Success";
     }
 
-    public List<GetMedia> send(String nowUser, String cateName) {
+    public List<MediaResponse> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
         System.out.println(dir);
         String[] mediaNames = getFileNames(dir);
         System.out.println(Arrays.asList(mediaNames));
-        List<GetMedia> getMediaList = new ArrayList<>();
+        List<MediaResponse> mediaResponseList = new ArrayList<>();
         if(mediaNames != null) {
             for (String mediaName : mediaNames) {
-                getMediaList.add(new GetMedia(mediaName, cateName));
+                mediaResponseList.add(new MediaResponse(mediaName, cateName));
             }
         }
-        System.out.println(getMediaList);
-        return getMediaList;
+        System.out.println(mediaResponseList);
+        return mediaResponseList;
     }
 
     public String move(String nowUser, String nowCate, String selectedMedia, String nextCateName) {
@@ -94,5 +96,15 @@ public class MediaService {
         } else {
             return "Not Exist";
         }
+    }
+
+    // 포즈 사진을 저장하는 메소드
+    public MediaResponse addPose(String userId, String fileURL) {
+        User res = userService.findById(userId);
+        if (res == null) {
+            throw new EntityNotFoundException("해당 유저를 찾을 수 없습니다");
+        }
+        mediaRepository.save(new Media(null, fileURL, LocalDateTime.now(), "pose", res));
+        return new MediaResponse(fileURL, "pose");
     }
 }

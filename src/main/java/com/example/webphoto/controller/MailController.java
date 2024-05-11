@@ -1,14 +1,11 @@
 package com.example.webphoto.controller;
 
-import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.AddUserResponse;
-import com.example.webphoto.dto.NewPasswordRequest;
-import com.example.webphoto.dto.NewPasswordResponse;
+import com.example.webphoto.dto.PasswordRequest;
+import com.example.webphoto.dto.UserResponse;
 import com.example.webphoto.email.*;
 import com.example.webphoto.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,11 +48,11 @@ public class MailController {
         }
     }
 
-    // 새로운 비밀번호 재설정
+    // 새로운 비밀번호 재설정(미완)
     @PostMapping("/newPwUpdate")
-    public NewPasswordResponse newPw(@RequestBody NewPasswordRequest dto) {
-        AddUserResponse user = userService.findByNewPw(dto.getId(), dto.getPassword());
+    public String newPw(@RequestBody PasswordRequest dto) {
+        UserResponse user = userService.findByNewPw(dto.getId(), dto.getPassword());
 
-        return new NewPasswordResponse(user.getMessage());
+        return "Success";
     }
 }

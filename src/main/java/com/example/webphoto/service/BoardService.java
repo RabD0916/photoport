@@ -1,11 +1,24 @@
 package com.example.webphoto.service;
 
+import com.example.webphoto.config.CustomException;
 import com.example.webphoto.domain.*;
+import com.example.webphoto.domain.enums.BoardType;
 import com.example.webphoto.dto.*;
 import com.example.webphoto.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -23,14 +37,14 @@ public class BoardService {
     private final BoardTagRepository boardTagRepository;
     private final MediaRepository mediaRepository;
     private final MediaBoardRepository mediaBoardRepository;
-    private final CommentRepository commentRepository;
     private final CommentService commentService;
-    private final TagRepository tagRepository;
+    private final LikeRepository likeRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     // Baord 엔티티를 GetMemoResponse DTO로 변환
-    private GetBoardPreviewResponse entityToPreviewResponse(Board board) {
+    private BoardPreviewResponse entityToPreviewResponse(Board board) {
         List<MediaBoard> mediaBoardList = board.getMedia();
-        GetMedia thumbnail = new GetMedia();
+        MediaResponse thumbnail = new MediaResponse();
         thumbnail.set(mediaBoardList.get(0).getMedia());
         List<BoardTag> boardTagList = board.getTags();
         List<String> tagList = new ArrayList<>();
@@ -41,7 +55,7 @@ public class BoardService {
             System.out.println(tag.getName());
         }
 
-        return new GetBoardPreviewResponse(
+        return new BoardPreviewResponse(
                 board.getId(),
                 board.getTitle(),
                 board.getCreatedAt(),
@@ -49,15 +63,17 @@ public class BoardService {
                 board.getLike(),
                 board.getBookmark(),
                 board.getWriter().getId(),
+                board.getWriter().getUserNick(),
                 thumbnail,
                 tagList
         );
     }
 
-    private GetBoardResponse entityToResponse(Board board) {
+    private BoardResponse entityToResponse(Board board) {
+
         List<MediaBoard> mediaBoardList = board.getMedia();
         List<BoardTag> boardTagList = board.getTags();
-        List<GetMedia> mediaList = new ArrayList<>();
+        List<MediaResponse> mediaList = new ArrayList<>();
         List<String> tagList = new ArrayList<>();
 
         for(BoardTag boardTag : boardTagList) {
@@ -67,11 +83,11 @@ public class BoardService {
         }
         for(MediaBoard mediaBoard : mediaBoardList) {
             Media media = mediaBoard.getMedia();
-            mediaList.add(new GetMedia(media.getName(), media.getCategory()));
+            mediaList.add(new MediaResponse(media.getName(), media.getCategory()));
             System.out.println(mediaList.get(mediaList.size()-1));
         }
 
-        return new GetBoardResponse(
+        return new BoardResponse(
                 board.getId(),
                 board.getTitle(),
                 board.getCreatedAt(),
@@ -80,6 +96,7 @@ public class BoardService {
                 board.getLike(),
                 board.getBookmark(),
                 board.getWriter().getId(),
+                board.getWriter().getUserNick(),
                 mediaList,
                 commentService.findAllComments(board.getId()), // 이곳도 서비스에서 해당 게시글에 등록된 모든 댓글 가져오는 dto 반환하는걸로 수정
                 tagList
@@ -87,36 +104,25 @@ public class BoardService {
     }
 
     // AddBoardRequest DTO를 Board 엔티티로 변환
-    private Board requestToEntity(AddBoardRequest dto) {
-        User user = userService.findById(dto.getWriterId());
+    private Board requestToEntity(BoardRequest dto) {
 
+        User user = userService.findById(dto.getWriterId());
         String[] tagNames = dto.getTags().split("[#@]");
+        String[] categories = dto.getCategories();
+        String[] mediaNames = dto.getMediaNames();
+
         List<Tag> tags = tagService.addTag(tagNames);
         List<BoardTag> boardTags = new ArrayList<>();
+        List<MediaBoard> mediaBoards = new ArrayList<>();
+
         for(Tag tag : tags) {
             boardTags.add(new BoardTag(null, null, tag));
         }
-        System.out.println("미디어 : " + Arrays.toString(dto.getMediaNames()));
-        System.out.println("미디어 개수 : " + dto.getMediaNames().length);
-        System.out.println("카테고리 개수 : " + dto.getCategories().length);
-
-        String[] categories = dto.getCategories();
-        String[] mediaNames = dto.getMediaNames();
-        List<Media> mediaList = new ArrayList<>();
-        List<MediaBoard> mediaBoards = new ArrayList<>();
-
-        if(categories.length != mediaNames.length) {
-            return null;
-        }
         for(int i=0; i<mediaNames.length; i++) {
-            mediaList.add(mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]));
-            System.out.println(i + " : 유저 : " + user.getId() + " : 카테고리 : " + categories[i] + " : 미디어 : " + mediaNames[i]);
-            System.out.println(i + " : " + mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]));
-        }
-        for(Media media : mediaList) {
+            Media media = mediaRepository.findByOwnerAndCategoryAndName(user, categories[i], mediaNames[i]);
             mediaBoards.add(new MediaBoard(null, media, null));
         }
-
+        System.out.println("게시글 종류 : " + dto.getType()); // 게시글 종류 : POSE 찍히는데 왜 다 NORMAL로 처들어감
 
         return new Board(
                 null,
@@ -131,45 +137,36 @@ public class BoardService {
         );
     }
 
-
-    private AddBoardResponse entityToResult(Board board) {
-        return new AddBoardResponse(
-                board.getTitle(),
-                board.getContent(),
-                board.getShare(),
-                board.getType()
-        );
-    }
-
-    public List<GetBoardPreviewResponse> findAll() {
-        return boardRepository.findAll().stream()
-                .map(board -> entityToPreviewResponse(board))
+    public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType) {
+        return boardRepository.findByType(boardType).stream()
+                .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
 
-    public GetBoardResponse findById(Long id) {
+
+    // 전체 게시글(종류 상관없이)
+    public List<BoardPreviewResponse> findAll() {
+        return boardRepository.findAll().stream()
+                .map(this::entityToPreviewResponse)
+                .collect(Collectors.toList());
+    }
+
+    public BoardResponse findById(Long id) {
         return entityToResponse(boardRepository.findById(id).orElse(null));
     }
 
     // 게시글을 추가하는 메소드
-    public AddBoardResponse addBoard(AddBoardRequest dto) {
+    public BoardResponse addBoard(BoardRequest dto) {
         Board saved = boardRepository.save(requestToEntity(dto));
-        List<BoardTag> boardTagList = new ArrayList<>();
-        List<MediaBoard> mediaBoardList = new ArrayList<>();
-        for(MediaBoard mediaBoard : saved.getMedia()) {
-            mediaBoardList.add(mediaBoardRepository.save(mediaBoard));
-        }
-        for(BoardTag boardTag : saved.getTags()) {
-            boardTagList.add(boardTagRepository.save(boardTag));
-        }
-        return entityToResult(saved);
+
+        mediaBoardRepository.saveAll(saved.getMedia());
+        boardTagRepository.saveAll(saved.getTags());
+
+        return entityToResponse(saved);
     }
 
     // 게시글을 수정하는 메소드
-    public GetBoardResponse updateBoard(Long id, AddBoardRequest dto) {
-
-        // 코드 리펙터링(by 시영이형)
-//        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+    public BoardResponse updateBoard(Long id, BoardRequest dto) {
 
         // 여기서부터 아래부분 해당 메소드 코드 고쳐야함
         Optional<Board> optionalBoard = boardRepository.findById(id);
@@ -188,20 +185,43 @@ public class BoardService {
         }
     }
 
-    // 게시글을 삭제하는 메소드
-    public void deleteBoard(Long id) {
-        boardRepository.deleteById(id);
+    @Transactional
+    public void deleteBoard(Long id, String userId) throws IOException {
+        Optional<Board> board = boardRepository.findById(id);
+        if (board.isPresent() && board.get().getWriter().getId().equals(userId)) {
+            // 게시글 유형이 포즈(POSE)인 경우에만 파일 삭제 로직 수행
+            if (board.get().getType() == BoardType.POSE) {
+                List<MediaBoard> mediaList = board.get().getMedia();
+
+                // 각 파일을 서버에서 삭제
+                for (MediaBoard mediaBoard : mediaList) {
+                    Media media = mediaBoard.getMedia();
+                    String path = "./front4/public/images/" + userId + "/pose/" + media.getName();
+                    Path filePath = Paths.get(path);
+                    if (Files.exists(filePath)) {
+                        Files.delete(filePath); // 파일 삭제
+                    }
+                    mediaRepository.deleteById(media.getId()); // 미디어 레코드 삭제
+                }
+            }
+
+            // 미디어 파일 처리 후 게시글 삭제
+            boardRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("작성자만 게시글을 삭제할 수 있습니다.");
+        }
     }
 
+
     // 특정 사용자의 게시글 목록을 가져오는 메소드
-    public List<GetBoardResponse> getBoardByUser(String id) {
+    public List<BoardResponse> getBoardByUser(String id) {
         return boardRepository.findByWriter_IdOrderByCreatedAtDesc(id).stream()
-                .map(board -> entityToResponse(board))
+                .map(this::entityToResponse)
                 .collect(Collectors.toList());
     }
 
     // 키워드로 게시물 검색하는 메소드
-    public List<GetBoardPreviewResponse> getBoardByKeyWord(String keyword) throws Exception {
+    public List<BoardPreviewResponse> getBoardByKeyWord(String keyword) throws Exception {
         List<Board> boardList;
         if (keyword.endsWith("#")) {
             throw new Exception("#로 검색할 수는 없습니다");
@@ -218,4 +238,74 @@ public class BoardService {
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
+
+    // 조회수 증가(사용자가 해당 게시글 클릭 시)
+    public Board updateVisit(Board board) {
+        Board target = boardRepository.findById(board.getId()).orElseThrow(() ->
+                new CustomException("게시글을 찾을 수없습니다.", HttpStatus.NOT_FOUND));
+        target.setView(target.getView() + 1);
+        boardRepository.save(target);
+        return target;
+    }
+
+    // 좋아요 기능
+    @Transactional
+    public Board addLike(Long id, User user) {
+
+        Board board = boardRepository.findById(id).orElse(null);
+        if (!likeRepository.existsByUserAndBoard(user, board)) {
+            // 호출되면 board에 like 증가
+            board.setLike(board.getLike() + 1);
+            likeRepository.save(new LikedBoard(null, user, board));
+        }
+        else{
+            // 같은 유저가 좋아요를 누르면 좋아요 개수 하나 감소
+            board.setLike(board.getLike() - 1);
+            likeRepository.deleteByUserAndBoard(user, board);
+        }
+        Board updatedBoard = boardRepository.save(board);
+        return updatedBoard;
+    }
+
+    // 북마크 기능
+    @Transactional
+    public Board addBookmark(Long id, User user) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 북마크가 이미 존재하는지 확인
+        boolean alreadyBookmarked = bookMarkRepository.existsByUserAndBoard(user, board);
+
+        // 자신의 게시글인 경우 북마크 추가 또는 삭제
+        if (user.equals(board.getWriter())) {
+            if (!alreadyBookmarked) {
+                // 북마크가 없다면 추가
+                board.setBookmark(board.getBookmark() + 1);
+                bookMarkRepository.save(new BookmarkedBoard(null, user, board));
+            } else {
+                // 이미 북마크가 있다면 삭제
+                if (board.getBookmark() > 0) {
+                    board.setBookmark(board.getBookmark() - 1);
+                    bookMarkRepository.deleteByUserAndBoard(user, board);
+                }
+            }
+        } else {
+            // 다른 사용자의 게시글 처리
+            if (!alreadyBookmarked) {
+                board.setBookmark(board.getBookmark() + 1);
+                bookMarkRepository.save(new BookmarkedBoard(null, user, board));
+            } else {
+                if (board.getBookmark() > 0) {
+                    board.setBookmark(board.getBookmark() - 1);
+                    bookMarkRepository.deleteByUserAndBoard(user, board);
+                }
+            }
+        }
+
+        // 게시판 정보 업데이트
+        Board updatedBoard = boardRepository.save(board);
+        return updatedBoard;
+    }
+
+
+
 }

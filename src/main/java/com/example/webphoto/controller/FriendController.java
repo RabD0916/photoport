@@ -1,7 +1,7 @@
 package com.example.webphoto.controller;
 
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.*;
+import com.example.webphoto.dto.Friend.*;
 import com.example.webphoto.service.FriendshipService;
 import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;

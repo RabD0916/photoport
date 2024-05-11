@@ -1,7 +1,7 @@
 package com.example.webphoto.controller;
 
-import com.example.webphoto.dto.Category;
-import com.example.webphoto.dto.GetMedia;
+import com.example.webphoto.dto.CategoryResponse;
+import com.example.webphoto.dto.MediaResponse;
 import com.example.webphoto.service.CategoryService;
 import com.example.webphoto.service.MediaService;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +24,19 @@ public class GalleryController {
     }
 
     @GetMapping("/sendCategory/{userId}")
-    public List<Category> sendCategory(@PathVariable String userId) {
+    public List<CategoryResponse> sendCategory(@PathVariable String userId) {
         this.nowUser = userId;
         return categoryService.send(userId);
     }
 
     @GetMapping("/sendMedia/{cateName}")
-    public List<GetMedia> sendMedia(@PathVariable String cateName) {
-        List<GetMedia> getMediaList = mediaService.send(nowUser, cateName);
-        System.out.println(getMediaList);
-        if(!getMediaList.isEmpty()) {
+    public List<MediaResponse> sendMedia(@PathVariable String cateName) {
+        List<MediaResponse> mediaResponseList = mediaService.send(nowUser, cateName);
+        System.out.println(mediaResponseList);
+        if(!mediaResponseList.isEmpty()) {
             nowCate = cateName;
         }
-        return getMediaList;
+        return mediaResponseList;
     }
 
     @PostMapping("/createCategory/{cateName}")

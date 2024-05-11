@@ -1,11 +1,9 @@
 package com.example.webphoto.controller;
 
-import com.example.webphoto.domain.Comment;
 import com.example.webphoto.domain.User;
-import com.example.webphoto.dto.AddCommentRequest;
-import com.example.webphoto.dto.AddCommentResponse;
-import com.example.webphoto.dto.CommentDtos;
-import com.example.webphoto.dto.DeleteCommentResponse;
+import com.example.webphoto.dto.CommentRequest;
+import com.example.webphoto.dto.CommentResponse;
+import com.example.webphoto.dto.CommentsResponse;
 import com.example.webphoto.service.CommentService;
 import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,31 +21,31 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/comments/{boardId}")
-    public AddCommentResponse addComment(@PathVariable Long boardId, @RequestBody AddCommentRequest request, Principal user) {
+    public CommentResponse addComment(@PathVariable Long boardId, @RequestBody CommentRequest request, Principal user) {
         User writer = userService.findById(user.getName());
         return commentService.addComment(boardId, request, writer);
     }
 
     // 본인 댓글 조회
     @GetMapping("/commentList")
-    public CommentDtos getComments(Principal user) {
-        CommentDtos dtos = commentService.findUserComments(user.getName());
+    public CommentsResponse getComments(Principal user) {
+        CommentsResponse dtos = commentService.findUserComments(user.getName());
         return dtos;
     }
 
     // 댓글 수정
     @PatchMapping("/updateComments/{commentId}")
-    public AddCommentResponse updateComments(@PathVariable Long commentId, @RequestBody AddCommentRequest request, Principal user) {
+    public CommentResponse updateComments(@PathVariable Long commentId, @RequestBody CommentRequest request, Principal user) {
         User writer = userService.findById(user.getName());
-        AddCommentResponse response = commentService.updateComment(commentId, request, writer);
+        CommentResponse response = commentService.updateComment(commentId, request, writer);
         return response;
     }
 
     // 댓글 삭제
     @DeleteMapping("/deleteComments/{commentId}")
-    public DeleteCommentResponse deleteComment(@PathVariable Long commentId, Principal user) {
+    public CommentResponse deleteComment(@PathVariable Long commentId, Principal user) {
         User writer = userService.findById(user.getName());
-        DeleteCommentResponse response = commentService.deleteComment(commentId, writer);
+        CommentResponse response = commentService.deleteComment(commentId, writer);
         return response;
     }
 }

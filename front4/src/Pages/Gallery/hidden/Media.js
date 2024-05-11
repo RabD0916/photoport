@@ -21,8 +21,8 @@ const Media = ({onChildClick}) => {
     const settings = {
         dots: true,
         arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
+        fade:true,
         infinite: true,
-        fade: false,
         draggable : true, 	//드래그 가능 여부
         speed: 1000,
         slidesToShow: 1,
@@ -70,6 +70,7 @@ const Media = ({onChildClick}) => {
     const sendDataToParent = () => {
         const data = [cateId, selectedMediaNames];
         window.opener.postMessage(data, '*');
+        window.close();
     };
     return (
         <>
@@ -85,8 +86,7 @@ const Media = ({onChildClick}) => {
                     </Slider>
                 </div>
             </div>
-            <button onClick={sendDataToParent}>부모 창으로 데이터 전송</button>
-
+            <button className={"send_button"} onClick={sendDataToParent}>부모 창으로 데이터 전송</button>
             <GalleryContainer className={"Media-list"}>
                 <div className={"cate-list"}>{media.map((media) => (
                     <img src={"/images/" + userId + "/" + cateId + "/" + media["mediaName"]}

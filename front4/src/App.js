@@ -29,6 +29,8 @@ import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
 import FindFriend from "./Pages/mypage/FindFriend";
+import PoseList from "./Pages/Board/PoseList";
+import PoseWrite from "./Pages/Board/PoseWrite";
 // import Report from "./Pages/Board/Report";
 
 /*
@@ -57,6 +59,8 @@ function App() {
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/BoardDetail"} element={<BoardDetail/>}></Route>
                   <Route path={"/BoardWrite"} element={<BoardWrite/>}></Route>
+                  <Route path={"/Pose"} element={<PoseList/>}></Route>
+                  <Route path={"/PoseWrite"} element={<PoseWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
                   <Route path={"/Event"} element={<EventPage/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
