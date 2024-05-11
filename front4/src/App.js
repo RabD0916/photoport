@@ -17,7 +17,6 @@ import EventPage from "./Pages/Event/Event";
 import Notice from "./Pages/Notice/Notice";
 import NoticeDetail from "./Pages/Notice/NoticeDetail";
 import NoticeWrite from "./Pages/Notice/NoticeWrite";
-import NoticeShow from "./Pages/Notice/NoticeShow";
 import NoticeUpdate from "./Pages/Notice/NoticeUpdate";
 import FQ from "./Pages/Notice/FQ";
 import Create from "./Pages/CreateCut/Create";
@@ -66,8 +65,8 @@ function App() {
                   <Route path={"/Notice"} element={<Notice/>}></Route>
                   <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
                   <Route path={"/Notice/:id"} element={<NoticeDetail/>}></Route>
-                  <Route path={"/NoticeShow"} element={<NoticeShow/>}></Route>
                   <Route path={"/NoticeUpdate"} element={<NoticeUpdate/>}></Route>
+                  <Route path={"/update/:id"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/NoticeWrite"} element={<NoticeWrite/>}></Route>
                   <Route path={"/FQ"} element={<FQ/>}></Route>
                   <Route path={"/signup"} element={<Signup/>}></Route>

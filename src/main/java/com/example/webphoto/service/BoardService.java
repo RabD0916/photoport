@@ -20,10 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +37,7 @@ public class BoardService {
     private final CommentService commentService;
     private final LikeRepository likeRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final TagRepository tagRepository;
 
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
         MediaResponse thumbnail = new MediaResponse();
@@ -173,24 +171,41 @@ public class BoardService {
         return entityToResponse(saved);
     }
 
-    // 게시글을 수정하는 메소드
+    // 게시글 수정(제목, 내용, 태그)
+    @Transactional
     public BoardResponse updateBoard(Long id, BoardRequest dto) {
-
-        // 여기서부터 아래부분 해당 메소드 코드 고쳐야함
         Optional<Board> optionalBoard = boardRepository.findById(id);
 
-        if (optionalBoard.isPresent()) {
-            Board board = optionalBoard.get();
-            board.setTitle(dto.getTitle());
-            board.setContent(dto.getContent());
-//            board.setFileName(dto.getFileName());
-
-            boardRepository.save(board);
-
-            return entityToResponse(board);
-        } else {
+        if (!optionalBoard.isPresent()) {
             throw new IllegalArgumentException("해당 게시글을 찾을 수 없습니다: " + id);
         }
+
+        Board board = optionalBoard.get();
+        board.setTitle(dto.getTitle());
+        board.setContent(dto.getContent());
+
+        // 기존의 모든 태그를 삭제
+        if (!board.getTags().isEmpty()) {
+            boardTagRepository.deleteAll(board.getTags()); // 기존 태그 연결을 데이터베이스에서 삭제
+            board.getTags().clear(); // 연관 관계를 메모리에서도 클리어
+        }
+
+        // 새 태그 처리
+        Arrays.stream(dto.getTags().split("[#@]"))
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .forEach(tagName -> {
+                    Tag tag = tagRepository.findByName(tagName)
+                            .orElseGet(() -> {
+                                Tag newTag = new Tag(null, tagName);
+                                tagRepository.save(newTag); // 새 태그 저장
+                                return newTag;
+                            });
+                    board.getTags().add(new BoardTag(null, board, tag));
+                });
+
+        boardRepository.save(board); // 게시글 업데이트 (태그 포함)
+        return entityToResponse(board);
     }
 
     @Transactional
