@@ -95,6 +95,7 @@ public class BoardService {
                 board.getView(),
                 board.getLike(),
                 board.getBookmark(),
+                board.getType(),
                 board.getWriter().getId(),
                 board.getWriter().getUserNick(),
                 mediaList,

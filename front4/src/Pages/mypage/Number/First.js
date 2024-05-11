@@ -18,6 +18,7 @@ const Report = React.lazy(() => import('../../Board/Report'));
 
 const First = () => {
     const [profileImage, setProfileImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null); // 이미지 미리보기 URL을 위한 상태
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const [cate, setCate] = useState([]);
@@ -25,6 +26,7 @@ const First = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
+    const [BoardType, setBoardType] = useState("");
 
     const getBoardList = async () => {
         try {
@@ -200,32 +202,38 @@ const First = () => {
                     </div>
                 </div>
             </div>
+            <button onClick={() => setBoardType("NORMAL")}>공유</button>
+            <button onClick={() => setBoardType("POSE")}>포즈</button>
             <GalleryContainer>
                 <div className="main_board2">
                     {boardList.map(post => (
-                        <div key={post.id} className="board_item2">
-                            {/* 게시글 내용 표시 */}
-                            {post.title}
-                            <div className={"board_content2"}>
-                                {post.writerName}</div>
-                            <div className={"img_box2"}>
-                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                {post.media.length > 0 && (
-                                    <img className="board_img2"
-                                         src={`./images/${post.writerId}/${post.media[0].categoryName}/${post.media[0].mediaName}`}
-                                         alt="#"
-                                         onClick={() => open_board(post.id)}/>
-                                )}
+                        (post.type === BoardType) && (
+                            <div key={post.id} className="board_item2">
+                                {/* 게시글 내용 표시 */}
+                                {post.title}
+                                <div className={"board_content2"}>
+                                    <img src={previewImage || profileImage} alt="Profile2" className="Profile2" />
+                                    {post.writerName}
+                                </div>
+                                <div className={"img_box2"}>
+                                    {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
+                                    {post.media.length > 0 && (
+                                        <img className="board_img2"
+                                             src={`./images/${post.writerId}/${post.media[0].categoryName}/${post.media[0].mediaName}`}
+                                             alt="#"
+                                             onClick={() => open_board(post.id)}
+                                        />
+                                    )}
+                                </div>
+                                <div className={"click_evt2"}>
+                                    <img className={"nav-img2"} src={like} alt={"좋아요"} /><p>{post.like}</p>
+                                    <img className={"nav-img2"} src={comment} alt={"댓글"} />
+                                    <img className={"nav-img2"} src={sub} alt={"북마크"} /><p>{post.bookmark}</p>
+                                    <p className={"view_2"}>view{post.view}</p>
+                                </div>
+                                <div className={"content_box2"}>태그 : {post.tags}</div>
                             </div>
-                            <div className={"click_evt2"}>
-                                <img className={"nav-img2"} src={like} alt={"좋아요"}/><p>{post.like}</p>
-                                <img className={"nav-img2"} src={comment} alt={"댓글"}/>
-                                <img className={"nav-img2"} src={sub} alt={"북마크"}/><p>{post.bookmark}</p>
-                                <p className={"view_2"}>view{post.view}</p>
-                            </div>
-                            <div className={"content_box2"}>태그 : {post.tags}
-                            </div>
-                        </div>
+                        )
                     ))}
                 </div>
             </GalleryContainer>

@@ -40,7 +40,7 @@ public class BoardController {
             File folder = new File(dir);
 
             if (!folder.exists() && !folder.mkdirs()) {
-                return ResponseEntity.internalServerError().body(new BoardResponse(null, dto.getTitle(), null, dto.getContent(), 0, 0, 0, dto.getWriterId(), null, null, null, null));
+                return ResponseEntity.internalServerError().body(new BoardResponse(null, dto.getTitle(), null, dto.getContent(), 0, 0, 0,dto.getType(), dto.getWriterId(), null, null, null, null));
             }
 
             for (MultipartFile file : files) {
@@ -50,7 +50,7 @@ public class BoardController {
                     // 파일 이름 중복 확인
                     if (Files.exists(filePath)) {
                         // 중복되는 경우 예외 처리
-                        return ResponseEntity.badRequest().body(new BoardResponse(null, "File name already exists: " + file.getOriginalFilename(), null, null, 0, 0, 0, null, null, null, null, null));
+                        return ResponseEntity.badRequest().body(new BoardResponse(null, "File name already exists: " + file.getOriginalFilename(), null, null, 0, 0, 0, null,null, null, null, null, null));
                     }
 
                     Files.write(filePath, file.getBytes());
