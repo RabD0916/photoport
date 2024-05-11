@@ -6,6 +6,7 @@ import com.example.webphoto.domain.enums.BoardType;
 import com.example.webphoto.dto.BoardRequest;
 import com.example.webphoto.dto.BoardPreviewResponse;
 import com.example.webphoto.dto.BoardResponse;
+import com.example.webphoto.dto.SortRequest;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
 import com.example.webphoto.service.MediaService;
@@ -71,6 +72,9 @@ public class BoardController {
     // 포즈 추천 게시글 등록
     @PostMapping("/poseBoard")
     public ResponseEntity<BoardResponse> addPoseBoard(Principal userId, @RequestPart(value = "dto") BoardRequest dto, @RequestPart("files") List<MultipartFile> files) {
+        System.out.println(userId);
+        System.out.println(dto);
+        System.out.println(files);
         return addBoardCommon(userId, dto, files);
     }
 
@@ -91,13 +95,13 @@ public class BoardController {
     @GetMapping("/boards")
     public List<BoardPreviewResponse> getBoards() {
         System.out.println("findAll");
-        return boardService.findAll();
+        return boardService.findAll("view", false);
     }
 
     // 게시글 종류별로 전체 불러오기
-    @GetMapping("/type/{boardType}")
-    public List<BoardPreviewResponse> getBoardsByType(@PathVariable("boardType") BoardType boardType) {
-        return boardService.findAllByBoardType(boardType);
+    @GetMapping("/type/{boardType}/{sortValue}/{sortOrder}")
+    public List<BoardPreviewResponse> getBoardsByType(@PathVariable("boardType") BoardType boardType, @PathVariable("sortValue") String sortValue, @PathVariable("sortOrder") String sortOrder) {
+        return boardService.findAllByBoardType(boardType, new SortRequest(sortValue, sortOrder));
     }
 
 

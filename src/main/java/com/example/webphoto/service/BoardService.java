@@ -8,13 +8,10 @@ import com.example.webphoto.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -139,15 +136,19 @@ public class BoardService {
         );
     }
 
-    public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType) {
-        return boardRepository.findByType(boardType).stream()
+    public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType, SortRequest sortRequest) {
+        Sort sort = Sort.by(sortRequest.getValue());
+        if(sortRequest.getOrder().equals("desc")) {
+            sort = sort.descending();
+        }
+        return boardRepository.findByType(boardType, sort).stream()
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
 
 
     // 전체 게시글(종류 상관없이)
-    public List<BoardPreviewResponse> findAll() {
+    public List<BoardPreviewResponse> findAll(String sortType, boolean isDesc) {
         return boardRepository.findAll().stream()
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());

@@ -49,10 +49,12 @@ const BoardList = () => {
         },
         tags: null
     }]);
+    const [sortValue, setSortValue] = useState("createdAt");        // Can use : title, createdAt, view, like, bookmark
+    const [sortOrder, setSortOrder] = useState("desc");             // asc = ascending, desc = descending
 
     const getBoardList = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}/${sortValue}/${sortOrder}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

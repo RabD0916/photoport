@@ -47,10 +47,12 @@ const PostList = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
+    const [sortValue, setSortValue] = useState("view")
+    const [sortOrder, setSortOrder] = useState("asc")
 
     const getBoardList = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}/${sortValue}/${sortOrder}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
