@@ -142,7 +142,7 @@ public class BoardController {
     }
 
     // 사용자가 작성한 게시글 수정하기(아직 미완인듯.. 사진 수정해야되면 로직 바꿔야함)
-    @PostMapping("/update/board/{id}")
+    @PostMapping("Board/update/board/{id}")
     public ResponseEntity<BoardResponse> updateBoard(
             @PathVariable("id") Long id, @RequestBody BoardRequest dto) {
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, Suspense} from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
@@ -180,6 +180,9 @@ const BoardList = () => {
                         <h3>게시글 상세페이지</h3>
                         {selectedPost && (
                             <div>
+                                <Link to={`update/board/${selectedPost.id}`}>
+                                <button>수정하기</button>
+                                </Link>
                                 <p>제목: {selectedPost.title}</p>
                                 <p>사진:</p>
                                 {selectedPost.media.map((media, index) => (
