@@ -157,7 +157,7 @@ public class BoardService {
     public BoardResponse findById(Long id) {
         return entityToResponse(boardRepository.findById(id).orElse(null));
     }
-
+    @Transactional
     // 게시글을 추가하는 메소드
     public BoardResponse addBoard(BoardRequest dto) {
         Board saved = boardRepository.save(requestToEntity(dto));

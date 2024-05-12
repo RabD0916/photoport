@@ -99,12 +99,11 @@ public class MediaService {
     }
 
     // 포즈 사진을 저장하는 메소드
-    public MediaResponse addPose(String userId, String fileURL) {
+    public Media addPose(String userId, String fileURL) {
         User res = userService.findById(userId);
         if (res == null) {
             throw new EntityNotFoundException("해당 유저를 찾을 수 없습니다");
         }
-        mediaRepository.save(new Media(null, fileURL, LocalDateTime.now(), "pose", res));
-        return new MediaResponse(fileURL, "pose");
+        return mediaRepository.save(new Media(null, fileURL, LocalDateTime.now(), "pose", res));
     }
 }

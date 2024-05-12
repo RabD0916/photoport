@@ -68,16 +68,19 @@ public class UserController {
         }
     }
 
-    // 회원 아이디 조회(됨)
-//    @PostMapping("/checkUserId")
-//    public boolean selectUser(@RequestBody String userId) {
-//        User user = userService.findById(userId);
-//        if (user != null) {
-//            return new ;
-//        }
-//        return null;
-//    }
-
+//     회원 아이디 조회(됨)
+@PostMapping("/checkUserId")
+public ResponseEntity<String> selectUser(@RequestBody UserRequest dto) {
+    User user = userService.findById(dto.getId());
+    if (user != null) {
+        // 사용자가 존재하면 userId를 반환합니다.
+        return ResponseEntity.ok(dto.getId());
+    } else {
+        // 사용자가 존재하지 않으면 적절한 상태 코드와 메시지를 반환합니다.
+        // 예를 들어, HttpStatus.NOT_FOUND 를 사용할 수 있습니다.
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+}
 
     // 회원 삭제
     @PostMapping("/delete")
