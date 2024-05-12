@@ -1,5 +1,6 @@
 package com.example.webphoto.dto;
 
+import com.example.webphoto.domain.enums.BoardType;
 import lombok.*;
 
 import java.time.LocalDateTime;

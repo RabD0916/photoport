@@ -72,12 +72,6 @@ function Nav() {
         }
     }
 
-    const isAdminEmpty = e => {
-        if (userId !== "ADMIN") {
-            alert("관리자만 작성할 수 있습니다");
-            e.preventDefault();
-        }
-    }
 
     // 로그아웃 핸들러
     const logoutHandler = () => {
@@ -113,13 +107,13 @@ function Nav() {
                               onClick={isUserIdEmpty}>갤러리</Link>
                         <div className={"dropdown"}>
                             <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
-                            <div className={"dropdown-content"}>
+                            <div className={"dropdown-content"} onClick={isUserIdEmpty}>
 
-                                <Link to={"/Board"} className={"drop_a"} onClick={isUserIdEmpty}>공유게시판</Link>
+                                <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
 
-                                <Link to={"/Pose"} className={"drop_a"} onClick={isUserIdEmpty}>포즈게시판</Link>
+                                <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
 
-                                <Link to={"/Notice"} className={"drop_a"} onClick={isAdminEmpty}>공지게시판</Link>
+                                <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
                             </div>
                         </div>
                         <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>

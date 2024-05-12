@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Suspense} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,9 +20,14 @@ const Report = React.lazy(() => import('./Report'));
 const BoardList = () => {
     const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem('id');
     const boardType = "NORMAL";
-    const id = localStorage.getItem("id");
     const navigate = useNavigate();
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newComment, setNewComment] = useState("");
+    const [upComment, setupComment] = useState(false);
+    const [content, setContent] = useState('');
     const [boardList, setBoardList] = useState([{
         id: null,
         title: null,
@@ -44,13 +49,12 @@ const BoardList = () => {
         },
         tags: null
     }]);
-    const [selectedPost, setSelectedPost] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newComment, setNewComment] = useState("");
+    const [sortValue, setSortValue] = useState("createdAt");        // Can use : title, createdAt, view, like, bookmark
+    const [sortOrder, setSortOrder] = useState("desc");             // asc = ascending, desc = descending
 
     const getBoardList = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}/${sortValue}/${sortOrder}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -169,6 +173,41 @@ const BoardList = () => {
         }
     };
 
+    const comment_update = async (commentId, content) => {
+        try {
+            const data = {content:content}
+            const response = await axios.post(`http://localhost:8080/api/updateComments/${commentId}`, data,{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            // 게시글 삭제 후 모달 닫기 및 새로 고침'
+            if (response.status === 200) {
+                alert("업데이트 완료.");
+                await open_board(selectedPost.id);
+                setupComment(false); // 댓글 수정 폼을 비활성화
+                setContent(''); // 수정 입력 폼을 비웁니다.
+            }
+        } catch (error) {
+            console.error("Error updating post:", error);
+        }
+    };
+    const comment_delete = async (postId) => {
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/deleteComments/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log("Post deleted:", response);
+            await open_board(selectedPost.id);
+            // 게시글 삭제 후 모달 닫기 및 새로 고침
+            alert("해당 댓글이 삭제되었습니다.");
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+
+    };
     return (
         <div>
             <div>
@@ -201,6 +240,22 @@ const BoardList = () => {
                                     {selectedPost.commentsDto.comments.map((comment) => (
                                         <div key={comment.id}>
                                             <p>{comment.writerName}: {comment.content}</p>
+                                            {comment.writerId === userId && (
+                                                <div>
+                                                    {comment.writerId === userId && (
+                                                        <>
+                                                            {upComment ? (
+                                                                <>
+                                                                    <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
+                                                                </>
+                                                            ) : (
+                                                                <button onClick={() => setupComment(true)}>수정</button>
+                                                            )}
+                                                            <button onClick={() => comment_delete(comment.id)}>삭제</button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>

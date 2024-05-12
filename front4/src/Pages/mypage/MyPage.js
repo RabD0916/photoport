@@ -116,7 +116,7 @@ function MyPage() {
                                 </Button>
                             ))}
                         {content && selectComponent[content] ?
-                            <Content>{selectComponent[content]}</Content> :
+                            <div>{selectComponent[content]}</div>:
                            <First />
                         }
                     </div>
@@ -132,10 +132,4 @@ const Button = styled.button`
   color: #111111;
   background-color: #eeeeee;
   border-radius: 2rem;
-`;
-const Content = styled.div`
-    padding: 0;
-    margin: auto;
-    display: flex;
-    width: 90%
 `;

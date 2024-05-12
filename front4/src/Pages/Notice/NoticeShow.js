@@ -5,19 +5,27 @@ import './css/Notice.css'
 
 /* createdAt 수정해야함*/
 /*createdBy 도 로그인된 관리자계정으로 수정*/
-const NoticeShow = ({ id, title, contents, createdBy, fileUrl /*createdAt*/}) => {
+const NoticeShow = ({id, title, createdBy, contents, tags, createdAt}) => {
     const navigate = useNavigate();
+    const accessToken = localStorage.getItem("accessToken");
 
     const moveToUpdate = () => {
         navigate('/update/' + id);
     };
     /*axios url 수정해야함 */
     const deleteNotice = async () => {
-        if (window.confirm('게시글을 삭제하시겠습니까?')) {
-            await axios.delete(`http://localhost:8080/Notice/${id}`).then((res) => {
-                alert('삭제되었습니다.');
-                navigate('/Notice');
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/delete/board/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
             });
+            console.log("Post deleted:", response);
+            // 게시글 삭제 후 모달 닫기 및 게시글 목록 새로고침
+            alert("해당 게시글이 삭제되었습니다.")
+            await NoticeShow;
+        } catch (error) {
+            console.error("Error deleting post:", error);
         }
     };
 
@@ -27,13 +35,20 @@ const NoticeShow = ({ id, title, contents, createdBy, fileUrl /*createdAt*/}) =>
     return (
         <div>
             <div>
-                <h2>{title}</h2>
-                <h5>{createdBy}</h5>
+                <h2>게시글 아이디 : {id}</h2>
+                <h2>제목 :  {title}</h2>
+                <h5>작성자 :  {createdBy}</h5>
                 <hr/>
-                <p>{contents}
-                    {fileUrl && <img src={fileUrl} alt="첨부 이미지" />}
+                <p>내용  :  {contents}
                 </p>
-
+                <hr/>
+                <p>
+                   태그:  {tags}
+                </p>
+                <hr/>
+                <p>
+                   작성일 :   {createdAt}
+                </p>
             </div>
             <div>
                 <button id='cancle_save_btn' onClick={moveToUpdate}>수정</button>

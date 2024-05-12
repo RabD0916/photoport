@@ -55,6 +55,10 @@
   .board_item{
     width: 200px;
   }
+  .Profile2{
+    width: 20px;
+    height: 20px;
+  }
 }
 /* 600px 이상일 때 */
 @media (min-width: 600px) {
@@ -64,7 +68,7 @@
   .board_item{
     width: 500px;
   }
-  .profile2{
+  .Profile2{
     margin: 0 0 10px 30px;
     width: 30px;
     height: 30px;

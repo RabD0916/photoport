@@ -1,6 +1,7 @@
 package com.example.webphoto.dto;
 
 import com.example.webphoto.domain.Board;
+import com.example.webphoto.domain.enums.BoardType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class BoardResponse {
     private int view;
     private int like;
     private int bookmark;
+    private BoardType type;
     private String writerId;
     private String writerName;
     private List<MediaResponse> media;
