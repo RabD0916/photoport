@@ -52,7 +52,6 @@ const Notice = () => {
 
     };
 
-
     useEffect(() => {
         getBoardList();
     }, []);
@@ -78,9 +77,9 @@ const Notice = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {boardList.map((board) => (
+                    {boardList.map((board,index) => (
                         <tr key={board.id} className="common-table-row">
-                            <td className="common-table-column">{board.id}</td>
+                            <td className="common-table-column">{boardList.length-index}</td>
                             <td className="common-table-column">
                                 <Link to={`/Notice/${board.id}`}>{board.title}</Link>
                             </td>
