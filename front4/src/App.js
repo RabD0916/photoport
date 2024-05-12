@@ -78,7 +78,7 @@ function App() {
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
                   <Route path={"/compoTest"} element={<Test1/>}></Route>
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
-                  <Route path={"/Board/update/board/:id"} element={<BoardModify/>}></Route>
+                  <Route path={"/board/:id"} element={<BoardModify/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

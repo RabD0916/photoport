@@ -1,0 +1,41 @@
+.up-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.up-title,
+.up-tag,
+.up-content {
+  margin-bottom: 20px;
+}
+
+.up-title input,
+.up-tag input,
+.up-content textarea {
+  width: 300px;
+  padding: 12px; /* 폰트 크기를 더 크게 조정 */
+  font-size: 16px; /* 폰트 크기를 16px로 설정 */
+  border: 2px solid blue;
+  border-radius: 10px;
+  outline: none;
+}
+
+.up-content textarea {
+  height: 200px;
+}
+
+button[type="submit"] {
+  padding: 12px 24px; /* 폰트 크기를 더 크게 조정 */
+  font-size: 16px; /* 폰트 크기를 16px로 설정 */
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: darkblue;
+}

@@ -219,9 +219,6 @@ const BoardList = () => {
                         <h3>게시글 상세페이지</h3>
                         {selectedPost && (
                             <div>
-                                <Link to={`update/board/${selectedPost.id}`}>
-                                <button>수정하기</button>
-                                </Link>
                                 <p>제목: {selectedPost.title}</p>
                                 <p>사진:</p>
                                 {selectedPost.media.map((media, index) => (
