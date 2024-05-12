@@ -28,6 +28,7 @@ const BoardList = () => {
     const [newComment, setNewComment] = useState("");
     const [upComment, setupComment] = useState(false);
     const [content, setContent] = useState('');
+    const [commentId, setCommentId] = useState('');
     const [boardList, setBoardList] = useState([{
         id: null,
         title: null,
@@ -257,12 +258,15 @@ const BoardList = () => {
                                                 <div>
                                                     {comment.writerId === userId && (
                                                         <>
-                                                            {upComment ? (
+                                                            {comment.id===commentId && upComment ? (
                                                                 <>
                                                                     <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
                                                                 </>
                                                             ) : (
-                                                                <button onClick={() => setupComment(true)}>수정</button>
+                                                                <button onClick={() => {
+                                                                    setupComment(true);
+                                                                    setCommentId(comment.id);
+                                                                }}>수정</button>
                                                             )}
                                                             <button onClick={() => comment_delete(comment.id)}>삭제</button>
                                                         </>
