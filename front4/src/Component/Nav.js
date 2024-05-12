@@ -87,22 +87,9 @@ function Nav() {
         navigate("/");
     }
 
-    const searchContent = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/keywordSearch`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-                params: {
-                    keyword: keyword
-                }
-            });
-            setBoardPreviews(response.data);
-            console.log(response.data);
+    const searchContent = () => {
             navigate(`/search?keyword=${keyword}`);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+
     };
     const handleInputChange = (e) => {
         setKeyword(e.target.value);

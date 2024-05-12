@@ -4,12 +4,14 @@ import Mainlogo from '../img/photoport.png';
 import {Link} from "react-router-dom";
 import { ScrollAnimation } from "./ScrollAnimation";
 import axios from "axios";
+import { useNavigate} from "react-router-dom";
 
 
 const Main = () => {
 
     const [isVisible1, setIsVisible1] = useState(false); // 포즈 이벤트
     const [isVisible2, setIsVisible2] = useState(false); // 프레임 이벤트
+    const navigate = useNavigate();
     const imageRef1 = useRef(null); // 포즈
     const imageRef2 = useRef(null); //프레임
     const textRef = useRef(null);
@@ -168,6 +170,9 @@ const Main = () => {
     useEffect(() => {
         getPoseList();
     }, []);
+    const searchContent = () => {
+            navigate(`/event?keyword=#event`);
+    };
     return (
         <div>
             <div>
@@ -175,7 +180,7 @@ const Main = () => {
             </div>
             <div className="mainBar">
                 <li className="mainMenu left1"><Link to={"/Notice"} className={"main_nav"}>공지사항</Link></li>
-                <li className="mainMenu right1"><Link to={"/Event"} className={"main_nav"}>이벤트</Link></li>
+                <li className="mainMenu right1"><button onClick={searchContent} className={"main_nav"}>이벤트</button></li>
             </div>
 
             <div className="main_first">
