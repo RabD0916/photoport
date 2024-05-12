@@ -126,10 +126,10 @@ const First = () => {
             });
             console.log(resp);
             // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
-            setSelectedPost({ ...selectedPost, dtos: { comments: [...selectedPost.dtos.comments, resp.data] } });
+            setSelectedPost({ ...selectedPost, commentsDto: { comments: [...selectedPost.commentsDto.comments, resp.data] } });
             setNewComment(""); //댓글 초기화
-            window.location.reload();
-            getBoardList() //게시글리스트 최신
+            // window.location.reload();
+            // getBoardList() //게시글리스트 최신
         } catch (error) {
             console.error("댓글 에러:", error);
         }
@@ -160,6 +160,9 @@ const First = () => {
                         <h3>게시글 상세페이지</h3>
                         {selectedPost && (
                             <div>
+                                <Link to={`/board/${selectedPost.id}`}>
+                                    <button>수정하기</button>
+                                </Link>
                                 <p>제목: {selectedPost.title}</p>
                                 <p>사진:</p>
                                 {selectedPost.media.map((media, index) => (

@@ -15,9 +15,9 @@ const BoardWrite = () => {
     const settings = {
         dots: true,
         fade: true,
-        arrows : false, 		// 옆으로 이동하는 화살표 표시 여부
+        arrows : false,       // 옆으로 이동하는 화살표 표시 여부
         infinite: true,
-        draggable : true, 	//드래그 가능 여부
+        draggable : true,    //드래그 가능 여부
         speed: 100,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -125,22 +125,22 @@ const BoardWrite = () => {
                 <div className={"content_div"}>
                     <span className={"p_name"}>사진</span>
                     <div>
-                    <Slider {...settings}>
-                    {key.map((item, index) => (
-                        <img
-                            key={index}
-                            src={"/images/" + userId + "/" + item + "/" + value[index]}
-                            alt={item}
-                            onClick={() => remove_index(index)}
-                        />
-                    ))}
-                    </Slider>
-                </div>
+                        <Slider {...settings}>
+                            {key.map((item, index) => (
+                                <img
+                                    key={index}
+                                    src={"/images/" + userId + "/" + item + "/" + value[index]}
+                                    alt={item}
+                                    onClick={() => remove_index(index)}
+                                />
+                            ))}
+                        </Slider>
+                    </div>
                     {/*<h1>값:{key[0]}{value[0]}</h1>*/}
                     <button className={"plus_button"} onClick={backToList}>사진추가</button>
                     <span>제목</span>
                     <input type="text" name="title" value={title} onChange={onChange}/>
-                <br/>
+                    <br/>
                     <span>태그</span>
                     <input
                         type="text"
@@ -148,14 +148,14 @@ const BoardWrite = () => {
                         value={tag}
                         onChange={onChange}
                     />
-                <br/>
+                    <br/>
                     <span>내용</span>
                     <textarea className="text_area"
                               name="content"
                               value={content}
-                        onChange={onChange}
+                              onChange={onChange}
                     />
-                <br/>
+                    <br/>
                 </div>
                 <div>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>
