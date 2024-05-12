@@ -161,6 +161,7 @@ public class BoardController {
     }
 
     // 키워드로 게시물 검색해서 나온 결과(게시물) 불러오기
+
     @GetMapping("/keywordSearch")
     public List<BoardPreviewResponse> getKeywordSearch(@RequestParam(required = false)String keyword) throws Exception {
         return boardService.getBoardByKeyWord(keyword);

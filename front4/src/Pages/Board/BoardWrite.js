@@ -64,6 +64,7 @@ const BoardWrite = () => {
 
     const handleMessage = (event) => {
         if (typeof event.data === 'object' && event.data[0] !== undefined && event.data[1] !== undefined) {
+            console.log(event.data[1])
             const newData = event.data[1];
             const newKeys = newData.map((item) => event.data[0]);
             setKey(prevKey => [...prevKey, ...newKeys]);
@@ -80,7 +81,10 @@ const BoardWrite = () => {
 
 
     const saveBoard = async () => {
-
+        if (value[0] === null || value[0] === undefined || value[0] === '') {
+            alert('사진을 추가해 주세요!');
+            return; // 함수를 여기서 멈춥니다.
+        }
         console.log(board.title);
         console.log(board.tag);
         console.log(key);

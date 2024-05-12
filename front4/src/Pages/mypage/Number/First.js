@@ -26,22 +26,8 @@ const First = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
-    const [BoardType, setBoardType] = useState("");
+    const [BoardType, setBoardType] = useState("NORMAL");
 
-    const getBoardList = async () => {
-        try {
-            const resp = await axios.get('http://localhost:8080/api/boards', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-            console.log(resp);
-            console.log(resp.data);
-            setBoardList(resp.data);
-        } catch (error) {
-            console.error("Error fetching board list:", error);
-        }
-    };
     useEffect(() => {
         console.log(userId);
         console.log(accessToken);

@@ -32,6 +32,7 @@ import PoseList from "./Pages/Board/PoseList";
 import PoseWrite from "./Pages/Board/PoseWrite";
 // import Report from "./Pages/Board/Report";
 import BoardModify from "./Pages/Board/BoardModify";
+import Search from "./Component/Search";
 
 /*
 function Eventpage() {
@@ -78,6 +79,7 @@ function App() {
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
                   <Route path={"/compoTest"} element={<Test1/>}></Route>
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
+                  <Route path={"/Search"} element={<Search/>}></Route>
                   <Route path={"/board/:id"} element={<BoardModify/>}></Route>
               </Routes>
           </BrowserRouter>

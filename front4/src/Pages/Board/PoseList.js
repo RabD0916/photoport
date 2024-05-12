@@ -21,7 +21,7 @@ const PostList = () => {
     const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
     const boardType = "POSE";
-    const id = localStorage.getItem("id");
+    const userId = localStorage.getItem('id');
     const navigate = useNavigate();
     const [boardList, setBoardList] = useState([{
         id: null,
@@ -169,7 +169,22 @@ const PostList = () => {
             console.error("북마크 처리 중 에러 발생:", error);
         }
     };
-
+    const deletePost = async (postId) => {
+        try {
+            const response = await axios.delete(`http://localhost:8080/api/delete/board/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log("Post deleted:", response);
+            // 게시글 삭제 후 모달 닫기 및 게시글 목록 새로고침
+            alert("해당 게시글이 삭제되었습니다.")
+            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
     return (
         <div>
             <div>
@@ -218,6 +233,10 @@ const PostList = () => {
                             <Report selectedPost={selectedPost}/>
                         </Suspense>
                         <button type="button" className="close_btn" onClick={close_board}>닫기</button>
+                        {selectedPost && selectedPost.writerId === userId && (
+                            <button type="button" className="close_btn"
+                                    onClick={() => deletePost(selectedPost.id)}>삭제</button>
+                        )}
                     </div>
                 </div>
             </div>

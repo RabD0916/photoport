@@ -6,7 +6,7 @@ import { ScrollAnimation } from "./ScrollAnimation";
 import axios from "axios";
 
 
-const Main = (props) => {
+const Main = () => {
 
     const [isVisible1, setIsVisible1] = useState(false); // 포즈 이벤트
     const [isVisible2, setIsVisible2] = useState(false); // 프레임 이벤트
@@ -14,7 +14,7 @@ const Main = (props) => {
     const imageRef2 = useRef(null); //프레임
     const textRef = useRef(null);
     const accessToken = localStorage.getItem("accessToken");
-    const [sortValue, setSortValue] = useState("createdAt");        // Can use : title, createdAt, view, like, bookmark
+    const [sortValue, setSortValue] = useState("like");        // Can use : title, createdAt, view, like, bookmark
     const [sortOrder, setSortOrder] = useState("desc");             // asc = ascending, desc = descending
     const [poseList, setPoseList] = useState([{
         id: null,
@@ -196,16 +196,16 @@ const Main = (props) => {
             </div>
             <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>
             <div className="main_div">
-                {boardList.map((board,index) => (
-                <div className="third">
-                    <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1}/>
-                </div>
+                {boardList.slice(0, 3).map((board) => (
+                    <div className="third" key={board.id}>
+                        <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1}/>
+                    </div>
                 ))}
             </div>
             <p className="font_font">내가 만든 포즈 한번봐줘!</p>
             <div className="main_div">
-                {poseList.map((board,index) => (
-                    <div className="third">
+                {poseList.slice(0, 3).map((board) => (
+                    <div className="third" key={board.id}>
                         <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1}/>
                     </div>
                 ))}

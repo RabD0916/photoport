@@ -7,15 +7,18 @@ import { useLocation } from "react-router-dom";
 import { useNavigate} from "react-router-dom";
 import LogoutIcon from '../img/logout.png';
 import ListIcon from '../img/list.png';
+import axios from "axios";
 function Nav() {
     const location = useLocation();
     // const queryParams = new URLSearchParams(location.search);
+    const accessToken = localStorage.getItem("accessToken");
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     //검색창 보이기
     const[visible,setVisible] = useState(false);
     //검색창에 들어가는 입력값
-    const [search, setSearch] = useState("");
+    const [keyword, setKeyword] = useState('');
+    const [boardPreviews, setBoardPreviews] = useState([]);
     // 로그인 상태 관리
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isWidth, setIsWidth] = useState(false);
@@ -83,10 +86,33 @@ function Nav() {
         setUserId('');
         navigate("/");
     }
-    const onChangeSearch = (e) => {
-        setSearch(e.target.value);
-    }
 
+    const searchContent = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/keywordSearch`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                params: {
+                    keyword: keyword
+                }
+            });
+            setBoardPreviews(response.data);
+            console.log(response.data);
+            navigate(`/search?keyword=${keyword}`);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    const handleInputChange = (e) => {
+        setKeyword(e.target.value);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            searchContent();
+        }
+    };
     return (
         <>
             <nav className="main_navBar">
@@ -95,7 +121,19 @@ function Nav() {
                 </div>
                 <div className="rightLinks">
                     <div className="searchLink">
-                        {visible && <input className={"search_bar"} type={"text"} name={search}/>}
+                        {visible &&
+                            <div>
+                                <input
+                                    type="text"
+                                    className="search_bar"
+                                    value={keyword}
+                                    onChange={handleInputChange}
+                                    onClick={handleKeyPress}
+                                    placeholder="검색어를 입력하세요"
+                                />
+                            <button onClick={searchContent}>전송</button>
+                            </div>
+                        }
                         <button className="right" onClick={() =>{
                             setVisible(!visible);
                         }}><img className={"search_icon"} src={Search} alt="하이"/></button>
@@ -108,11 +146,8 @@ function Nav() {
                         <div className={"dropdown"}>
                             <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
                             <div className={"dropdown-content"} onClick={isUserIdEmpty}>
-
                                 <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
-
                                 <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
-
                                 <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
                             </div>
                         </div>
@@ -131,7 +166,6 @@ function Nav() {
                                     <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
                                 )
                             }
-                            {/*<Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="하이"/></Link>*/}
                     </div>
                         ) : (
                             <div>
@@ -142,6 +176,16 @@ function Nav() {
                                     {
                                         isLoggedIn ? (
                                             <div className={"nav_div"}>
+                                                <Link to={"/gallery/" + userId} className={"downright"}
+                                                      onClick={isUserIdEmpty}>갤러리</Link>
+                                                <div className={"dropdown"}>
+                                                    <span className="dropbtn downright" onClick={isUserIdEmpty}>게시판</span>
+                                                    <div className={"dropdown-content"} onClick={isUserIdEmpty}>
+                                                        <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
+                                                        <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
+                                                        <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
+                                                    </div>
+                                                </div>
                                                 <Link to={"/Mypage"}>
                                                     <div className={"in_text"}>마이페이지</div>
                                                 </Link>

@@ -222,6 +222,17 @@ $shadowColour: rgba(0, 0, 0, .6);
 /* 600px 미만일 때 */
 @media (max-width: 599px) {
     /* 화면의 폭이 600px 미만일 때 적용되는 스타일 */
+    .dropdown{
+
+    }
+    .drop_a{
+        width: 40px;
+        display: inline-flex;
+        font-size: 5px;
+    }
+    .downright{
+        font-size: 10px;
+    }
     .centerLink{
         margin-top: 20px;
     }
@@ -241,8 +252,13 @@ $shadowColour: rgba(0, 0, 0, .6);
         width: 20px;
         margin-right: 10px;
     }
-    .rightLinks a{
-        text-decoration: none;
+    .rightLinks{
+        a{
+            margin-left: 10px;
+            text-decoration: none;
+        }
+        float: left;
+        text-align: left;
     }
     .in_button{
         margin: 0 auto auto 4px;
