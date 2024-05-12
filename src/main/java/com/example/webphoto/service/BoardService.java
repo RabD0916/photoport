@@ -253,10 +253,10 @@ public class BoardService {
         if (keyword.startsWith("#")) {
             // 태그 검색 로직
             String tagKeyword = keyword.substring(1); // '#' 제거
-            boardList = boardRepository.searchByTitleOrContentOrTag(tagKeyword);
+            boardList = boardRepository.searchByTag(tagKeyword);
         } else {
-            // 기본 검색 로직
-            boardList = boardRepository.searchByTitleOrContentOrTag(keyword);
+            // 기본 검색 로직 (제목만 검색)
+            boardList = boardRepository.searchByTitle(keyword);
         }
         return boardList.stream()
                 .map(this::entityToPreviewResponse)

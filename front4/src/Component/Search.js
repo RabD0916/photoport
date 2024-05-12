@@ -11,17 +11,14 @@ const Search = () => {
         const fetchSearchResults = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/keywordSearch`, {
+                    params: { keyword: decodeURIComponent(keyword) }, // URL 디코드
                     headers: {
                         Authorization: `Bearer ${accessToken}`
-                    },
-                    params: {
-                        keyword: keyword
                     }
                 });
                 setboardList(response.data);
-                console.log(response.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching search results:', error);
             }
         };
 
@@ -38,12 +35,13 @@ const Search = () => {
                 {/* 검색 결과를 매핑하여 리스트로 표시합니다. */}
                 {boardList.map(post => (
                     <div key={post.id}>
-                    <li>제목 : {post.title}</li>
-                    <li>글쓴이 : {post.writerId}</li>
-                    <img className="board_img"
-                    src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}/>
-
+                        <li>제목 : {post.title}</li>
+                        <li>글쓴이 : {post.writerId}</li>
+                        <img className="board_img"
+                             src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}/>
+                        <li>{post.tags.filter(tag => tag.trim() !== '').map(tag => `#${tag}`).join(', ')}</li>
                     </div>
+
                 ))}
             </ul>
         </div>

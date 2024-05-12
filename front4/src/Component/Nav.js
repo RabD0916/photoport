@@ -88,7 +88,10 @@ function Nav() {
     }
 
     const searchContent = () => {
-            navigate(`/search?keyword=${keyword}`);
+        // URL 인코딩 추가
+        const encodedKeyword = encodeURIComponent(keyword);
+        navigate(`/search?keyword=${encodedKeyword}`);
+
 
     };
     const handleInputChange = (e) => {

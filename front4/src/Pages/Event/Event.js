@@ -33,64 +33,64 @@ const Event = () => {
             fetchSearchResults();
         }
     }, [keyword]); // keyword가 변경될 때마다 useEffect가 실행됩니다.
-  return (
-      <>
-          <div>
-              <h2>검색 결과</h2>
-              <p>검색어: {keyword}</p>
-              <ul>
-                  {/* 검색 결과를 매핑하여 리스트로 표시합니다. */}
-                  {boardList.map(post => (
-                      <div key={post.id}>
-                          <li>제목 : {post.title}</li>
-                          <li>글쓴이 : {post.writerId}</li>
-                          <li>태그 : {post.tags}</li>
-                          <img className="board_img"
-                               src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}/>
+    return (
+        <>
+            <div>
+                <h2>검색 결과</h2>
+                <p>검색어: {keyword}</p>
+                <ul>
+                    {/* 검색 결과를 매핑하여 리스트로 표시합니다. */}
+                    {boardList.map(post => (
+                        <div key={post.id}>
+                            <li>제목 : {post.title}</li>
+                            <li>글쓴이 : {post.writerId}</li>
+                            <li>태그 : {post.tags}</li>
+                            <img className="board_img"
+                                 src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}/>
 
-                      </div>
-                  ))}
-              </ul>
-          </div>
-          <div className={"EventCenter"}>
-              진행중인 이벤트
-              <div className={"rowbar"}></div>
-          </div>
+                        </div>
+                    ))}
+                </ul>
+            </div>
+            <div className={"EventCenter"}>
+                진행중인 이벤트
+                <div className={"rowbar"}></div>
+            </div>
 
-          <div className={"EventList"}>
-              <div className={"EventItem"}>
-                  <img src={test2} className={"Eventimage"} alt={"이벤트 사진"}/>
-                  <div className={"EventContent"}>
-                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
-                  </div>
-              </div>
-              <div className={"EventItem"}>
-                  <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
-                  <div className={"EventContent"}>
-                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
-                  </div>
-              </div>
-              <div className={"EventItem"}>
-                  <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
-                  <div className={"EventContent"}>
-                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
-                  </div>
-              </div>
-              <div className={"EventItem"}>
-                  <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
-                  <div className={"EventContent"}>
-                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
-                  </div>
-              </div>
-              <div className={"EventItem"}>
-                  <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
-                  <div className={"EventContent"}>
-                      포토포트 여러분의 곁으로 곧 찾아 갑니다!
-                  </div>
-              </div>
-          </div>
-      </>
-  )
+            <div className={"EventList"}>
+                <div className={"EventItem"}>
+                    <img src={test2} className={"Eventimage"} alt={"이벤트 사진"}/>
+                    <div className={"EventContent"}>
+                        포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                    </div>
+                </div>
+                <div className={"EventItem"}>
+                    <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
+                    <div className={"EventContent"}>
+                        포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                    </div>
+                </div>
+                <div className={"EventItem"}>
+                    <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
+                    <div className={"EventContent"}>
+                        포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                    </div>
+                </div>
+                <div className={"EventItem"}>
+                    <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
+                    <div className={"EventContent"}>
+                        포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                    </div>
+                </div>
+                <div className={"EventItem"}>
+                    <img src={test} className={"Eventimage"} alt={"이벤트 사진"}/>
+                    <div className={"EventContent"}>
+                        포토포트 여러분의 곁으로 곧 찾아 갑니다!
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
 
 export default Event;
