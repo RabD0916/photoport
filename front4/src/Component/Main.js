@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import './css/main.scss';
 import Mainlogo from '../img/photoport.png';
 import {Link} from "react-router-dom";
-import Frame1 from "../img/frame1.jpg"
-import Frame2 from "../img/frame2.jpg"
-import Frame3 from "../img/frame3.jpg"
 import { ScrollAnimation } from "./ScrollAnimation";
+import axios from "axios";
 
 
 const Main = (props) => {
@@ -15,7 +13,52 @@ const Main = (props) => {
     const imageRef1 = useRef(null); // 포즈
     const imageRef2 = useRef(null); //프레임
     const textRef = useRef(null);
+    const accessToken = localStorage.getItem("accessToken");
+    const [sortValue, setSortValue] = useState("createdAt");        // Can use : title, createdAt, view, like, bookmark
+    const [sortOrder, setSortOrder] = useState("desc");             // asc = ascending, desc = descending
+    const [poseList, setPoseList] = useState([{
+        id: null,
+        title: null,
+        createdAt: null,
+        view: null,
+        like: null,
+        bookmark: null,
+        writerId: null,
+        writerName: null,
+        media: {
+            mediaName: null,
+            categoryName: null
+        },
+        commentsDto: {
+            id: null,
+            content: null,
+            writerId: null,
+            writerName: null
+        },
+        tags: null
+    }]);
 
+    const [boardList, setBoardList] = useState([{
+        id: null,
+        title: null,
+        createdAt: null,
+        view: null,
+        like: null,
+        bookmark: null,
+        writerId: null,
+        writerName: null,
+        media: {
+            mediaName: null,
+            categoryName: null
+        },
+        commentsDto: {
+            id: null,
+            content: null,
+            writerId: null,
+            writerName: null
+        },
+        tags: null
+    }]);
 
     //포즈 사진 효과
     useEffect(() => {
@@ -92,7 +135,39 @@ const Main = (props) => {
             }
         };
     }, [textRef]);
-
+    //게시판 정렬
+    const getBoardList = async () => {
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/type/NORMAL/${sortValue}/${sortOrder}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            setBoardList(resp.data);
+        } catch (error) {
+            console.error("Error board list: ", error);
+        }
+    };
+    useEffect(() => {
+        getBoardList();
+    }, []);
+    const getPoseList = async () => {
+        try {
+            const resp = await axios.get(`http://localhost:8080/api/type/POSE/${sortValue}/${sortOrder}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(resp);
+            setPoseList(resp.data);
+        } catch (error) {
+            console.error("Error board list: ", error);
+        }
+    };
+    useEffect(() => {
+        getPoseList();
+    }, []);
     return (
         <div>
             <div>
@@ -121,19 +196,19 @@ const Main = (props) => {
             </div>
             <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>
             <div className="main_div">
+                {boardList.map((board,index) => (
                 <div className="third">
-                    <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={"/one.jpg"} alt={"프레임1"} ref={imageRef1}/>
-                    <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={"/one1.jpg"} alt={"프레임2"} ref={imageRef1}/>
-                    <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={"/one1.jpg"} alt={"프레임3"} ref={imageRef1}/>
+                    <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1}/>
                 </div>
+                ))}
             </div>
             <p className="font_font">내가 만든 포즈 한번봐줘!</p>
             <div className="main_div">
-                <div className="third">
-                    <img className={isVisible2 ? "frame-in1" : "frame-out1"} src={Frame1} alt={"프레임1"} ref={imageRef2}/>
-                    <img className={isVisible2? "frame-in1" : "frame-out1"} src={Frame2} alt={"프레임2"} ref={imageRef2}/>
-                    <img className={isVisible2 ? "frame-in1" : "frame-out1"} src={Frame3} alt={"프레임3"} ref={imageRef2}/>
-                </div>
+                {poseList.map((board,index) => (
+                    <div className="third">
+                        <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1}/>
+                    </div>
+                ))}
             </div>
         </div>
     );

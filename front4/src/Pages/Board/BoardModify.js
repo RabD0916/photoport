@@ -12,6 +12,12 @@ const BoardModify = () => {
     const navigate = useNavigate();
     const accessToken = localStorage.getItem("accessToken");
     const [selectedPost, setSelectedPost] = useState(null);
+    const [board, setBoard] = useState( {
+        title: '',
+        content:'',
+        tags:''
+    })
+
 
     // 게시물 데이터 불러오기
     useEffect(() => {
@@ -22,10 +28,12 @@ const BoardModify = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                setSelectedPost(resp.data);
-                setTitle(resp.data.title); // 게시물 제목 설정
-                setContent(resp.data.content); // 게시물 내용 설정
-                setTag(resp.data.tags); // 게시물 태그 설정
+                const { title, content, tags } = resp.data;
+                setBoard( {
+                    title,
+                    content,
+                    tags: tags.join(', ')
+                })
             } catch (error) {
                 console.error("Error fetching board list:", error);
             }
@@ -33,17 +41,28 @@ const BoardModify = () => {
         fetchPost();
     }, [id, accessToken]);
 
+    const onChange = (event) => {
+        const { name, value } = event.target;
+        setBoard(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     // 수정 내용 저장
     const handleSave = async () => {
         try {
             // 변경된 제목과 내용, 태그를 서버에 전송
-            await axios.put(`http://localhost:8080/api/update/board/${id}`, { title, content, tags: tag }, {
+            const response = await axios.post(`http://localhost:8080/api/update/board/${id}`, board, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             // 수정이 완료되면 리다이렉션
-            navigate(`/Mypage`);
+            if (response.status === 200) {
+                alert("업데이트 완료");
+                navigate(`/Mypage`);
+            }
         } catch (error) {
             console.error("Error updating post:", error);
         }
@@ -53,16 +72,11 @@ const BoardModify = () => {
         <div>
             <h2>게시물 수정하기</h2>
             {/* 수정 폼 구성 */}
-            <form className={"up-main"} onSubmit={(e) => {
-                e.preventDefault();
-                handleSave(); // 수정 내용 저장
-            }}>
+            <p className={"up-title"}>제목<input type="text" name="title" value={board.title} className={"up-main"} onChange={onChange}/></p>
+            <p className={"up-title"}>내용<input type="text" name="content" value={board.content} onChange={onChange}/></p>
+            <p className={"up-tag"}>태그<input name="tags" placeholder={"#을 붙혀주세요"} value={board.tags} onChange={onChange} /></p>
+            <button onClick={handleSave}>수정 완료</button>
 
-                <p className={"up-title"}>제목<input type="text" value={title} onChange={(e) => setTitle(e.target.value)} /></p>
-                <p className={"up-tag"}>태그<input type="text" placeholder={"#을 붙혀주세요"} value={tag} onChange={(e) => setTag(e.target.value)} /></p>
-                <p className={"up-content"}>내용<textarea value={content} onChange={(e) => setContent(e.target.value)}></textarea></p>
-                <button type="submit">수정 완료</button>
-            </form>
         </div>
     );
 };
