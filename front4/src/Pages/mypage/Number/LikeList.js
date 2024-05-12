@@ -13,6 +13,7 @@ const LikeList = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
+                console.log(response);
                 setLikeBoards(response.data);
             } catch (error) {
                 console.error("Error fetching bookmarked boards:", error);
