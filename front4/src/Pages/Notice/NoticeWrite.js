@@ -80,7 +80,7 @@ const NoticeWrite = () => {
                     <span>태그</span><br/>
                     <textarea id='contents_area'
                               name="tags"
-                              cols="30"
+                              cols="10"
                               rows="5"
                               value={tags}
                               onChange={onChange}

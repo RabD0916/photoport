@@ -42,6 +42,7 @@ public class BoardController {
             String dir = path + userId.getName() + "/pose";
             File folder = new File(dir);
 
+
             if (!folder.exists() && !folder.mkdirs()) {
                 return ResponseEntity.internalServerError().body(new BoardResponse(null, dto.getTitle(), null, dto.getContent(), 0, 0, 0,dto.getType(), dto.getWriterId(), null, null, null, null));
             }
