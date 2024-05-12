@@ -3,6 +3,8 @@ import "./css/MyPage.scss";
 import { MAIN_DATA } from "./MainData";
 import First from "./Number/First";
 import Second from "./Number/Second";
+import LikeList from "./Number/LikeList";
+import BookList from "./Number/BookList";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -95,6 +97,8 @@ function MyPage() {
     const selectComponent = {
         first: <First />,
         second: <Second />,
+        third: <LikeList />,
+        fourth: <BookList />,
     };
 
     return (
