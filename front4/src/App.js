@@ -31,6 +31,7 @@ import FindFriend from "./Pages/mypage/FindFriend";
 import PoseList from "./Pages/Board/PoseList";
 import PoseWrite from "./Pages/Board/PoseWrite";
 // import Report from "./Pages/Board/Report";
+import ModalModel from "./Component/ModalModel";
 import BoardModify from "./Pages/Board/BoardModify";
 import Search from "./Component/Search";
 
@@ -81,6 +82,7 @@ function App() {
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
                   <Route path={"/Search"} element={<Search/>}></Route>
                   <Route path={"/board/:id"} element={<BoardModify/>}></Route>
+                  <Route path={"/ModalModel"} element={<ModalModel/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>
