@@ -1,58 +1,49 @@
 import './css/nav.scss';
 import { Link } from "react-router-dom";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Search from '../img/search.png';
 import Mypag from '../img/mypage.png';
 import { useLocation } from "react-router-dom";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LogoutIcon from '../img/logout.png';
 import ListIcon from '../img/list.png';
 import axios from "axios";
+
 function Nav() {
+    const storedUsername = localStorage.getItem("id");
     const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
-    const accessToken = localStorage.getItem("accessToken");
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
-    //검색창 보이기
-    const[visible,setVisible] = useState(false);
-    //검색창에 들어가는 입력값
+    const [visible, setVisible] = useState(false);
     const [keyword, setKeyword] = useState('');
-    const [boardPreviews, setBoardPreviews] = useState([]);
-    // 로그인 상태 관리
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isWidth, setIsWidth] = useState(false);
     const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false); // New state to track admin status
 
     const toggleSidebar = () => {
         setSidebarVisible(!isSidebarVisible);
     };
-
 
     useEffect(() => {
         const handleResize = () => {
             const windowWidth = window.innerWidth;
             if (windowWidth > 600) {
                 setIsWidth(true);
-                console.log(windowWidth);
             } else {
                 setIsWidth(false);
             }
         };
 
-        // 처음 한 번 호출하고, 창 크기가 변경될 때마다 다시 호출합니다.
-        handleResize(); // 초기 호출
-        window.addEventListener('resize', handleResize); // 리사이즈 이벤트 리스너 등록
+        handleResize();
+        window.addEventListener('resize', handleResize);
 
         return () => {
-            // 컴포넌트가 언마운트되기 전에 이벤트 리스너를 제거합니다.
             window.removeEventListener('resize', handleResize);
         };
-    }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 이펙트를 실행합니다.
-
+    }, []);
 
     useEffect(() => {
-        // 로그인 상태 확인
         const token = localStorage.getItem("accessToken");
         const storedUsername = localStorage.getItem("id");
         if (token) {
@@ -63,20 +54,14 @@ function Nav() {
         }
     });
 
-    // const saveUserId = e => {
-    //     setUserId(e.target.value);
-    // };
-
-    const isUserIdEmpty = e => {
-        if(userId.length < 1) {
+    const isUserIdEmpty = (e) => {
+        if (userId.length < 1) {
             alert("로그인 후에 이용 가능합니다!");
-            navigate("/login")
+            navigate("/login");
             e.preventDefault();
         }
-    }
+    };
 
-
-    // 로그아웃 핸들러
     const logoutHandler = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -85,15 +70,13 @@ function Nav() {
         setIsLoggedIn(false);
         setUserId('');
         navigate("/");
-    }
+    };
 
     const searchContent = () => {
-        // URL 인코딩 추가
         const encodedKeyword = encodeURIComponent(keyword);
         navigate(`/search?keyword=${encodedKeyword}`);
-
-
     };
+
     const handleInputChange = (e) => {
         setKeyword(e.target.value);
     };
@@ -103,6 +86,7 @@ function Nav() {
             searchContent();
         }
     };
+
     return (
         <>
             <nav className="main_navBar">
@@ -118,45 +102,47 @@ function Nav() {
                                     className="search_bar"
                                     value={keyword}
                                     onChange={handleInputChange}
-                                    onClick={handleKeyPress}
+                                    // onKeyPress={handleKeyPress}
                                     placeholder="검색어를 입력하세요"
                                 />
-                            <button onClick={searchContent}>전송</button>
+                                <button onClick={searchContent}>전송</button>
                             </div>
                         }
-                        <button className="right" onClick={() =>{
+                        <button className="right" onClick={() => {
                             setVisible(!visible);
                         }}><img className={"search_icon"} src={Search} alt="하이"/></button>
                     </div>
                     {
                         isWidth ? (
-                    <div className="otherLinks">
-                        <Link to={"/gallery/" + userId} className={"downright main_b"}
-                              onClick={isUserIdEmpty}>갤러리</Link>
-                        <div className={"dropdown"}>
-                            <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
-                            <div className={"dropdown-content"} onClick={isUserIdEmpty}>
-                                <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
-                                <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
-                                <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
-                            </div>
-                        </div>
-                        <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>
-                        {
-                                isLoggedIn ? (
-                                    <div className={"nav_div"}>
-                                        <Link to={"/Mypage"}>
-                                            <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
-                                        </Link>
-                                        <button className={"mypage_btn"} onClick={logoutHandler}>
-                                            <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
-                                        </button>
+                            <div className="otherLinks">
+                                <Link to={"/gallery/" + userId} className={"downright main_b"} onClick={isUserIdEmpty}>갤러리</Link>
+                                <div className={"dropdown"}>
+                                    <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
+                                    <div className={"dropdown-content"} onClick={isUserIdEmpty}>
+                                        <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
+                                        <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
+                                        <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
                                     </div>
-                                ) : (
-                                    <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
-                                )
-                            }
-                    </div>
+                                </div>
+                                <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>
+                                {
+                                    isAdmin && <Link to={"/Blacklist"} className={"downright main_b"}>블랙리스트 관리</Link>
+                                }
+                                {
+                                    isLoggedIn ? (
+                                        <div className={"nav_div"}>
+                                            <Link to={"/Mypage"}>
+                                                <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
+                                            </Link>
+                                            <button className={"mypage_btn"} onClick={logoutHandler}>
+                                                <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
+                                    )
+                                }
+                            </div>
                         ) : (
                             <div>
                                 <div className={`sidebar ${isSidebarVisible ? 'active' : ''}`}>
@@ -166,8 +152,7 @@ function Nav() {
                                     {
                                         isLoggedIn ? (
                                             <div className={"nav_div"}>
-                                                <Link to={"/gallery/" + userId} className={"downright"}
-                                                      onClick={isUserIdEmpty}>갤러리</Link>
+                                                <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
                                                 <div className={"dropdown"}>
                                                     <span className="dropbtn downright" onClick={isUserIdEmpty}>게시판</span>
                                                     <div className={"dropdown-content"} onClick={isUserIdEmpty}>
@@ -176,17 +161,21 @@ function Nav() {
                                                         <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
                                                     </div>
                                                 </div>
+                                                <Link to={"/FindFriend"} className={"downright"} onClick={isUserIdEmpty}>친구추가</Link>
+                                                {
+                                                    isAdmin && <Link to={"/Blacklist"} className={"downright"}>블랙리스트 관리</Link>
+                                                }
                                                 <Link to={"/Mypage"}>
                                                     <div className={"in_text"}>마이페이지</div>
                                                 </Link>
                                                 <button className={"in_button"} onClick={logoutHandler}>
-                                            <div>로그아웃</div>
+                                                    <div>로그아웃</div>
                                                 </button>
                                             </div>
                                         ) : (
                                             <Link to={"/login"}>
-                                            <div className={"in_text"}>로그인</div>
-                                        </Link>
+                                                <div className={"in_text"}>로그인</div>
+                                            </Link>
                                         )
                                     }
                                 </div>
@@ -197,10 +186,9 @@ function Nav() {
                         )
                     }
                 </div>
-                {/*<input type={"text"} placeholder={"유저 아이디"} value={userId} onChange={saveUserId}></input>*/}
             </nav>
         </>
-);
+    );
 }
 
 export default Nav;
