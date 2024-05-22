@@ -112,6 +112,12 @@ public class BoardController {
         return boardService.getBoardByUser(user.getName());
     }
 
+    // 특정 유저(ex 블랙리스트 유저 등) 게시글 불러오기
+    @GetMapping("/blackBoards/{blackUser}")
+    public List<BoardResponse> getBlackBoards(@PathVariable String blackUser) {
+        return boardService.getBoardByUser(blackUser);
+    }
+
     // 게시글 조회 시 조회수 증가 기능 추가
     @GetMapping("/board/{id}")
     public BoardResponse getBoard(@PathVariable String id) {
