@@ -34,6 +34,8 @@ import ModalModel from "./Component/ModalModel";
 import BoardModify from "./Pages/Board/BoardModify";
 import Search from "./Component/Search";
 import WritePage from "./Pages/Admin/WritePage";
+import BlackList from "./Pages/Admin/BlackList";
+import ReportList from "./Pages/Admin/ReportList";
 
 /*
 function Eventpage() {
@@ -84,6 +86,8 @@ function App() {
                   <Route path={"/board/:id"} element={<BoardModify/>}></Route>
                   <Route path={"/ModalModel"} element={<ModalModel/>}></Route>
                   <Route path={"/WritePage"} element={<WritePage/>}></Route>
+                  <Route path={"/ReportList"} element={<ReportList/>}></Route>
+                  <Route path={"/BlackList"} element={<BlackList/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

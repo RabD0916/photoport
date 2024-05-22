@@ -1,6 +1,6 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import axios from 'axios';
-import {Link, useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
@@ -8,10 +8,10 @@ import sub from "../../img/sub.png";
 import view from "../../img/view.png";
 
 const GalleryContainer = styled.div`
-  width: 80%;
-  margin: auto;
-  display: flex;
-  flex-wrap: wrap;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
 `;
 
 // Report 컴포넌트를 동적으로 로드하기 위한 Lazy 로딩
@@ -121,7 +121,7 @@ const BoardList = () => {
 
 
     const updateProfileImages = async (boards) => {
-        let newImages = {...profileImages};
+        let newImages = { ...profileImages };
         for (const post of boards) {
             if (!newImages[post.writerId]) { // 이미 로드된 이미지가 없는 경우에만 요청
                 try {
@@ -159,7 +159,7 @@ const BoardList = () => {
         }
     };
 
-// 북마크 버튼을 눌렀을 때 실행할 함수
+    // 북마크 버튼을 눌렀을 때 실행할 함수
     const handleBookmark = async (postId) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/bookmark/${postId}`, {}, {
@@ -176,8 +176,8 @@ const BoardList = () => {
 
     const comment_update = async (commentId, content) => {
         try {
-            const data = {content:content}
-            const response = await axios.post(`http://localhost:8080/api/updateComments/${commentId}`, data,{
+            const data = { content: content }
+            const response = await axios.post(`http://localhost:8080/api/updateComments/${commentId}`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 }
@@ -258,7 +258,7 @@ const BoardList = () => {
                                                 <div>
                                                     {comment.writerId === userId && (
                                                         <>
-                                                            {comment.id===commentId && upComment ? (
+                                                            {comment.id === commentId && upComment ? (
                                                                 <>
                                                                     <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
                                                                 </>
@@ -289,7 +289,7 @@ const BoardList = () => {
                         )}
                         {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
                         <Suspense fallback={<div>Loading...</div>}>
-                            <Report selectedPost={selectedPost}/>
+                            {selectedPost && <Report selectedPost={selectedPost} />}
                         </Suspense>
                         <button type="button" className="close_btn" onClick={close_board}>닫기</button>
                         {selectedPost && selectedPost.writerId === userId && (
@@ -306,7 +306,7 @@ const BoardList = () => {
                             {/* 게시글 내용 표시 */}
                             {post.title}
                             <div className={"board_content"}>
-                                <img src={profileImages[post.writerId]} alt="Profile" className="profile"/>
+                                <img src={profileImages[post.writerId]} alt="Profile" className="profile" />
                                 {post.writerName}</div>
                             <div className={"img_box"}>
                                 {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
@@ -318,11 +318,11 @@ const BoardList = () => {
                             </div>
                             <div className={"click_evt"}>
                                 <button onClick={() => handleLike(post.id)}><img className={"nav-img"} src={like}
-                                                                                 alt={"좋아요"}/>{post.like}</button>
+                                                                                 alt={"좋아요"} />{post.like}</button>
                                 <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"} src={sub}
-                                                                                     alt={"북마크"}/>{post.bookmark}
+                                                                                     alt={"북마크"} />{post.bookmark}
                                 </button>
-                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}
+                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"} />{post.view}
                                 </div>
                             </div>
                             <div>

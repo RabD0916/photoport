@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./BoardCss/Report.scss";
 
-const Report = () => {
+const Report = ({ selectedPost }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedReason, setSelectedReason] = useState(""); // 선택된 이유를 상태로 관리합니다.
     const [otherReason, setOtherReason] = useState(""); // 기타 이유를 입력하는 상태를 추가합니다.
+    const accessToken = localStorage.getItem("accessToken");
+
+    useEffect(() => {
+        console.log("Selected Post:", selectedPost);
+    }, [selectedPost]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -23,13 +28,47 @@ const Report = () => {
     };
 
     const handleSubmit = () => {
-        // 여기서 선택된 이유와 기타 이유를 처리할 수 있습니다.
-        // 예를 들어, 서버에 전송하거나 다른 작업을 수행할 수 있습니다.
-        console.log("선택된 이유:", selectedReason);
-        console.log("기타 이유:", otherReason);
-        // 모달을 닫습니다.
+        if (!selectedPost || !selectedPost.writerId) {
+            alert("게시글 작성자가 선택되지 않았습니다.");
+            return;
+        }
+
+        const reason = selectedReason === "기타" ? otherReason : selectedReason;
+
+        fetch("http://localhost:8080/api/blacklist/report", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`  // 올바른 인증 헤더를 추가합니다.
+            },
+            body: JSON.stringify({
+                writerId: selectedPost.writerId,  // 작성자의 ID로 변경
+                reason: reason,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || "신고 접수에 실패하였습니다.");
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.message) {
+                    alert(data.message);
+                } else {
+                    alert("신고 접수에 실패하였습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert(error.message);
+            });
+
         closeModal();
     };
+
 
     return (
         <div className="report">
