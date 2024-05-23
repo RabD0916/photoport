@@ -32,6 +32,14 @@ const Second = () => {
         }
     };
 
+    //친구 차단
+    // const banFriend =async (friendshipId) =>{
+    //     try{
+    //         await axios.delete()
+    //     }
+    //
+    // }
+
     useEffect(() => {
         fetchFriendsList();
     }, []);
@@ -43,7 +51,8 @@ const Second = () => {
                 {friendsList.map((friend) => (
                     <li key={friend.friendshipId}>
                         {friend.friendName}
-                        <button onClick={() => removeFriend(friend.friendshipId)}>친구 끊기</button>
+                        <button onClick={() => removeFriend(friend.friendshipId)}>친구 삭제</button>
+                        <button onClick={() => banFriend(friend.friendshipId)}>친구 차단</button>
                     </li>
                 ))}
             </ul>

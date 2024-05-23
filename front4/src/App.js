@@ -1,4 +1,5 @@
 import './App.scss';
+import './output.css';
 import Nav from './Component/Nav';
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
@@ -36,6 +37,7 @@ import Search from "./Component/Search";
 import WritePage from "./Pages/Admin/WritePage";
 import BlackList from "./Pages/Admin/BlackList";
 import ReportList from "./Pages/Admin/ReportList";
+import Testtailwind1 from "./Testtailwind";
 
 /*
 function Eventpage() {
@@ -88,6 +90,7 @@ function App() {
                   <Route path={"/WritePage"} element={<WritePage/>}></Route>
                   <Route path={"/ReportList"} element={<ReportList/>}></Route>
                   <Route path={"/BlackList"} element={<BlackList/>}></Route>
+                  <Route path={"/tailwind"} element={<Testtailwind1/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

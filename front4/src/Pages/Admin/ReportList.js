@@ -11,12 +11,13 @@ const ReportList = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
-        fetchReports();
+        getReports();
     }, []);
 
-    const fetchReports = async () => {
+    //신고받은 리스트 보기
+    const getReports = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/blacklist/reports", {
+            const response = await axios.get("http://localhost:8080/api/reportUser", { //영우가 설정해 놓은 주소로 변경해야함
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -27,44 +28,48 @@ const ReportList = () => {
         }
     };
 
-    const fetchUserPosts = async (userId) => {
+
+    //신고당한 게시글 보기
+    const fetchUserPosts = async (blackUser) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/board/user/${userId}`, {
+            const response = await axios.get(`http://localhost:8080/api/blackBoards/${blackUser}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             setSelectedUserPosts(response.data);
-            setSelectedUserId(userId);
+            setSelectedUserId(blackUser);
             setIsDetailOpen(true);
         } catch (error) {
             console.error("Error fetching user posts:", error);
         }
     };
 
-    const handleBlacklist = async (userId) => {
+    //블랙리스트 추가
+    const handleBlacklist = async (blackId) => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/blacklist/accept/${userId}`, {}, {
+            const response = await axios.post(`http://localhost:8080/api/accept/${blackId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
-            alert(response.data.message || "블랙리스트에 추가되었습니다.");
-            fetchReports(); // 블랙리스트 추가 후 신고 목록 갱신
+            alert(response.data.message || `${blackId}블랙리스트에 추가되었습니다.`);
+            getReports(); // 블랙리스트 추가 후 신고 목록 갱신
         } catch (error) {
             console.error("Error adding to blacklist:", error);
         }
     };
 
-    const handleReject = async (reportId) => {
+    //반송
+    const handleReject = async (blackId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/blacklist/reject/${reportId}`, {
+            const response = await axios.delete(`http://localhost:8080/api/reject/${blackId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             alert(response.data || "신고가 반송 처리되었습니다.");
-            fetchReports(); // 신고 반송 후 신고 목록 갱신
+            getReports(); // 신고 반송 후 신고 목록 갱신
         } catch (error) {
             console.error("Error rejecting report:", error);
         }
@@ -75,12 +80,12 @@ const ReportList = () => {
             <h1>신고받은 내역</h1>
             <ul className="report-list">
                 {reports.map(report => (
-                    <li key={report.id} className="report-item">
-                        <p>작성자 ID: {report.writerId}</p>
+                    <li key={report.blackId} className="report-item">
+                        <p>작성자 ID: {report.blackUser}</p>
                         <p>신고 사유: {report.reason}</p>
-                        <button onClick={() => fetchUserPosts(report.writerId)}>게시글 보기</button>
-                        <button onClick={() => handleBlacklist(report.writerId)}>블랙리스트 추가</button>
-                        <button onClick={() => handleReject(report.id)}>반송</button>
+                        <button onClick={() => fetchUserPosts(report.blackUser)}>게시글 보기</button>
+                        <button onClick={() => handleBlacklist(report.blackId)}>블랙리스트 추가</button>
+                        <button onClick={() => handleReject(report.blackId)}>반송</button>
                     </li>
                 ))}
             </ul>
