@@ -32,6 +32,8 @@ import NewPw from "./Pages/mypage/NewPw";
 import FindFriend from "./Pages/mypage/FindFriend";
 import PoseList from "./Pages/Board/PoseList";
 import PoseWrite from "./Pages/Board/PoseWrite";
+import KakaoRedirect from "./Pages/mypage/KakaoRedirect";
+// import Report from "./Pages/Board/Report";
 import ModalModel from "./Component/ModalModel";
 import BoardModify from "./Pages/Board/BoardModify";
 import Search from "./Component/Search";
@@ -87,6 +89,7 @@ function App() {
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
                   <Route path={"/Search"} element={<Search/>}></Route>
                   <Route path={"/board/:id"} element={<BoardModify/>}></Route>
+                  <Route path={"/oauth/kakao"} element={<KakaoRedirect/>}></Route>
                   <Route path={"/ModalModel"} element={<ModalModel/>}></Route>
                   <Route path={"/WritePage"} element={<WritePage/>}></Route>
                   <Route path={"/ReportList"} element={<ReportList/>}></Route>

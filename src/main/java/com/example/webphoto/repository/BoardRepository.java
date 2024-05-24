@@ -23,7 +23,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.title LIKE %:titleKeyword%")
     List<Board> searchByTitle(String titleKeyword);
 
-
     // 게시글 종류 별 리스트
     List<Board> findByType(BoardType boardType, Sort sort);
 

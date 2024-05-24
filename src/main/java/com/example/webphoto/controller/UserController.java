@@ -53,6 +53,13 @@ public class UserController {
         }
     }
 
+//    @GetMapping("/api/checkAdmin")
+//    public ResponseEntity<UserResponse> checkAdmin(Principal user) {
+//        if (user.getName().equals("ADMIN")) {
+//
+//        }
+//    }
+
 
     // 토큰 재발급(리프레시 토큰을 이용해서 액세스 토큰 재발급)
     @PostMapping("/token")

@@ -24,19 +24,19 @@ public class User {
     @Column(name = "user_id", length = 100)
     private String id;
 
-    @Column(name = "user_pw", length = 100, nullable = false)
+    @Column(name = "user_pw", length = 100)
     private String password;
 
-    @Column(name = "user_nick", length = 100, nullable = false)
+    @Column(name = "user_nick", length = 100)
     private String userNick;
 
-    @Column(name = "user_phone", length = 100, nullable = false)
+    @Column(name = "user_phone", length = 100)
     private String phone;
 
-    @Column(name = "user_birth", length = 100, nullable = false)
+    @Column(name = "user_birth", length = 100)
     private String birth;
 
-    @Column(name = "user_email", length = 100, nullable = false)
+    @Column(name = "user_email", length = 100)
     private String email;
 
     @CreationTimestamp

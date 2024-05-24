@@ -24,7 +24,7 @@
     border: none;
     font-size: 20px;
     width: 100%; /* 부모 요소에 대한 상대적인 너비를 가집니다. */
-    height: 500px; /* 고정된 높이를 설정합니다. */
+    height: 200px; /* 고정된 높이를 설정합니다. */
     resize: none; /* 사용자가 크기를 조정하지 못하도록 합니다. */
     resize : vertical;
 }

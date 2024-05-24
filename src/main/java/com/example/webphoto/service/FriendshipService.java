@@ -6,6 +6,7 @@ import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.Friend.*;
 import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -171,6 +172,18 @@ public class FriendshipService {
 
         return responseDto;
     }
+
+//    // 친구 차단 메서드
+//    @Transactional
+//    public FriendshipRemovalResponse blockFriendship(Long friendshipId) throws Exception {
+//        Friendship friendship = friendshipRepository.findById(friendshipId)
+//                .orElseThrow(() -> new Exception("Friendship not found"));
+//
+//        friendship.blockFriendship();
+//        friendshipRepository.save(friendship);
+//
+//        return new FriendshipRemovalResponse(friendshipId, "Friendship blocked successfully");
+//    }
 
     // 친구 목록
     public List<FriendDTO> findFriendsByUserEmail(String userEmail) throws Exception {

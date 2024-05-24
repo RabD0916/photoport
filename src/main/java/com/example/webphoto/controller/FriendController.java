@@ -64,4 +64,11 @@ public class FriendController {
         FriendshipRemovalResponse response = friendshipService.removeFriendship(friendshipId);
         return ResponseEntity.ok(response);
     }
+
+    // 친구 차단
+//    @DeleteMapping("/user/friends/block/{friendshipId}")
+//    public ResponseEntity<FriendshipRemovalResponse> blockFriend(@PathVariable("friendshipId") Long friendshipId) throws Exception {
+//        FriendshipRemovalResponse response = friendshipService.blockFriendship(friendshipId);
+//        return ResponseEntity.ok(response);
+//    }
 }

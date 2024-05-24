@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
 
+    const handleKakaoLogin = () => {
+        window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=ab365f86f03b47b75738f7a3f6bd64ab&redirect_uri=http://localhost:3000/oauth/kakao&response_type=code`;
+    };
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -38,7 +42,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('id', formData.id);
-            // localStorage.setItem('userNick', response.data.userNick);
+            localStorage.setItem('userNick', response.data.userNick);
             navigate("/")
         } catch (error) {
             console.error('Error:', error);
@@ -55,10 +59,12 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
                 <form onSubmit={handleSubmit} method="post">
                     <div className="first-input input__block first-input__block">
-                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="id" value={formData.id} onChange={handleChange}   />
+                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="id" value={formData.id}
+                               onChange={handleChange}/>
                     </div>
                     <div className="input__block">
-                        <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password" value={formData.password} onChange={handleChange}    />
+                        <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password"
+                               value={formData.password} onChange={handleChange}/>
                     </div>
                     <button className="signin__btn">
                         로그인
@@ -69,20 +75,24 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                     <p>OR</p>
                 </div>
 
-                <button className="github__btn">
-                    <i className="fa fa-github"></i>
-                    <a href="src={Kakao">카카오</a>
-                </button>
+                    <img className="signin__btn" src="/kakao_login.png" alt="카카오 로그인" onClick={handleKakaoLogin} style={{ cursor: 'pointer' }}/>
 
-                <button className="github__btn">
-                    <i className="fa fa-github"></i>
-                    <a href="src={Kakao">카카오</a>
-                </button>
-                
-                <button className="github__btn">
-                    <i className="fa fa-github"></i>
-                    <a href="src={Kakao">카카오</a>
-                </button>
+                {/*<button className="github__btn">*/}
+                {/*    <i className="fa fa-github"></i>*/}
+                {/*    <Link to={"/kakaoLogin"}>카카오</Link>*/}
+                {/*</button>*/}
+
+                {/*<button className="github__btn">*/}
+                {/*    <i className="fa fa-github"></i>*/}
+                {/*    <a href="src={Kakao">카카오</a>*/}
+                {/*</button>*/}
+
+                {/*<button className="github__btn">*/}
+                {/*    <i className="fa fa-github"></i>*/}
+                {/*    <a href="src={Kakao">카카오</a>*/}
+                {/*</button>*/}
+                <br/>
+                <br/>
                 <p className={"id_role"}>
                     <Link to={"/join"}>가입하기</Link>
                     <Link to={"/findID"}>아이디 찾기</Link>
@@ -90,7 +100,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
                 </p>
             </div>
 
-            </div>
+        </div>
     );
 }
 

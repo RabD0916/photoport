@@ -35,6 +35,7 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final BookMarkRepository bookMarkRepository;
     private final TagRepository tagRepository;
+    private final BlackService blackService;
 
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
         MediaResponse thumbnail = new MediaResponse();
@@ -136,16 +137,24 @@ public class BoardService {
         );
     }
 
+    // 게시글 종류별로 전체 불러오기(추가로 블랙리스트 된 유저들의 게시글들은 필터링 되어서 숨김처리)
     public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType, SortRequest sortRequest) {
         Sort sort = Sort.by(sortRequest.getValue());
         if(sortRequest.getOrder().equals("desc")) {
             sort = sort.descending();
         }
+
+        List<Black> blacklistedUser = blackService.getBlackUser();
+        List<String> blacklistedUserIds = blacklistedUser.stream()
+                .map(black -> black.getBlackUser().getId())
+                .toList();
+
+
         return boardRepository.findByType(boardType, sort).stream()
+                .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
     }
-
 
     // 전체 게시글(종류 상관없이)
     public List<BoardPreviewResponse> findAll(String sortType, boolean isDesc) {
