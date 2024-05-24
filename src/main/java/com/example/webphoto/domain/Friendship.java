@@ -21,7 +21,9 @@ public class Friendship {
 
     private String userEmail;
     private String friendEmail;
+
     private FriendshipStatus status;
+
     private boolean isFrom;
 
     private Long counterpartId;
@@ -29,6 +31,7 @@ public class Friendship {
     public void acceptFriendshipRequest() {
         status = FriendshipStatus.ACCEPT;
     }
+
 
     public void setCounterpartId(Long id) {
         counterpartId = id;

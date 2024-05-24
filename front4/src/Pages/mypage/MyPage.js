@@ -6,8 +6,7 @@ import Second from "./Number/Second";
 import LikeList from "./Number/LikeList";
 import BookList from "./Number/BookList";
 import styled from "styled-components";
-import axios from "axios";
-
+import axiosInstance from "../../axiosInstance";
 
 function MyPage() {
     const [profileImage, setProfileImage] = useState(null);
@@ -18,6 +17,7 @@ function MyPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [friendsList, setFriendsList] = useState([]);
+    const userNick = localStorage.getItem('userNick');
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -28,19 +28,14 @@ function MyPage() {
                 console.log(storedUsername);
                 setUserId(storedUsername);
 
-                axios.get(`http://localhost:8080/api/profile/${storedUsername}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
+                axiosInstance.get(`/profile/${storedUsername}`) // axiosInstance 사용
                     .then(response => {
                         setProfileImage(response.data.userProfile);
                     })
                     .catch(error => console.error("Failed to load profile image", error));
             }
         }
-    });
+    }, [profileImage]);
 
     // 파일 업로드 처리
     const handleFileUpload = async () => {
@@ -51,9 +46,8 @@ function MyPage() {
         formData.append('userId', userId);
 
         try {
-            const response = await axios.post(`http://localhost:8080/api/profileUpdate/${userId}`, formData, {
+            const response = await axiosInstance.post(`/profileUpdate/${userId}`, formData, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
@@ -75,6 +69,7 @@ function MyPage() {
             }
         }
     };
+
     // 파일 선택 처리 및 미리보기 생성
     const handleChange = (e) => {
         const file = e.target.files[0];
@@ -112,16 +107,16 @@ function MyPage() {
                         {selectedFile && <button onClick={handleFileUpload} className={"img_btn"}>사진 수정</button>}
                     </div>
                     <input type={"file"} onChange={handleChange} ref={fileInput} style={{ display: "none" }} />
-                    <h3>{userId}</h3>
+                    <h3>{userNick}</h3>
                     <div className={"my-pageNav"}>
-                            {MAIN_DATA.map(data => (
-                                <Button onClick={handleClickButton} name={data.name} key={data.id}>
-                                    {data.text}
-                                </Button>
-                            ))}
+                        {MAIN_DATA.map(data => (
+                            <Button onClick={handleClickButton} name={data.name} key={data.id}>
+                                {data.text}
+                            </Button>
+                        ))}
                         {content && selectComponent[content] ?
                             <div>{selectComponent[content]}</div>:
-                           <First />
+                            <First />
                         }
                     </div>
                 </div>
@@ -132,9 +127,8 @@ function MyPage() {
 export default MyPage;
 
 const Button = styled.button`
-  height: 20px;
-  color: #111111;
-  background-color: #eeeeee;
-  border-radius: 2rem;
+    height: 20px;
+    color: #111111;
+    background-color: #eeeeee;
+    border-radius: 2rem;
 `;
-

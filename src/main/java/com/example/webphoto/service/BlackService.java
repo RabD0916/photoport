@@ -55,4 +55,9 @@ public class BlackService {
     public List<Black> getBlackUser() {
         return blackRepository.findByBlackType(BlackType.ACCEPT);
     }
+
+    // 현재 블랙리스트 접수된 유저들 불러오기(상태가 WAITING)
+    public List<Black> getReportUser() {
+        return blackRepository.findByBlackType(BlackType.WAITING);
+    }
 }

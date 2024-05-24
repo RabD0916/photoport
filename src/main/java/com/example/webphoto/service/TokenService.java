@@ -30,8 +30,7 @@ public class TokenService {
             if(bCryptPasswordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return new AccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
-                        createRefreshToken(user));
-
+                        createRefreshToken(user), user.getId(), user.getUserNick());
             }
         }
         else if(request.getRefreshToken() != null) {
@@ -40,7 +39,7 @@ public class TokenService {
                 User user = userService.findById(userId);
                 return new AccessTokenResponse(
                         tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration())),
-                        null);
+                        null, user.getId(), user.getUserNick());
             }
         }
         throw new IllegalArgumentException("Invalid password");
@@ -53,6 +52,12 @@ public class TokenService {
         refreshToken.setRefreshToken(token);
         refreshTokenService.save(refreshToken); // save refresh token
         return token;
+    }
+
+    public AccessTokenResponse createTokensForUser(User user) {
+        String accessToken = tokenProvider.createToken(user, Duration.ofMinutes(jwtProperties.getDuration()));
+        String refreshToken = createRefreshToken(user);
+        return new AccessTokenResponse(accessToken, refreshToken, user.getId(),user.getUserNick());
     }
 
 }

@@ -99,7 +99,7 @@ public class BoardController {
         return boardService.findAll("view", false);
     }
 
-    // 게시글 종류별로 전체 불러오기
+    // 게시글 종류별로 전체 불러오기(블랙리스트에 등록된 유저의 게시글은 안나옴 그대로 사용하면 됨) 수정된 건 서비스 코드
     @GetMapping("/type/{boardType}/{sortValue}/{sortOrder}")
     public List<BoardPreviewResponse> getBoardsByType(@PathVariable("boardType") BoardType boardType, @PathVariable("sortValue") String sortValue, @PathVariable("sortOrder") String sortOrder) {
         return boardService.findAllByBoardType(boardType, new SortRequest(sortValue, sortOrder));
