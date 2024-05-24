@@ -1,5 +1,6 @@
 import './App.scss';
 import './output.css';
+import './input.css';
 import Nav from './Component/Nav';
 import React from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
