@@ -66,7 +66,7 @@ const Second = () => {
         <div>
             <div>
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">친구목록</h2>
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-3">친구목록</h2>
                 </div>
                 <ul className={"divide-y divide-gray-100"}>
                     {friendsList.map((friend) => (

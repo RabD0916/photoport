@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import "./BoardCss/BoardList.scss";
+// import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
 import view from "../../img/view.png";
@@ -226,113 +226,126 @@ const BoardList = () => {
         }
     };
     return (
-        <div>
-            <div>
-                <button onClick={moveToWrite}>글쓰기</button>
-            </div>
-            <div className={"Detail_page"}>
-                <div className={`modal ${isModalOpen ? 'on' : ''}`}>
-                    <div className="report_popup">
-                        <h3>게시글 상세페이지</h3>
-                        {selectedPost && (
-                            <div>
-                                <p>제목: {selectedPost.title}</p>
-                                <p>사진:</p>
-                                {selectedPost.media.map((media, index) => (
-                                    <img
-                                        key={index}
-                                        className={"detail_img"}
-                                        src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
-                                        alt={`사진 ${index + 1}`}
-                                    />
-                                ))}
+        <div className="bg-white py-24 sm:py-32">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto max-w-2xl lg:mx-0">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">공유 게시판</h2>
+                    <div>
+                        <button onClick={moveToWrite}>글쓰기</button>
+                    </div>
+                    <div className={"container mx-auto"}>
+                        <div className={`modal ${isModalOpen ? 'on' : ''}`}>
+                            <div className="container mt-5 px-2 w-1/2 h-auto bg-white">
+                                <h3 className={"mt-5"}>게시글 상세페이지</h3>
+                                {selectedPost && (
+                                    <div>
+                                        <p className="mt-3 relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">제목: {selectedPost.title}</p>
+                                        {selectedPost.media.map((media, index) => (
+                                            <img
+                                                key={index}
+                                                className={"flex flex-wrap w-1/5 h-1/5 center-align"}
+                                                src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
+                                                alt={`사진 ${index + 1}`}
+                                            />
+                                        ))}
 
-                                <p>내용: {selectedPost.content}</p>
-                                {/* 게시글의 다른 필드들을 여기에 추가 */}
-                                <div className="comments">
-                                    <h4>댓글</h4>
-                                    {selectedPost.commentsDto.comments.map((comment) => (
-                                        <div key={comment.id}>
-                                            <p>{comment.writerName}: {comment.content}</p>
-                                            {comment.writerId === userId && (
-                                                <div>
+                                        <p>내용: {selectedPost.content}</p>
+                                        {/* 게시글의 다른 필드들을 여기에 추가 */}
+                                        <div className="comments">
+                                            <h4>댓글</h4>
+                                            {selectedPost.commentsDto.comments.map((comment) => (
+                                                <div key={comment.id}>
+                                                    <p>{comment.writerName}: {comment.content}</p>
                                                     {comment.writerId === userId && (
-                                                        <>
-                                                            {comment.id === commentId && upComment ? (
+                                                        <div>
+                                                            {comment.writerId === userId && (
                                                                 <>
-                                                                    <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
+                                                                    {comment.id === commentId && upComment ? (
+                                                                        <>
+                                                                            <input type="text" value={content}
+                                                                                   onChange={(e) => setContent(e.target.value)}/>
+                                                                            <button
+                                                                                onClick={() => comment_update(comment.id, content)}>수정완료
+                                                                            </button>
+                                                                        </>
+                                                                    ) : (
+                                                                        <button onClick={() => {
+                                                                            setupComment(true);
+                                                                            setCommentId(comment.id);
+                                                                        }}>수정</button>
+                                                                    )}
+                                                                    <button
+                                                                        onClick={() => comment_delete(comment.id)}>삭제
+                                                                    </button>
                                                                 </>
-                                                            ) : (
-                                                                <button onClick={() => {
-                                                                    setupComment(true);
-                                                                    setCommentId(comment.id);
-                                                                }}>수정</button>
                                                             )}
-                                                            <button onClick={() => comment_delete(comment.id)}>삭제</button>
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>
-                                            )}
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                                <div className={"comment-write"}>
-                                    <h4>댓글 쓰기</h4>
-                                    <textarea
-                                        value={newComment}
-                                        onChange={handleCommentChange}
-                                        placeholder="댓글을 입력하세요"
-                                    />
-                                    <button onClick={submitComment}>작성</button>
-                                </div>
-                            </div>
-                        )}
-                        {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
-                        <Suspense fallback={<div>Loading...</div>}>
-                            {selectedPost && <Report selectedPost={selectedPost} />}
-                        </Suspense>
-                        <button type="button" className="close_btn" onClick={close_board}>닫기</button>
-                        {selectedPost && selectedPost.writerId === userId && (
-                            <button type="button" className="close_btn"
-                                    onClick={() => deletePost(selectedPost.id)}>삭제</button>
-                        )}
-                    </div>
-                </div>
-            </div>
-            <GalleryContainer>
-                <div className="main_board">
-                    {boardList.map(post => (
-                        <div key={post.id} className="board_item">
-                            {/* 게시글 내용 표시 */}
-                            {post.title}
-                            <div className={"board_content"}>
-                                <img src={profileImages[post.writerId]} alt="Profile" className="profile" />
-                                {post.writerName}</div>
-                            <div className={"img_box"}>
-                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                <img className="board_img"
-                                     src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
-                                     alt="#"
-                                     onClick={() => open_board(post.id)}
-                                />
-                            </div>
-                            <div className={"click_evt"}>
-                                <button onClick={() => handleLike(post.id)}><img className={"nav-img"} src={like}
-                                                                                 alt={"좋아요"} />{post.like}</button>
-                                <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"} src={sub}
-                                                                                     alt={"북마크"} />{post.bookmark}
-                                </button>
-                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"} />{post.view}
-                                </div>
-                            </div>
-                            <div>
-                                태그: {post.tags}
+                                        <div className={"comment-write"}>
+                                            <h4>댓글 쓰기</h4>
+                                            <textarea
+                                                value={newComment}
+                                                onChange={handleCommentChange}
+                                                placeholder="댓글을 입력하세요"
+                                            />
+                                            <button onClick={submitComment}>작성</button>
+                                        </div>
+                                    </div>
+                                )}
+                                {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
+                                <Suspense fallback={<div>Loading...</div>}>
+                                    {selectedPost && <Report selectedPost={selectedPost}/>}
+                                </Suspense>
+                                <button type="button" className="close_btn" onClick={close_board}>닫기</button>
+                                {selectedPost && selectedPost.writerId === userId && (
+                                    <button type="button" className="close_btn"
+                                            onClick={() => deletePost(selectedPost.id)}>삭제</button>
+                                )}
                             </div>
                         </div>
-                    ))}
+                    </div>
+                    <GalleryContainer>
+                        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"    >
+                            {boardList.map(post => (
+                                <div key={post.id} className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
+                                    {/* 게시글 내용 표시 */}
+                                    {post.title}
+                                    <div className={"board_content"}>
+                                        <img src={profileImages[post.writerId]} alt="Profile" className="profile"/>
+                                        {post.writerName}</div>
+                                    <div className={"img_box"}>
+                                        {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
+                                        <img className="board_img"
+                                             src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                             alt="#"
+                                             onClick={() => open_board(post.id)}
+                                        />
+                                    </div>
+                                    <div className={"click_evt"}>
+                                        <button onClick={() => handleLike(post.id)}><img className={"nav-img"}
+                                                                                         src={like}
+                                                                                         alt={"좋아요"}/>{post.like}
+                                        </button>
+                                        <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"}
+                                                                                             src={sub}
+                                                                                             alt={"북마크"}/>{post.bookmark}
+                                        </button>
+                                        <div className={"view_"}><img className={"nav-img"} src={view}
+                                                                      alt={"view"}/>{post.view}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        태그: {post.tags}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </GalleryContainer>
                 </div>
-            </GalleryContainer>
-
+            </div>
         </div>
     );
 };
