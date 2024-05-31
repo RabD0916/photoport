@@ -95,11 +95,11 @@ public class Board {
     }
 
     public Board(Long id, String title, LocalDateTime createdAt, String content, List<MediaBoard> media, List<BoardTag> tags, BoardShare share, BoardType type, User writer) {
-        this(id, title, createdAt, content, media, tags, 0, 0, 0, BoardShare.PUBLIC, type, writer);
+        this(id, title, createdAt, content, media, tags, 0, 0, 0, share, type, writer);
     }
 
     public Board(Long id, String title, LocalDateTime createdAt, String content, BoardShare share, BoardType type, User writer) {
-        this(id, title, createdAt, content, null, null, 0, 0, 0, BoardShare.PUBLIC, type, writer);
+        this(id, title, createdAt, content, null, null, 0, 0, 0, share, type, writer);
     }
 
     public void setTags(List<BoardTag> list) {

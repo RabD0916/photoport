@@ -1,21 +1,23 @@
 package com.example.webphoto.service;
 
-import com.example.webphoto.config.CustomException;
 import com.example.webphoto.domain.*;
+import com.example.webphoto.domain.enums.BoardShare;
 import com.example.webphoto.domain.enums.BoardType;
+import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.*;
+import com.example.webphoto.dto.Friend.FriendDTO;
 import com.example.webphoto.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +38,11 @@ public class BoardService {
     private final BookMarkRepository bookMarkRepository;
     private final TagRepository tagRepository;
     private final BlackService blackService;
+    private final FriendshipService friendshipService;
+    private final CloseFriendService closeFriendService;
+    private final UserRepository userRepository;
+    private final LookedBoardRepository lookedBoardRepository;
+    private final EventService eventService;
 
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
         MediaResponse thumbnail = new MediaResponse();
@@ -113,9 +120,9 @@ public class BoardService {
                 .map(tag -> new BoardTag(null, null, tag))
                 .collect(Collectors.toList());
 
-        // NOTICE 타입 게시글일 경우 미디어 리스트를 초기화하지 않음
+        // NOTICE,EVENT 타입 게시글일 경우 미디어 리스트를 초기화하지 않음
         List<MediaBoard> mediaBoards = new ArrayList<>();
-        if (dto.getType() != BoardType.NOTICE) {
+        if (dto.getType() != BoardType.NOTICE && dto.getType() != BoardType.EVENT) {
             String[] categories = dto.getCategories();
             String[] mediaNames = dto.getMediaNames();
             for (int i = 0; i < mediaNames.length; i++) {
@@ -137,23 +144,104 @@ public class BoardService {
         );
     }
 
-    // 게시글 종류별로 전체 불러오기(추가로 블랙리스트 된 유저들의 게시글들은 필터링 되어서 숨김처리)
-    public List<BoardPreviewResponse> findAllByBoardType(BoardType boardType, SortRequest sortRequest) {
-        Sort sort = Sort.by(sortRequest.getValue());
-        if(sortRequest.getOrder().equals("desc")) {
-            sort = sort.descending();
+    // 게시글을 추가하는 메소드
+    @Transactional
+    public BoardResponse addBoard(BoardRequest dto) {
+        User user = userService.findById(dto.getWriterId());
+
+        if (user.getUserType() != UserType.ADMIN && dto.getType() == BoardType.EVENT) {
+            List<String> adminEventTags = eventService.getAdminEventTags();
+            eventService.validateEventTags(dto, adminEventTags);
         }
+
+        Board saved = boardRepository.save(requestToEntity(dto));
+
+        // 게시글 타입이 공지사항,이벤트가 아니면 미디어 저장
+        if (saved.getType() != BoardType.NOTICE && saved.getType() != BoardType.EVENT) {
+            mediaBoardRepository.saveAll(saved.getMedia());
+        }
+        // 모든 게시글에 대해 태그 저장
+        boardTagRepository.saveAll(saved.getTags());
+
+        return entityToResponse(saved);
+    }
+
+
+    // 게시글 종류별로 전체 불러오기(추가로 블랙리스트 된 유저들의 게시글들은 필터링 되어서 숨김처리)
+    public Page<BoardPreviewResponse> findAllByBoardType(BoardType boardType, int page, int size, String sortValue, String sortOrder, Principal principal) throws Exception {
+        Sort sort = Sort.by(sortValue);
+
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        User user = userRepository.findById(principal.getName()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
 
         List<Black> blacklistedUser = blackService.getBlackUser();
         List<String> blacklistedUserIds = blacklistedUser.stream()
                 .map(black -> black.getBlackUser().getId())
-                .toList();
+                .collect(Collectors.toList());
 
+        List<FriendDTO> friendships = friendshipService.findFriendsByUserEmail(user.getEmail());
+        List<String> friendUserIds = friendships.stream()
+                .map(FriendDTO::getFriendName)
+                .collect(Collectors.toList());
 
-        return boardRepository.findByType(boardType, sort).stream()
-                .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
+        List<CloseFriendResponse> closeFriends = closeFriendService.getAddedByCloseFriends(user.getId());
+        List<String> closeFriendUserIds = closeFriends.stream()
+                .map(CloseFriendResponse::getUserId)
+                .collect(Collectors.toList());
+
+        List<LookedBoard> lookedBoards = lookedBoardRepository.findByUser(user);
+        List<Long> lookedBoardIds = lookedBoards.stream()
+                .map(lookedBoard -> lookedBoard.getBoard().getId())
+                .collect(Collectors.toList());
+
+        List<Board> allBoards;
+
+        if (user.getUserType() == UserType.ADMIN) {
+            // 관리자는 모든 게시글을 필터링 없이 가져옵니다.
+            allBoards = boardRepository.findByType(boardType, sort).stream()
+                    .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
+                    .collect(Collectors.toList());
+        } else {
+            // 관리자가 아닌 경우 기존의 필터링 조건 사용
+            allBoards = boardRepository.findByType(boardType, sort).stream()
+                    .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
+                    .filter(board -> board.getShare() == BoardShare.PUBLIC ||
+                            (board.getShare() == BoardShare.FRIEND && (friendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
+                            (board.getShare() == BoardShare.CLOSE_FRIEND && (closeFriendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
+                            (board.getShare() == BoardShare.PRIVATE && board.getWriter().getId().equals(user.getId())) || board.getWriter().getId().equals(user.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        // 필터링된 게시글에서 한번도 보지 않았던 게시글들을 상위에 추가
+        List<BoardPreviewResponse> newBoards = allBoards.stream()
+                .filter(board -> !lookedBoardIds.contains(board.getId()))
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
+
+        // 필터링된 게시글들 중 이미 본 게시글을 아래에 추가(가장 최근에 봤던 게시글이 가장 아래로 내려감)
+        List<BoardPreviewResponse> seenBoards = lookedBoards.stream()
+                .filter(lookedBoard -> lookedBoard.getBoard().getType() == boardType) // 게시글 타입 필터링 추가
+                .sorted(Comparator.comparing(LookedBoard::getDate))
+                .map(lookedBoard -> entityToPreviewResponse(lookedBoard.getBoard()))
+                .collect(Collectors.toList());
+
+        List<BoardPreviewResponse> sortedBoards = new ArrayList<>();
+        sortedBoards.addAll(newBoards);
+        sortedBoards.addAll(seenBoards);
+
+        // 필터링된 결과를 기반으로 새롭게 페이지 객체를 만듭니다.
+        int start = Math.min((int)pageable.getOffset(), sortedBoards.size());
+        int end = Math.min((start + pageable.getPageSize()), sortedBoards.size());
+        List<BoardPreviewResponse> paginatedBoards = sortedBoards.subList(start, end);
+
+        return new PageImpl<>(paginatedBoards, pageable, allBoards.size());
     }
 
     // 전체 게시글(종류 상관없이)
@@ -165,20 +253,6 @@ public class BoardService {
 
     public BoardResponse findById(Long id) {
         return entityToResponse(boardRepository.findById(id).orElse(null));
-    }
-    @Transactional
-    // 게시글을 추가하는 메소드
-    public BoardResponse addBoard(BoardRequest dto) {
-        Board saved = boardRepository.save(requestToEntity(dto));
-
-        // 게시글 타입이 공지사항이 아니면 미디어 저장
-        if (saved.getType() != BoardType.NOTICE) {
-            mediaBoardRepository.saveAll(saved.getMedia());
-        }
-        // 모든 게시글에 대해 태그 저장
-        boardTagRepository.saveAll(saved.getTags());
-
-        return entityToResponse(saved);
     }
 
     // 게시글 수정(제목, 내용, 태그)
@@ -221,7 +295,8 @@ public class BoardService {
     @Transactional
     public void deleteBoard(Long id, String userId) throws IOException {
         Optional<Board> board = boardRepository.findById(id);
-        if (board.isPresent() && board.get().getWriter().getId().equals(userId)) {
+        User user = userService.findById(userId);
+        if (board.isPresent() && board.get().getWriter().getId().equals(userId) || user.getUserType() == UserType.ADMIN) {
             // 게시글 유형이 포즈(POSE)인 경우에만 파일 삭제 로직 수행
             if (board.get().getType() == BoardType.POSE) {
                 List<MediaBoard> mediaList = board.get().getMedia();
@@ -241,7 +316,7 @@ public class BoardService {
             // 미디어 파일 처리 후 게시글 삭제
             boardRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("작성자만 게시글을 삭제할 수 있습니다.");
+            throw new IllegalArgumentException("작성자와 관리자만 게시글을 삭제할 수 있습니다.");
         }
     }
 
@@ -272,13 +347,20 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
-    // 조회수 증가(사용자가 해당 게시글 클릭 시)
-    public Board updateVisit(Board board) {
-        Board target = boardRepository.findById(board.getId()).orElseThrow(() ->
-                new CustomException("게시글을 찾을 수없습니다.", HttpStatus.NOT_FOUND));
-        target.setView(target.getView() + 1);
-        boardRepository.save(target);
-        return target;
+    // 조회수 증가(사용자가 해당 게시글 클릭 시), 게시물 상세 보기 시 해당 유저의 이미 본 게시글로 등록
+    @Transactional
+    public Board updateVisit(Board board, User user) {
+        if (board != null) {
+            board.setView(board.getView() + 1);
+            boardRepository.save(board);
+
+            // 이미 본 게시글 테이블에 등록된 게시글이면 본 시간만 업데이트해서 저장
+            LookedBoard lookedBoard = lookedBoardRepository.findByUserAndBoard(user, board)
+                    .orElseGet(() -> new LookedBoard(null, LocalDateTime.now(), user, board)); // 최초로 볼 떄
+            lookedBoard.setDate(LocalDateTime.now()); // 이미 본 게시글을 다시 볼 때 시간만 갱신
+            lookedBoardRepository.save(lookedBoard);
+        }
+        return board;
     }
 
     // 좋아요 기능

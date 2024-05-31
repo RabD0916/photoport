@@ -9,9 +9,11 @@ import com.example.webphoto.dto.BoardResponse;
 import com.example.webphoto.dto.SortRequest;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
+import com.example.webphoto.service.EventService;
 import com.example.webphoto.service.MediaService;
 import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +35,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final UserService userService;
     private final MediaService mediaService;
+    private final EventService eventService;
 
     // 공통 게시글 추가 로직
     private ResponseEntity<BoardResponse> addBoardCommon(Principal userId, BoardRequest dto, List<MultipartFile> files) {
@@ -85,10 +88,24 @@ public class BoardController {
         return addBoardCommon(userId, dto, null);
     }
 
-//     관리자 게시글 추가
+    // 관리자 게시글 추가
     @PostMapping("/adminBoard")
     public ResponseEntity<BoardResponse> addAdminBoard(@RequestBody BoardRequest dto, Principal adminId) {
         return addBoardCommon(adminId, dto, null);
+    }
+
+    // 이벤트 게시글 추가
+    @PostMapping("/eventBoard")
+    public ResponseEntity<BoardResponse> addEventBoard(@RequestBody BoardRequest dto, Principal principal) {
+        return addBoardCommon(principal, dto, null);
+    }
+
+
+    // 이벤트 게시글 불러오기(이벤트에 참여한 게시글들을 불러와서 당첨자 고를때 사용?..)
+    @GetMapping("/eventBoards")
+    public ResponseEntity<List<BoardResponse>> getEventBoards() {
+        List<BoardResponse> participationPosts = eventService.getEventBoards();
+        return ResponseEntity.ok(participationPosts);
     }
 
 
@@ -99,10 +116,18 @@ public class BoardController {
         return boardService.findAll("view", false);
     }
 
-    // 게시글 종류별로 전체 불러오기(블랙리스트에 등록된 유저의 게시글은 안나옴 그대로 사용하면 됨) 수정된 건 서비스 코드
-    @GetMapping("/type/{boardType}/{sortValue}/{sortOrder}")
-    public List<BoardPreviewResponse> getBoardsByType(@PathVariable("boardType") BoardType boardType, @PathVariable("sortValue") String sortValue, @PathVariable("sortOrder") String sortOrder) {
-        return boardService.findAllByBoardType(boardType, new SortRequest(sortValue, sortOrder));
+    // 게시글 종류별로 전체 불러오기(블랙리스트에 등록된 유저의 게시글은 안나옴 그대로 사용하면 됨, 공개 범위, 이미 본 게시글 필터 추가)
+    @GetMapping("/type/{boardType}")
+    public ResponseEntity<Page<BoardPreviewResponse>> getBoardsByType(
+            @PathVariable("boardType") String boardType,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortValue", defaultValue = "createdAt") String sortValue,
+            @RequestParam(value = "sortOrder", defaultValue = "desc") String sortOrder,
+            Principal principal) throws Exception {
+
+        Page<BoardPreviewResponse> responses = boardService.findAllByBoardType(BoardType.valueOf(boardType.toUpperCase()), page, size, sortValue, sortOrder, principal);
+        return ResponseEntity.ok(responses);
     }
 
 
@@ -120,10 +145,11 @@ public class BoardController {
 
     // 게시글 조회 시 조회수 증가 기능 추가
     @GetMapping("/board/{id}")
-    public BoardResponse getBoard(@PathVariable String id) {
+    public BoardResponse getBoard(@PathVariable String id, Principal principal) {
         System.out.println(id);
-        Board board = boardRepository.findById(Long.valueOf(id)).orElse(null); // 추가 코드
-        Board updatedBoard = boardService.updateVisit(board); // 추가 코드
+        User user = userService.findById(principal.getName());
+        Board board = boardRepository.findById(Long.valueOf(id)).orElse(null);
+        Board updatedBoard = boardService.updateVisit(board, user);
 
         return boardService.findById(updatedBoard.getId());
     }

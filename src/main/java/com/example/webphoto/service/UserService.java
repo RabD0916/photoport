@@ -10,6 +10,7 @@ import com.example.webphoto.dto.UserSearchResult;
 import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,11 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,10 +57,16 @@ public class UserService {
 
     // dto를 user엔티티로 저장
     private User requestToEntity(UserRequest dto) {
-        Optional<User> existingUser = userRepository.findById(dto.getId());
-        if (existingUser.isPresent()) {
+        Optional<User> existingUserById = userRepository.findById(dto.getId());
+        if (existingUserById.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
         }
+
+        Optional<User> existingUserByEmail = userRepository.findByEmail(dto.getEmail());
+        if (existingUserByEmail.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+
         String password = bCryptPasswordEncoder.encode(dto.getPassword());
         if (dto.getId().equals("ADMIN")) {
             return new User(dto.getId(), password, dto.getUserNick(),
@@ -70,12 +82,12 @@ public class UserService {
         return new UserResponse(user.getId(), user.getUserNick(), user.getUserProfile(), user.getEmail());
     }
 
-
     // 사용자를 추가하는 메소드
     public UserResponse addUser(UserRequest dto) {
-        if(userRepository.existsById(dto.getId())) {
-            return null;
+        if (userRepository.existsById(dto.getId())) {
+            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
         }
+
         User user = userRepository.save(requestToEntity(dto));
         String dir = path + user.getId();
         File folder = new File(dir);
@@ -100,8 +112,32 @@ public class UserService {
     }
 
     // 사용자를 삭제하는 메소드
-    public void deleteUser(String userId) {
-        userRepository.deleteById(userId);
+    @Transactional
+    public void deleteUser(String userId) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with userId: " + userId));
+
+        // 유저 삭제
+        userRepository.delete(user);
+
+        // 사용자 폴더 삭제
+        String userDirPath = path + userId;
+        Path userDir = Paths.get(userDirPath);
+        if (Files.exists(userDir)) {
+            deleteDirectory(userDir);
+        }
+    }
+
+    // 디렉토리 및 하위 파일/디렉토리 삭제
+    private void deleteDirectory(Path path) throws IOException {
+        if (Files.isDirectory(path)) {
+            try (DirectoryStream<Path> entries = Files.newDirectoryStream(path)) {
+                for (Path entry : entries) {
+                    deleteDirectory(entry);
+                }
+            }
+        }
+        Files.delete(path);
     }
 
     // 유저 아이디로 검색
@@ -156,4 +192,5 @@ public class UserService {
         return resultDtoList;
 
     }
+
 }

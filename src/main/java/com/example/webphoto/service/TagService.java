@@ -25,4 +25,5 @@ public class TagService {
     public boolean existsByName(String tagName) {
         return tagRepository.existsByName(tagName);
     }
+
 }
