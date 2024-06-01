@@ -12,6 +12,7 @@ import com.example.webphoto.service.BoardService;
 import com.example.webphoto.service.EventService;
 import com.example.webphoto.service.MediaService;
 import com.example.webphoto.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,26 +48,29 @@ public class BoardController {
             String dir = path + userId.getName() + "/pose";
             File folder = new File(dir);
 
-
             if (!folder.exists() && !folder.mkdirs()) {
-                return ResponseEntity.internalServerError().body(new BoardResponse(null, dto.getTitle(), null, dto.getContent(), 0, 0, 0,dto.getType(), dto.getWriterId(), null, null, null, null));
+                return ResponseEntity.internalServerError().body(new BoardResponse(null, dto.getTitle(), null, dto.getContent(), 0, 0, 0, dto.getType(), dto.getWriterId(), null, null, null, null));
             }
 
             for (MultipartFile file : files) {
                 try {
-                    Path filePath = Paths.get(folder.getAbsolutePath() + "/" + file.getOriginalFilename());
+                    String fileName = file.getOriginalFilename();
+                    Path filePath = Paths.get(folder.getAbsolutePath() + "/" + fileName);
 
                     // 파일 이름 중복 확인
                     if (Files.exists(filePath)) {
-                        // 중복되는 경우 예외 처리
-                        return ResponseEntity.badRequest().body(new BoardResponse(null, "File name already exists: " + file.getOriginalFilename(), null, null, 0, 0, 0, null,null, null, null, null, null));
+                        // 중복되는 경우 UUID를 사용하여 파일 이름 변경
+                        String randomFileName = UUID.randomUUID() + "_" + fileName;
+                        filePath = Paths.get(folder.getAbsolutePath() + "/" + randomFileName);
+                        fileName = randomFileName;
                     }
 
-                    Files.write(filePath, file.getBytes());
-                    String fileURL = file.getOriginalFilename();
-                    mediaService.addPose(userId.getName(), fileURL);
+                    // 파일 쓰기
+                    Files.write(filePath, file.getBytes(), StandardOpenOption.CREATE_NEW);
+                    mediaService.addPose(userId.getName(), fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return ResponseEntity.internalServerError().body(new BoardResponse(null, "File upload error: " + file.getOriginalFilename(), null, null, 0, 0, 0, dto.getType(), dto.getWriterId(), null, null, null, null));
                 }
             }
         }

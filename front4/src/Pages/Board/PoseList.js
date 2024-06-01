@@ -47,8 +47,8 @@ const PostList = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
-    const [sortValue, setSortValue] = useState("view");
-    const [sortOrder, setSortOrder] = useState("asc");
+    const [sortValue, setSortValue] = useState("createdAt");
+    const [sortOrder, setSortOrder] = useState("desc");
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
 
