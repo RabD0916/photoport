@@ -1,6 +1,6 @@
-import React, {useEffect, useState, Suspense} from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
@@ -8,10 +8,30 @@ import sub from "../../img/sub.png";
 import view from "../../img/view.png";
 
 const GalleryContainer = styled.div`
-  width: 80%;
-  margin: auto;
-  display: flex;
-  flex-wrap: wrap;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+
+    &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
 `;
 
 // Report 컴포넌트를 동적으로 로드하기 위한 Lazy 로딩
@@ -23,44 +43,33 @@ const PostList = () => {
     const boardType = "POSE";
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
-    const [boardList, setBoardList] = useState([{
-        id: null,
-        title: null,
-        createdAt: null,
-        view: null,
-        like: null,
-        bookmark: null,
-        writerId: null,
-        writerName: null,
-        media: {
-            mediaName: null,
-            categoryName: null
-        },
-        commentsDto: {
-            id: null,
-            content: null,
-            writerId: null,
-            writerName: null
-        },
-        tags: null
-    }]);
+    const [boardList, setBoardList] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
-    const [sortValue, setSortValue] = useState("view")
-    const [sortOrder, setSortOrder] = useState("asc")
+    const [sortValue, setSortValue] = useState("createdAt");
+    const [sortOrder, setSortOrder] = useState("desc");
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const getBoardList = async () => {
+    const getBoardList = async (page = 0) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}/${sortValue}/${sortOrder}`, {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+                params: {
+                    page,
+                    size: 5, // 한 페이지에 보여줄 게시글 수
+                    sortValue,
+                    sortOrder
+                },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             console.log(resp);
-            console.log(resp.data);
-            setBoardList(resp.data);
-            updateProfileImages(resp.data); // 유저별 프로필 가져오기(수정한거니까 받아주세요 예전에는 공유 게시판 들어가면 현재 로그인한 사용자 프로필로 다떳습니다)
+            setBoardList(resp.data.content);
+            setTotalPages(resp.data.totalPages);
+            setCurrentPage(resp.data.number);
+            updateProfileImages(resp.data.content);
         } catch (error) {
             console.error("Error fetching board list:", error);
         }
@@ -90,8 +99,9 @@ const PostList = () => {
     };
 
     const handleCommentChange = (event) => {
-        setNewComment(event.target.value); // 댓글 내용 변경 시 상태 업데이트
+        setNewComment(event.target.value);
     };
+
     const submitComment = async () => {
         const data = {
             content: newComment
@@ -104,23 +114,22 @@ const PostList = () => {
                 }
             });
             console.log(resp);
-            // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
             setSelectedPost({ ...selectedPost, commentsDto: { comments: [...selectedPost.commentsDto.comments, resp.data] } });
-            setNewComment(""); //댓글 초기화
-            getBoardList() //게시글리스트 최신
+            setNewComment("");
+            getBoardList(currentPage);
         } catch (error) {
             console.error("댓글 에러:", error);
         }
     };
-    useEffect(() => {
-        getBoardList();
-    }, []);
 
+    useEffect(() => {
+        getBoardList(currentPage);
+    }, [currentPage, sortValue, sortOrder]); // currentPage, sortValue, sortOrder 변경 시 데이터를 다시 가져옴
 
     const updateProfileImages = async (boards) => {
-        let newImages = {...profileImages};
+        let newImages = { ...profileImages };
         for (const post of boards) {
-            if (!newImages[post.writerId]) { // 이미 로드된 이미지가 없는 경우에만 요청
+            if (!newImages[post.writerId]) {
                 try {
                     const response = await axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
                         headers: {
@@ -137,10 +146,6 @@ const PostList = () => {
         setProfileImages(newImages);
     };
 
-    useEffect(() => {
-        getBoardList();
-    }, []); // 의존성 배열을 비워서 컴포넌트 마운트 시에만 호출되도록
-    // 좋아요 버튼을 눌렀을 때 실행할 함수
     const handleLike = async (postId) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/like/${postId}`, {}, {
@@ -149,13 +154,12 @@ const PostList = () => {
                 }
             });
             console.log(response.data);
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            getBoardList(currentPage);
         } catch (error) {
             console.error("좋아요 처리 중 에러 발생:", error);
         }
     };
 
-    // 북마크 버튼을 눌렀을 때 실행할 함수
     const handleBookmark = async (postId) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/bookmark/${postId}`, {}, {
@@ -164,11 +168,12 @@ const PostList = () => {
                 }
             });
             console.log(response.data);
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            getBoardList(currentPage);
         } catch (error) {
             console.error("북마크 처리 중 에러 발생:", error);
         }
     };
+
     const deletePost = async (postId) => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/delete/board/${postId}`, {
@@ -177,14 +182,20 @@ const PostList = () => {
                 }
             });
             console.log("Post deleted:", response);
-            // 게시글 삭제 후 모달 닫기 및 게시글 목록 새로고침
-            alert("해당 게시글이 삭제되었습니다.")
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            alert("해당 게시글이 삭제되었습니다.");
+            getBoardList(currentPage);
             setIsModalOpen(false);
         } catch (error) {
             console.error("Error deleting post:", error);
         }
     };
+
+    const handlePageChange = (page) => {
+        if (page >= 0 && page < totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     return (
         <div>
             <div>
@@ -206,9 +217,7 @@ const PostList = () => {
                                         alt={`사진 ${index + 1}`}
                                     />
                                 ))}
-
                                 <p>내용: {selectedPost.content}</p>
-                                {/* 게시글의 다른 필드들을 여기에 추가 */}
                                 <div className="comments">
                                     <h4>댓글</h4>
                                     {selectedPost.commentsDto.comments.map((comment) => (
@@ -228,7 +237,6 @@ const PostList = () => {
                                 </div>
                             </div>
                         )}
-                        {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
                         <Suspense fallback={<div>Loading...</div>}>
                             <Report selectedPost={selectedPost}/>
                         </Suspense>
@@ -244,13 +252,11 @@ const PostList = () => {
                 <div className="main_board">
                     {boardList.map(post => (
                         <div key={post.id} className="board_item">
-                            {/* 게시글 내용 표시 */}
                             {post.title}
                             <div className={"board_content"}>
                                 <img src={profileImages[post.writerId]} alt="Profile" className="profile" />
                                 {post.writerName}</div>
                             <div className={"img_box"}>
-                                {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
                                 <img className="board_img" src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
                                      onClick={() => open_board(post.id)}
                                 />
@@ -265,13 +271,25 @@ const PostList = () => {
                                 </div>
                             </div>
                             <div>
-                            태그: {post.tags}
+                                태그: {post.tags}
                             </div>
                         </div>
                     ))}
                 </div>
             </GalleryContainer>
-
+            <PaginationContainer>
+                <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                    이전
+                </PageButton>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <PageButton key={index} onClick={() => handlePageChange(index)} disabled={currentPage === index}>
+                        {index + 1}
+                    </PageButton>
+                ))}
+                <PageButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                    다음
+                </PageButton>
+            </PaginationContainer>
         </div>
     );
 };

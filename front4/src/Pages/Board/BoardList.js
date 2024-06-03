@@ -14,7 +14,26 @@ const GalleryContainer = styled.div`
     flex-wrap: wrap;
 `;
 
-// Report 컴포넌트를 동적으로 로드하기 위한 Lazy 로딩
+const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+`;
+
+const PageButton = styled.button`
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+
+    &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+`;
+
 const Report = React.lazy(() => import('./Report'));
 
 const BoardList = () => {
@@ -29,41 +48,30 @@ const BoardList = () => {
     const [upComment, setupComment] = useState(false);
     const [content, setContent] = useState('');
     const [commentId, setCommentId] = useState('');
-    const [boardList, setBoardList] = useState([{
-        id: null,
-        title: null,
-        createdAt: null,
-        view: null,
-        like: null,
-        bookmark: null,
-        writerId: null,
-        writerName: null,
-        media: {
-            mediaName: null,
-            categoryName: null
-        },
-        commentsDto: {
-            id: null,
-            content: null,
-            writerId: null,
-            writerName: null
-        },
-        tags: null
-    }]);
-    const [sortValue, setSortValue] = useState("createdAt");        // Can use : title, createdAt, view, like, bookmark
-    const [sortOrder, setSortOrder] = useState("desc");             // asc = ascending, desc = descending
+    const [boardList, setBoardList] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [sortValue, setSortValue] = useState("createdAt");
+    const [sortOrder, setSortOrder] = useState("desc");
 
-    const getBoardList = async () => {
+    const getBoardList = async (page = 0) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}/${sortValue}/${sortOrder}`, {
+            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+                params: {
+                    page,
+                    size: 5, // 한 페이지에 보여줄 게시글 수
+                    sortValue,
+                    sortOrder
+                },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             console.log(resp);
-            console.log(resp.data);
-            setBoardList(resp.data);
-            updateProfileImages(resp.data); // 유저별 프로필 가져오기(수정한거니까 받아주세요 예전에는 공유 게시판 들어가면 현재 로그인한 사용자 프로필로 다떳습니다)
+            setBoardList(resp.data.content);
+            setTotalPages(resp.data.totalPages);
+            setCurrentPage(resp.data.number);
+            updateProfileImages(resp.data.content);
         } catch (error) {
             console.error("Error fetching board list:", error);
         }
@@ -93,8 +101,9 @@ const BoardList = () => {
     };
 
     const handleCommentChange = (event) => {
-        setNewComment(event.target.value); // 댓글 내용 변경 시 상태 업데이트
+        setNewComment(event.target.value);
     };
+
     const submitComment = async () => {
         const data = {
             content: newComment
@@ -109,21 +118,21 @@ const BoardList = () => {
             console.log(resp);
             // 댓글 작성 후에는 해당 게시물의 정보를 업데이트하여 선택된 게시물로 설정
             setSelectedPost({ ...selectedPost, commentsDto: { comments: [...selectedPost.commentsDto.comments, resp.data] } });
-            setNewComment(""); //댓글 초기화
-            getBoardList() //게시글리스트 최신
+            setNewComment("");
+            getBoardList(currentPage);
         } catch (error) {
             console.error("댓글 에러:", error);
         }
     };
-    useEffect(() => {
-        getBoardList();
-    }, []);
 
+    useEffect(() => {
+        getBoardList(currentPage);
+    }, [currentPage, sortValue, sortOrder]);
 
     const updateProfileImages = async (boards) => {
         let newImages = { ...profileImages };
         for (const post of boards) {
-            if (!newImages[post.writerId]) { // 이미 로드된 이미지가 없는 경우에만 요청
+            if (!newImages[post.writerId]) {
                 try {
                     const response = await axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
                         headers: {
@@ -140,11 +149,6 @@ const BoardList = () => {
         setProfileImages(newImages);
     };
 
-    useEffect(() => {
-        getBoardList();
-    }, []); // 의존성 배열을 비워서 컴포넌트 마운트 시에만 호출되도록
-
-    // 좋아요 버튼을 눌렀을 때 실행할 함수
     const handleLike = async (postId) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/like/${postId}`, {}, {
@@ -153,13 +157,12 @@ const BoardList = () => {
                 }
             });
             console.log(response.data);
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            getBoardList(currentPage);
         } catch (error) {
             console.error("좋아요 처리 중 에러 발생:", error);
         }
     };
 
-    // 북마크 버튼을 눌렀을 때 실행할 함수
     const handleBookmark = async (postId) => {
         try {
             const response = await axios.post(`http://localhost:8080/api/bookmark/${postId}`, {}, {
@@ -168,7 +171,7 @@ const BoardList = () => {
                 }
             });
             console.log(response.data);
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            getBoardList(currentPage);
         } catch (error) {
             console.error("북마크 처리 중 에러 발생:", error);
         }
@@ -182,17 +185,17 @@ const BoardList = () => {
                     Authorization: `Bearer ${accessToken}`,
                 }
             });
-            // 게시글 삭제 후 모달 닫기 및 새로 고침'
             if (response.status === 200) {
                 alert("업데이트 완료.");
                 await open_board(selectedPost.id);
-                setupComment(false); // 댓글 수정 폼을 비활성화
-                setContent(''); // 수정 입력 폼을 비웁니다.
+                setupComment(false);
+                setContent('');
             }
         } catch (error) {
             console.error("Error updating post:", error);
         }
     };
+
     const comment_delete = async (postId) => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/deleteComments/${postId}`, {
@@ -202,13 +205,12 @@ const BoardList = () => {
             });
             console.log("Post deleted:", response);
             await open_board(selectedPost.id);
-            // 게시글 삭제 후 모달 닫기 및 새로 고침
             alert("해당 댓글이 삭제되었습니다.");
         } catch (error) {
             console.error("Error deleting post:", error);
         }
-
     };
+
     const deletePost = async (postId) => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/delete/board/${postId}`, {
@@ -217,14 +219,20 @@ const BoardList = () => {
                 }
             });
             console.log("Post deleted:", response);
-            // 게시글 삭제 후 모달 닫기 및 게시글 목록 새로고침
             alert("해당 게시글이 삭제되었습니다.")
-            getBoardList(); // 게시글 리스트를 다시 가져옴으로써 화면을 최신 상태로 업데이트
+            getBoardList(currentPage);
             setIsModalOpen(false);
         } catch (error) {
             console.error("Error deleting post:", error);
         }
     };
+
+    const handlePageChange = (page) => {
+        if (page >= 0 && page < totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     return (
         <div className="bg-white py-24 sm:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -249,103 +257,95 @@ const BoardList = () => {
                                             />
                                         ))}
 
-                                        <p>내용: {selectedPost.content}</p>
-                                        {/* 게시글의 다른 필드들을 여기에 추가 */}
-                                        <div className="comments">
-                                            <h4>댓글</h4>
-                                            {selectedPost.commentsDto.comments.map((comment) => (
-                                                <div key={comment.id}>
-                                                    <p>{comment.writerName}: {comment.content}</p>
+                                <p>내용: {selectedPost.content}</p>
+                                <div className="comments">
+                                    <h4>댓글</h4>
+                                    {selectedPost.commentsDto.comments.map((comment) => (
+                                        <div key={comment.id}>
+                                            <p>{comment.writerName}: {comment.content}</p>
+                                            {comment.writerId === userId && (
+                                                <div>
                                                     {comment.writerId === userId && (
-                                                        <div>
-                                                            {comment.writerId === userId && (
+                                                        <>
+                                                            {comment.id === commentId && upComment ? (
                                                                 <>
-                                                                    {comment.id === commentId && upComment ? (
-                                                                        <>
-                                                                            <input type="text" value={content}
-                                                                                   onChange={(e) => setContent(e.target.value)}/>
-                                                                            <button
-                                                                                onClick={() => comment_update(comment.id, content)}>수정완료
-                                                                            </button>
-                                                                        </>
-                                                                    ) : (
-                                                                        <button onClick={() => {
-                                                                            setupComment(true);
-                                                                            setCommentId(comment.id);
-                                                                        }}>수정</button>
-                                                                    )}
-                                                                    <button
-                                                                        onClick={() => comment_delete(comment.id)}>삭제
-                                                                    </button>
+                                                                    <input type="text" value={content} onChange={(e) => setContent(e.target.value)} /><button onClick={() => comment_update(comment.id, content)}>수정완료</button>
                                                                 </>
+                                                            ) : (
+                                                                <button onClick={() => {
+                                                                    setupComment(true);
+                                                                    setCommentId(comment.id);
+                                                                }}>수정</button>
                                                             )}
-                                                        </div>
+                                                            <button onClick={() => comment_delete(comment.id)}>삭제</button>
+                                                        </>
                                                     )}
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
-                                        <div className={"comment-write"}>
-                                            <h4>댓글 쓰기</h4>
-                                            <textarea
-                                                value={newComment}
-                                                onChange={handleCommentChange}
-                                                placeholder="댓글을 입력하세요"
-                                            />
-                                            <button onClick={submitComment}>작성</button>
-                                        </div>
-                                    </div>
-                                )}
-                                {/* Report 컴포넌트를 동적으로 로드하여 렌더링 */}
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    {selectedPost && <Report selectedPost={selectedPost}/>}
-                                </Suspense>
-                                <button type="button" className="close_btn" onClick={close_board}>닫기</button>
-                                {selectedPost && selectedPost.writerId === userId && (
-                                    <button type="button" className="close_btn"
-                                            onClick={() => deletePost(selectedPost.id)}>삭제</button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <GalleryContainer>
-                        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"    >
-                            {boardList.map(post => (
-                                <div key={post.id} className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                                    {/* 게시글 내용 표시 */}
-                                    {post.title}
-                                    <div className={"board_content"}>
-                                        <img src={profileImages[post.writerId]} alt="Profile" className="profile"/>
-                                        {post.writerName}</div>
-                                    <div className={"img_box"}>
-                                        {/* 배열의 첫 번째 이미지만 표시. 배열이 비어있지 않은지 확인 필요 */}
-                                        <img className="board_img"
-                                             src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
-                                             alt="#"
-                                             onClick={() => open_board(post.id)}
-                                        />
-                                    </div>
-                                    <div className={"click_evt"}>
-                                        <button onClick={() => handleLike(post.id)}><img className={"nav-img"}
-                                                                                         src={like}
-                                                                                         alt={"좋아요"}/>{post.like}
-                                        </button>
-                                        <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"}
-                                                                                             src={sub}
-                                                                                             alt={"북마크"}/>{post.bookmark}
-                                        </button>
-                                        <div className={"view_"}><img className={"nav-img"} src={view}
-                                                                      alt={"view"}/>{post.view}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        태그: {post.tags}
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </GalleryContainer>
+                                <div className={"comment-write"}>
+                                    <h4>댓글 쓰기</h4>
+                                    <textarea
+                                        value={newComment}
+                                        onChange={handleCommentChange}
+                                        placeholder="댓글을 입력하세요"
+                                    />
+                                    <button onClick={submitComment}>작성</button>
+                                </div>
+                            </div>
+                        )}
+                        <Suspense fallback={<div>Loading...</div>}>
+                            {selectedPost && <Report selectedPost={selectedPost} />}
+                        </Suspense>
+                        <button type="button" className="close_btn" onClick={close_board}>닫기</button>
+                        {selectedPost && selectedPost.writerId === userId && (
+                            <button type="button" className="close_btn" onClick={() => deletePost(selectedPost.id)}>삭제</button>
+                        )}
+                    </div>
                 </div>
             </div>
+            <GalleryContainer>
+                <div className="main_board">
+                    {boardList.map(post => (
+                        <div key={post.id} className="board_item">
+                            {post.title}
+                            <div className={"board_content"}>
+                                <img src={profileImages[post.writerId]} alt="Profile" className="profile" />
+                                {post.writerName}</div>
+                            <div className={"img_box"}>
+                                <img className="board_img"
+                                     src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                     alt="#"
+                                     onClick={() => open_board(post.id)}
+                                />
+                            </div>
+                            <div className={"click_evt"}>
+                                <button onClick={() => handleLike(post.id)}><img className={"nav-img"} src={like} alt={"좋아요"} />{post.like}</button>
+                                <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"} src={sub} alt={"북마크"} />{post.bookmark}</button>
+                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"} />{post.view}</div>
+                            </div>
+                            <div>
+                                태그: {post.tags}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </GalleryContainer>
+            <PaginationContainer>
+                <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                    이전
+                </PageButton>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <PageButton key={index} onClick={() => handlePageChange(index)} disabled={index === currentPage}>
+                        {index + 1}
+                    </PageButton>
+                ))}
+                <PageButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                    다음
+                </PageButton>
+            </PaginationContainer>
         </div>
     );
 };

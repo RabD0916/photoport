@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -10,30 +10,28 @@ const BoardWrite = () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
-    const [key,setKey] =useState([]);
-    const [value,setValue]=useState([]);
+    const [key, setKey] = useState([]);
+    const [value, setValue] = useState([]);
     const settings = {
         dots: true,
         fade: true,
-        arrows : false,       // 옆으로 이동하는 화살표 표시 여부
+        arrows: false,
         infinite: true,
-        draggable : true,    //드래그 가능 여부
+        draggable: true,
         speed: 100,
         slidesToShow: 1,
         slidesToScroll: 1,
-        responsive: [ // 반응형 웹 구현 옵션
+        responsive: [
             {
-                breakpoint: 960, //화면 사이즈 960px일 때
+                breakpoint: 960,
                 settings: {
-                    //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
-                    slidesToShow:3
+                    slidesToShow: 3
                 }
             },
             {
-                breakpoint: 768, //화면 사이즈 768px일 때
+                breakpoint: 768,
                 settings: {
-                    //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
-                    slidesToShow:2
+                    slidesToShow: 2
                 }
             }
         ]
@@ -41,12 +39,13 @@ const BoardWrite = () => {
     const [board, setBoard] = useState({
         title: '',
         content: '',
-        fileName : [],
-        tag: '',
-        share: 'PUBLIC',
+        fileName: [],
+        tags: '',  // 변수명 수정
+        share: 'FRIEND',
         type: 'NORMAL',
         writer: userId
     });
+
     useEffect(() => {
         window.addEventListener('message', handleMessage);
         return () => {
@@ -55,7 +54,7 @@ const BoardWrite = () => {
     }, []);
 
     const onChange = (event) => {
-        const { value, name } = event.target; //event.target에서 name과 value만 가져오기
+        const { value, name } = event.target;
         setBoard({
             ...board,
             [name]: value,
@@ -64,65 +63,57 @@ const BoardWrite = () => {
 
     const handleMessage = (event) => {
         if (typeof event.data === 'object' && event.data[0] !== undefined && event.data[1] !== undefined) {
-            console.log(event.data[1])
             const newData = event.data[1];
             const newKeys = newData.map((item) => event.data[0]);
             setKey(prevKey => [...prevKey, ...newKeys]);
-            setValue(prevValue => [...prevValue, ...newData])
+            setValue(prevValue => [...prevValue, ...newData]);
             setBoard({
                 ...board,
                 ["fileName"]: value,
             });
-            console.log(key);
         }
     };
 
-    const { title, tag, content} = board; //비구조화 할당
-
+    const { title, tags, content } = board; // 변수명 수정
 
     const saveBoard = async () => {
         if (value[0] === null || value[0] === undefined || value[0] === '') {
             alert('사진을 추가해 주세요!');
-            return; // 함수를 여기서 멈춥니다.
+            return;
         }
-        console.log(board.title);
-        console.log(board.tag);
-        console.log(key);
-        console.log(value);
-        console.log(board.content);
-        console.log(accessToken);
-        console.log(key)
-        console.log(value)
+
         await axios.post(`http://localhost:8080/api/normalBoard`, {
             title: board.title,
             content: board.content,
             categories: key,
             mediaNames: value,
-            tags: board.tag,
+            tags: board.tags,  // 변수명 수정
             share: board.share,
             type: board.type,
             writerId: board.writer
-        },{
-            headers : {
-                Authorization : `Bearer ${accessToken}`
+        }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
             }
         }).then((res) => {
             alert('등록되었습니다.');
             navigate('/board');
         });
     };
-    const backToList=() =>{
-        window.open("gallery/hidden/"+userId,"_blank","width=100");
-    }
-    const go_back=() =>{
-        navigate('/board')
-    }
-    const remove_index=(index)=>{
+
+    const backToList = () => {
+        window.open("gallery/hidden/" + userId, "_blank", "width=100");
+    };
+    const go_back = () => {
+        navigate('/board');
+    };
+    const remove_index = (index) => {
         const newKey = [...key.slice(0, index), ...key.slice(index + 1)];
         const newValue = [...value.slice(0, index), ...value.slice(index + 1)];
         setKey(newKey);
         setValue(newValue);
-    }
+    };
+
     return (
         <div className="center-align">
             <div className="big-font">
@@ -140,26 +131,25 @@ const BoardWrite = () => {
                             ))}
                         </Slider>
                     </div>
-                    {/*<h1>값:{key[0]}{value[0]}</h1>*/}
                     <button className={"plus_button"} onClick={backToList}>사진추가</button>
                     <span>제목</span>
-                    <input type="text" name="title" value={title} onChange={onChange}/>
-                    <br/>
+                    <input type="text" name="title" value={title} onChange={onChange} />
+                    <br />
                     <span>태그</span>
                     <input
                         type="text"
-                        name="tag"
-                        value={tag}
+                        name="tags"  // 변수명 수정
+                        value={tags}
                         onChange={onChange}
                     />
-                    <br/>
+                    <br />
                     <span>내용</span>
                     <textarea className="text_area"
                               name="content"
                               value={content}
                               onChange={onChange}
                     />
-                    <br/>
+                    <br />
                 </div>
                 <div>
                     <button className="button-style" onClick={saveBoard}>글쓰기</button>
@@ -167,7 +157,6 @@ const BoardWrite = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 

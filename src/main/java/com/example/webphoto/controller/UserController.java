@@ -91,7 +91,7 @@ public ResponseEntity<String> selectUser(@RequestBody UserRequest dto) {
 
     // 회원 삭제
     @PostMapping("/delete")
-    public String deleteUser(Principal user) {
+    public String deleteUser(Principal user) throws IOException {
         userService.deleteUser(user.getName());
         return "delete User";
     }

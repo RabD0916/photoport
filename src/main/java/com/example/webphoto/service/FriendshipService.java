@@ -173,18 +173,6 @@ public class FriendshipService {
         return responseDto;
     }
 
-//    // 친구 차단 메서드
-//    @Transactional
-//    public FriendshipRemovalResponse blockFriendship(Long friendshipId) throws Exception {
-//        Friendship friendship = friendshipRepository.findById(friendshipId)
-//                .orElseThrow(() -> new Exception("Friendship not found"));
-//
-//        friendship.blockFriendship();
-//        friendshipRepository.save(friendship);
-//
-//        return new FriendshipRemovalResponse(friendshipId, "Friendship blocked successfully");
-//    }
-
     // 친구 목록
     public List<FriendDTO> findFriendsByUserEmail(String userEmail) throws Exception {
         // 유저 존재 여부 검증

@@ -65,20 +65,21 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Friendship> friendshipList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "receiver")
-    private List<Alarm> receiveAlarms = new ArrayList<>();
+//    @OneToMany(mappedBy = "receiver")
+//    private List<Alarm> receiveAlarms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender")
-    private List<Alarm> sendAlarms = new ArrayList<>();
+//    @OneToMany(mappedBy = "sender")
+//    private List<Alarm> sendAlarms = new ArrayList<>();
+
 
     public User(String id, String password, String userNick, String phone, String birth, String email, LocalDateTime userConn, UserType userType, boolean userAgree, String userProfile) {
         this.id = id;
