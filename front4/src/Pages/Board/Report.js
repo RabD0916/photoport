@@ -73,7 +73,10 @@ const Report = ({ selectedPost }) => {
     return (
         <div className="report">
             {/* 신고하기 버튼 */}
-            <button type="button" className="report_btn" onClick={openModal}>
+            <button
+                type="button"
+                className={"justify-items-end mt-3 text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center" +
+                    " me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"} onClick={openModal}>
                 신고하기
             </button>
 
@@ -130,6 +133,7 @@ const Report = ({ selectedPost }) => {
                 </div>
             </div>
         </div>
+
     );
 };
 

@@ -1,10 +1,10 @@
-import './css/nav.scss';
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+// import './css/nav.scss';
+import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
 import Search from '../img/search.png';
 import Mypag from '../img/mypage.png';
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import {useLocation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import LogoutIcon from '../img/logout.png';
 import ListIcon from '../img/list.png';
 import axios from "axios";
@@ -89,103 +89,85 @@ function Nav() {
 
     return (
         <>
-            <nav className="main_navBar">
-                <div className="centerLink">
-                    <Link to={"/"} className={"main_a"}>포토포트</Link>
-                </div>
-                <div className="rightLinks">
-                    <div className="searchLink">
-                        {visible &&
-                            <div>
-                                <input
-                                    type="text"
-                                    className="search_bar"
-                                    value={keyword}
-                                    onChange={handleInputChange}
-                                    // onKeyPress={handleKeyPress}
-                                    placeholder="검색어를 입력하세요"
-                                />
-                                <button onClick={searchContent}>전송</button>
-                            </div>
-                        }
-                        <button className="right" onClick={() => {
-                            setVisible(!visible);
-                        }}><img className={"search_icon"} src={Search} alt="하이"/></button>
+            <nav
+                className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-t-2 border-blue-700">
+                <div
+                    className={"flex justify-between lg:w-auto w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-5 lg:pb-0"}>
+                    <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
+                        <Link to={"/"} className={"font-semibold text-xl tracking-tight"}>포토포트</Link>
                     </div>
+                    <div className={"block lg:hidden"}>
+                        <button
+                            className={"flex items-center px-3 py-2 border-2 rounded text-blue-700 border-blue-700 hover:text-blue-700 hover:border-blue-700"}
+                        >
+                        <title>머지이건?</title>
+                        </button>
+                    </div>
+                </div>
+                    <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
+                        <div className={"text-md font-bold text-blue-700 lg:flex-grow"}>
+                            <Link to={"/gallery/" + userId}
+                                  className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}
+                                  onClick={isUserIdEmpty}>갤러리</Link>
+                            <div
+                                className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}>
+                                <div onClick={isUserIdEmpty}>게시판</div>
+                                {/*<div className={"absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"} onClick={isUserIdEmpty}>*/}
+                                {/*    <div className={"py-1"}>*/}
+                                {/*        <Link to={"/Board"} className={"text-gray-700 block px-4 py-2 text-sm"}>공유게시판</Link>*/}
+                                {/*        <Link to={"/Pose"} className={"text-gray-700 block px-4 py-2 text-sm"}>포즈게시판</Link>*/}
+                                {/*        <Link to={"/Notice"} className={"text-gray-700 block px-4 py-2 text-sm"}>공지게시판</Link>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                            </div>
+                            <Link to={"/FindFriend"}
+                                  className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}
+                                  onClick={isUserIdEmpty}>친구추가</Link>
+                            {
+                                isAdmin &&
+                                <Link to={"/Blacklist"}
+                                      className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}>
+                                    블랙리스트 관리</Link>
+                            }
+                        </div>
+                    </div>
+                    <div className="relative mx-auto text-gray-600 lg:block hidden">
+                        <input
+                            type="text"
+                            className="border-2 border-gray-300 bg-white h-10 pl-2 pr-8 rounded-lg text-sm focus:outline-none"
+                            value={keyword}
+                            onChange={handleInputChange}
+                            // onKeyPress={handleKeyPress}
+                            placeholder="검색어를 입력하세요"
+                        />
+                        <button className={"absolute right-0 top-0 mt-3 mr-2"} onClick={searchContent}>
+                            <img className={"text-gray-600 h-4 w-4 fill-current"} src={Search} alt="검색사진"/>
+                        </button>
+                    </div>
+                    <div className={"flex"}>
                     {
-                        isWidth ? (
-                            <div className="otherLinks">
-                                <Link to={"/gallery/" + userId} className={"downright main_b"} onClick={isUserIdEmpty}>갤러리</Link>
-                                <div className={"dropdown"}>
-                                    <span className="dropbtn downright main_b" onClick={isUserIdEmpty}>게시판</span>
-                                    <div className={"dropdown-content"} onClick={isUserIdEmpty}>
-                                        <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
-                                        <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
-                                        <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
-                                    </div>
-                                </div>
-                                <Link to={"/FindFriend"} className={"downright main_b"} onClick={isUserIdEmpty}>친구추가</Link>
-                                {
-                                    isAdmin && <Link to={"/Blacklist"} className={"downright main_b"}>블랙리스트 관리</Link>
-                                }
-                                {
-                                    isLoggedIn ? (
-                                        <div className={"nav_div"}>
-                                            <Link to={"/Mypage"}>
-                                                <img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>
-                                            </Link>
-                                            <button className={"mypage_btn"} onClick={logoutHandler}>
-                                                <img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <Link to={"/login"}><img className={"mypage_icon"} src={Mypag} alt="로그인"/></Link>
-                                    )
-                                }
-                            </div>
+                        isLoggedIn ? (
+                            <>
+                                <Link to={"/Mypage"}
+                                      className={"block text-md px-4 py-2 rounded text-blue-700 ml-2 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"}>
+                                    {/*<img className={"mypage_icon"} src={Mypag} alt="마이페이지"/>*/} MyPage
+                                </Link>
+                                <button
+                                    className={"block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"}
+                                    onClick={logoutHandler}>
+                                    {/*<img className={"mypage_icon"} src={LogoutIcon} alt="로그아웃"/> */} Logout
+                                </button>
+                            </>
                         ) : (
-                            <div>
-                                <div className={`sidebar ${isSidebarVisible ? 'active' : ''}`}>
-                                    <button className="toggle_button" onClick={toggleSidebar}>
-                                        <img className={"list_icon"} src={ListIcon} alt="#" />
-                                    </button>
-                                    {
-                                        isLoggedIn ? (
-                                            <div className={"nav_div"}>
-                                                <Link to={"/gallery/" + userId} className={"downright"} onClick={isUserIdEmpty}>갤러리</Link>
-                                                <div className={"dropdown"}>
-                                                    <span className="dropbtn downright" onClick={isUserIdEmpty}>게시판</span>
-                                                    <div className={"dropdown-content"} onClick={isUserIdEmpty}>
-                                                        <Link to={"/Board"} className={"drop_a"}>공유게시판</Link>
-                                                        <Link to={"/Pose"} className={"drop_a"}>포즈게시판</Link>
-                                                        <Link to={"/Notice"} className={"drop_a"}>공지게시판</Link>
-                                                    </div>
-                                                </div>
-                                                <Link to={"/FindFriend"} className={"downright"} onClick={isUserIdEmpty}>친구추가</Link>
-                                                {
-                                                    isAdmin && <Link to={"/Blacklist"} className={"downright"}>블랙리스트 관리</Link>
-                                                }
-                                                <Link to={"/Mypage"}>
-                                                    <div className={"in_text"}>마이페이지</div>
-                                                </Link>
-                                                <button className={"in_button"} onClick={logoutHandler}>
-                                                    <div>로그아웃</div>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <Link to={"/login"}>
-                                                <div className={"in_text"}>로그인</div>
-                                            </Link>
-                                        )
-                                    }
-                                </div>
-                                <div className="content">
-                                    {/* Content */}
-                                </div>
-                            </div>
+                            <>
+                            <Link to={"/login"}
+                                  className={"block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"}>
+                                {/*<img className={"mypage_icon"} src={Mypag} alt="로그인"/>*/} Login
+                            </Link>
+                            </>
                         )
                     }
-                </div>
+                    </div>
             </nav>
         </>
     );
