@@ -176,7 +176,7 @@ const Main = () => {
     return (
         <div>
             <div>
-                <img className="center1" src="/backbaxk.jpg" alt="센터1"/>
+                {/*<img className="center1" src="/backbaxk.jpg" alt="센터1"/> 사진 집어넣기 */}
             </div>
             <div className="mainBar">
                 <li className="mainMenu left1"><Link to={"/Notice"} className={"main_nav"}>공지사항</Link></li>
