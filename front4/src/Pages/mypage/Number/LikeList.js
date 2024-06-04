@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const LikeList = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [LikeBoards, setLikeBoards] = useState([]);
     const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
         const getLikeBoards = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/likedBoards`, {
+                const response = await axios.get(`${SERVER_IP}/api/likedBoards`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }

@@ -4,6 +4,7 @@ import "./css/signup.scss";
 import axios from "axios";
 
 const SignUp = ({ onSignUpSuccess }) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
 
     const [formData, setFormData] = useState({
         id: '',
@@ -59,7 +60,7 @@ const SignUp = ({ onSignUpSuccess }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/join', formData);
+            const response = await axios.post(`${SERVER_IP}/api/join`, formData);
             console.log(response.data);
             if (response.status === 200) {
                 console.log("Success : ", response.status);

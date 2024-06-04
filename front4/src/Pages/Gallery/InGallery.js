@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const InGallery = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     //const {userId} = useParams();
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
@@ -15,7 +16,7 @@ const InGallery = () => {
         console.log(accessToken);
         async function getCategoryList() {
             const result = await axios.get(
-                `http://localhost:8080/api/sendCategory/${userId}`,
+                `${SERVER_IP}/api/sendCategory/${userId}`,
                 {
                     headers : {
                         Authorization : `Bearer ${accessToken}`
@@ -34,7 +35,7 @@ const InGallery = () => {
 
     async function createCate(cateName) {
         const result = await axios.post(
-            `http://localhost:8080/api/createCategory/${cateName}`,
+            `${SERVER_IP}/api/createCategory/${cateName}`,
         {},
             {
                 headers : {
@@ -48,7 +49,7 @@ const InGallery = () => {
 
     async function deleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:8080/api/deleteCategory/${cateName}`,
+            `${SERVER_IP}/api/deleteCategory/${cateName}`,
             {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
@@ -60,14 +61,14 @@ const InGallery = () => {
     }
     async function RenameCate(cateName) {
         const result = await axios.patch(
-            `http://localhost:8080/api/RenameCategory/${cateName}`
+            `${SERVER_IP}/api/RenameCategory/${cateName}`
         )
         return result.data;
     }
 
     async function forceDeleteCate(cateName) {
         const result = await axios.delete(
-            `http://localhost:8080/api/forceDeleteCategory/${cateName}`,
+            `${SERVER_IP}/api/forceDeleteCategory/${cateName}`,
             {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('accessToken')}`,

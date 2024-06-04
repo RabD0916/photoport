@@ -7,6 +7,7 @@ import {useLocation} from "react-router-dom";
 
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,7 +36,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/newPwUpdate', formData);
+            const response = await axios.post(`${SERVER_IP}/api/newPwUpdate`, formData);
             navigate("/")
         } catch (error) {
             console.error('Error:', error);

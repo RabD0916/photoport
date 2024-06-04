@@ -3,6 +3,7 @@ import axios from "axios";
 // import "./BoardCss/BlackList.scss";
 
 const BlackList = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [blacklist, setBlacklist] = useState([]);
     const [selectedUserPosts, setSelectedUserPosts] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -16,7 +17,7 @@ const BlackList = () => {
 
     const fetchBlacklist = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/blacklist", {
+            const response = await axios.get(`${SERVER_IP}/api/blacklist`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -29,7 +30,7 @@ const BlackList = () => {
 
     const fetchUserPosts = async (blackUser) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/blackBoards/${blackUser}`, {
+            const response = await axios.get(`${SERVER_IP}/api/blackBoards/${blackUser}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -43,7 +44,7 @@ const BlackList = () => {
     };
     const deleteblackUser = async (blackId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/reject/${blackId}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/reject/${blackId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

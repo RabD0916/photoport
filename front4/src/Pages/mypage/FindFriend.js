@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 function AddFriendPage() {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const accessToken = localStorage.getItem("accessToken");
     const [email, setEmail] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -19,7 +20,7 @@ function AddFriendPage() {
     // 받은 친구 요청을 불러오는 함수
     const fetchReceivedRequests = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/user/friends/received`, {
+            const response = await axios.get(`${SERVER_IP}/api/user/friends/received`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -37,7 +38,7 @@ function AddFriendPage() {
         for (const list of receivedRequests) {
             if (!newImages[list.writerId]) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/profile/${list.writerId}`, {
+                    const response = await axios.get(`${SERVER_IP}/api/profile/${list.writerId}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                             'Content-Type': 'application/json'
@@ -54,7 +55,7 @@ function AddFriendPage() {
     // 사용자 검색 처리 함수
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/user/search`, {
+            const response = await axios.get(`${SERVER_IP}/api/user/search`, {
                 params: {email: email},
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -69,7 +70,7 @@ function AddFriendPage() {
     // 친구 추가 요청 처리 함수
     const handleAddFriend = async (email) => {
         try {
-            await axios.post(`http://localhost:8080/api/user/friends/${email}`, {}, {
+            await axios.post(`${SERVER_IP}/api/user/friends/${email}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -83,7 +84,7 @@ function AddFriendPage() {
     // 친구 요청 수락 처리 함수
     const handleApprove = async (friendshipId) => {
         try {
-            await axios.post(`http://localhost:8080/api/user/friends/approve/${friendshipId}`, {}, {
+            await axios.post(`${SERVER_IP}/api/user/friends/approve/${friendshipId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -98,7 +99,7 @@ function AddFriendPage() {
     // 친구 요청 거절 처리 함수
     const handleReject = async (friendshipId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/user/friends/reject/${friendshipId}`, {
+            await axios.delete(`${SERVER_IP}/api/user/friends/reject/${friendshipId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },

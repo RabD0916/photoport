@@ -37,6 +37,7 @@ const PageButton = styled.button`
 const Report = React.lazy(() => import('./Report'));
 
 const BoardList = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
@@ -56,7 +57,7 @@ const BoardList = () => {
 
     const getBoardList = async (page = 0) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
                     size: 5, // 한 페이지에 보여줄 게시글 수
@@ -83,7 +84,7 @@ const BoardList = () => {
 
     const open_board = async (postId) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/board/${postId}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/board/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -110,7 +111,7 @@ const BoardList = () => {
         };
 
         try {
-            const resp = await axios.post(`http://localhost:8080/api/comments/${selectedPost.id}`, data, {
+            const resp = await axios.post(`${SERVER_IP}/api/comments/${selectedPost.id}`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -137,7 +138,7 @@ const BoardList = () => {
         for (const post of boards) {
             if (!newImages[post.writerId]) {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
+                    const response = await axios.get(`${SERVER_IP}/api/profile/${post.writerId}`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                             'Content-Type': 'application/json'
@@ -154,7 +155,7 @@ const BoardList = () => {
 
     const handleLike = async (postId) => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/like/${postId}`, {}, {
+            const response = await axios.post(`${SERVER_IP}/api/like/${postId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -168,7 +169,7 @@ const BoardList = () => {
 
     const handleBookmark = async (postId) => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/bookmark/${postId}`, {}, {
+            const response = await axios.post(`${SERVER_IP}/api/bookmark/${postId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -183,7 +184,7 @@ const BoardList = () => {
     const comment_update = async (commentId, content) => {
         try {
             const data = {content: content}
-            const response = await axios.post(`http://localhost:8080/api/updateComments/${commentId}`, data, {
+            const response = await axios.post(`${SERVER_IP}/api/updateComments/${commentId}`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 }
@@ -201,7 +202,7 @@ const BoardList = () => {
 
     const comment_delete = async (postId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/deleteComments/${postId}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/deleteComments/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -216,7 +217,7 @@ const BoardList = () => {
 
     const deletePost = async (postId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/delete/board/${postId}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/delete/board/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

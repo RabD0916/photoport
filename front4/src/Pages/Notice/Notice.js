@@ -7,6 +7,7 @@ import './css/CommonTable.css';
 import styled from "styled-components";
 
 const Notice = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const navigate = useNavigate();
     const id = localStorage.getItem("id");
     const boardType = "NOTICE"; // 게시글 종류 지정
@@ -20,7 +21,7 @@ const Notice = () => {
 
     const getBoardList = async (page = 0) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/${boardType}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
                     size: 5, // 한 페이지에 보여줄 게시글 수

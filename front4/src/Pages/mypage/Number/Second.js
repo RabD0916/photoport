@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Second = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [friendsList, setFriendsList] = useState([]);
     const [profileImages, setProfileImages] = useState({});
     const accessToken = localStorage.getItem("accessToken");
 
     const fetchFriendsList = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/user/friendsList', {
+            const response = await axios.get(`${SERVER_IP}/api/user/friendsList`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -24,7 +25,7 @@ const Second = () => {
         const images = {};
         for (const friend of friends) {
             try {
-                const response = await axios.get(`http://localhost:8080/api/profile/${friend.friendName}`, {
+                const response = await axios.get(`${SERVER_IP}/api/profile/${friend.friendName}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
@@ -40,7 +41,7 @@ const Second = () => {
 
     const removeFriend = async (friendName) => {
         try {
-            await axios.delete(`http://localhost:8080/api/user/friends/remove/${friendName}`, {
+            await axios.delete(`${SERVER_IP}/api/user/friends/remove/${friendName}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

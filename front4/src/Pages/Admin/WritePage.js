@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const WritePage = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const navigate = useNavigate();
     const fileInput = React.useRef(null);
     const id = localStorage.getItem('id');
@@ -32,7 +33,7 @@ const WritePage = () => {
 
     const saveNotice = async () => {
         try {
-            await axios.post(`http://localhost:8080/api/adminBoard`, {
+            await axios.post(`${SERVER_IP}/api/adminBoard`, {
                 title:Notice.title,
                 content:Notice.content,
                 tags:Notice.tags,

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const NoticeUpdate = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const navigate = useNavigate();
     const { id } = useParams();
     const accessToken = localStorage.getItem("accessToken");
@@ -16,7 +17,7 @@ const NoticeUpdate = () => {
     useEffect(() => {
         const fetchNotice = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/board/${id}`, {
+                const response = await axios.get(`${SERVER_IP}/api/board/${id}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
@@ -45,7 +46,7 @@ const NoticeUpdate = () => {
 
     const updateNotice = async () => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/update/board/${id}`, notice, {
+            const response = await axios.post(`${SERVER_IP}/api/update/board/${id}`, notice, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
