@@ -35,7 +35,7 @@ const InGallery = () => {
     async function createCate(cateName) {
         const result = await axios.post(
             `${SERVER_IP}/api/createCategory/${cateName}`,
-        {},
+            {},
             {
                 headers : {
                     Authorization : `Bearer ${localStorage.getItem('accessToken')}`,
@@ -159,36 +159,36 @@ const InGallery = () => {
 
     return (
         <section className={"text-gray-600 body-font"}>
-        <div className={"container mx-auto p-5 py-24"}>
-            <div className={"flex flex-col text-center w-full mb-20"}>
-                <h1 className={"sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"}>{userId}님의 추억</h1>
-                <p className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>Categories</p>
-            </div>
-            <div className="flex flex-col text-center w-full mb-20">
+            <div className={"container mx-auto p-5 py-24"}>
+                <div className={"flex flex-col text-center w-full mb-20"}>
+                    <h1 className={"sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"}>{userId}님의 추억</h1>
+                    <p className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>Categories</p>
+                </div>
+                <div className="flex flex-col text-center w-full mb-20">
                     <button onClick={createCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 추가</button>
                     <button onClick={deleteCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 삭제</button>
                     <button onClick={renameCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 수정</button>
-            </div>
+                </div>
 
-            <div className={"flex flex-wrap -m-4 place-content-center"}>
+                <div className={"flex flex-wrap -m-4 place-content-center"}>
                     <div className="lg:w-2/3 sm:w-1/2 p-4">
                         {cate.map((category) => (
                             <Link key={category["name"]} to={"/gallery/" + userId + "/" + category["name"]}
-                                  className={"flex relative mt-4"}>
+                                  className={"flex relative mt-4 group"}>
                                 {category["thumbnail"] !== "Empty" ?
-                                    <img className={"absolute inset-0 w-full h-full object-cover object-center"}
+                                    <img className={"absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100"}
                                          src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
                                          alt={category["thumbnail"]}
                                     ></img>
                                     : <div className={"absolute inset-0 w-full h-full object-cover object-center mt-4"}></div>}
-                                <div className={"px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-0 hover:opacity-100"}>
+                                <div className={"px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-100 group-hover:opacity-0"}>
                                     <div className={"tracking-widest text-2xl title-font font-medium text-black mb-1"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
                                 </div>
                             </Link>
                         ))}
                     </div>
                 </div>
-        </div>
+            </div>
         </section>
     );
 }
