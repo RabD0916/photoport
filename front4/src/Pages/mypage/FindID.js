@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import "./css/find.scss";
 import { useNavigate } from "react-router-dom";
 
 const FindID = ({ handleLogin }) => {
