@@ -3,10 +3,7 @@ package com.example.webphoto.controller;
 import com.example.webphoto.domain.Board;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.domain.enums.BoardType;
-import com.example.webphoto.dto.BoardRequest;
-import com.example.webphoto.dto.BoardPreviewResponse;
-import com.example.webphoto.dto.BoardResponse;
-import com.example.webphoto.dto.SortRequest;
+import com.example.webphoto.dto.*;
 import com.example.webphoto.repository.BoardRepository;
 import com.example.webphoto.service.BoardService;
 import com.example.webphoto.service.EventService;
@@ -100,9 +97,20 @@ public class BoardController {
         return addBoardCommon(adminId, dto, null);
     }
 
+    // 태그 알람(사용자 태그) 가져오기
+    @GetMapping("/tag/{tagName}/alarms")
+    public ResponseEntity<List<TagAlaramResponse>> getTagAlarms(@PathVariable String tagName) {
+        List<TagAlaramResponse> tagAlarms = boardService.tagAlaram(tagName);
+        if (tagAlarms.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(tagAlarms);
+    }
+
     // 이벤트 게시글 추가
     @PostMapping("/eventBoard")
     public ResponseEntity<BoardResponse> addEventBoard(@RequestBody BoardRequest dto, Principal principal) {
+
         return addBoardCommon(principal, dto, null);
     }
 
@@ -133,6 +141,13 @@ public class BoardController {
             Principal principal) throws Exception {
 
         Page<BoardPreviewResponse> responses = boardService.findAllByBoardType(BoardType.valueOf(boardType.toUpperCase()), page, size, sortValue, sortOrder, principal);
+        return ResponseEntity.ok(responses);
+    }
+
+    // 상위 게시물 3개 가져오기(공유, 포즈)
+    @GetMapping("/top3/{boardType}")
+    public ResponseEntity<List<BoardPreviewResponse>> getTop3Boards(@PathVariable("boardType") String boardType) {
+        List<BoardPreviewResponse> responses = boardService.getTop3BoardsByType(BoardType.valueOf(boardType.toUpperCase()));
         return ResponseEntity.ok(responses);
     }
 

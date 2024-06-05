@@ -83,11 +83,24 @@ public class BoardService {
         List<MediaResponse> mediaList = new ArrayList<>();
         List<String> tagList = new ArrayList<>();
 
+
         for(BoardTag boardTag : boardTagList) {
             Tag tag = boardTag.getTag();
             tagList.add(tag.getName());
             System.out.println(tag.getName());
         }
+
+    // 태그 내용에 사용자의 이름이 포함된 경우
+        for (String tagName : tagList) {
+            if (userService.findById(tagName) != null) {
+                List<TagAlaramResponse> tagAlarmResponse = tagAlaram(tagName);
+                if (tagAlarmResponse != null) {
+                    // 여기서 태그 알람을 처리합니다.
+                    System.out.println("사용자에 대한 태그 알람: " + tagName + " - " + tagAlarmResponse);
+                }
+            }
+        }
+
         for(MediaBoard mediaBoard : mediaBoardList) {
             Media media = mediaBoard.getMedia();
             mediaList.add(new MediaResponse(media.getName(), media.getCategory()));
@@ -111,10 +124,40 @@ public class BoardService {
         );
     }
 
+    // 사용자에게 태그 알림을 전송
+    public List<TagAlaramResponse> tagAlaram(String tagName) {
+        Optional<Tag> tagOptional = tagRepository.findByName(tagName);
+
+        if (!tagOptional.isPresent()) {
+            return new ArrayList<>(); // 태그가 존재하지 않으면 빈 리스트 반환
+        }
+
+        Tag tag = tagOptional.get();
+        List<TagAlaramResponse> responses = new ArrayList<>();
+
+        // 태그가 포함된 게시글 목록을 작성 시간 기준으로 내림차순 정렬
+        List<Board> boards = new ArrayList<>();
+        for (BoardTag boardTag : tag.getBoards()) {
+            boards.add(boardTag.getBoard());
+        }
+        boards.sort(Comparator.comparing(Board::getCreatedAt).reversed());
+
+        for (Board board : boards) {
+            TagAlaramResponse response = new TagAlaramResponse();
+            response.setTitle(board.getTitle());
+            response.setContent(board.getContent());
+            response.setWriterId(board.getWriter().getId());
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
     // AddBoardRequest DTO를 Board 엔티티로 변환
     private Board requestToEntity(BoardRequest dto) {
         User user = userService.findById(dto.getWriterId());
         String[] tagNames = dto.getTags().split("[#@]");
+
         List<Tag> tags = tagService.addTag(tagNames);
         List<BoardTag> boardTags = tags.stream()
                 .map(tag -> new BoardTag(null, null, tag))
@@ -164,6 +207,13 @@ public class BoardService {
         boardTagRepository.saveAll(saved.getTags());
 
         return entityToResponse(saved);
+    }
+
+    // TOP3 게시물 가져오기
+    public List<BoardPreviewResponse> getTop3BoardsByType(BoardType boardType) {
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "view"));
+        List<Board> boards = boardRepository.findByType(boardType, pageRequest).getContent();
+        return boards.stream().map(this::entityToPreviewResponse).collect(Collectors.toList());
     }
 
 

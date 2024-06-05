@@ -112,13 +112,13 @@ function Nav() {
                             <div
                                 className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}>
                                 <div onClick={isUserIdEmpty}>게시판</div>
-                                {/*<div className={"absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"} onClick={isUserIdEmpty}>*/}
-                                {/*    <div className={"py-1"}>*/}
-                                {/*        <Link to={"/Board"} className={"text-gray-700 block px-4 py-2 text-sm"}>공유게시판</Link>*/}
-                                {/*        <Link to={"/Pose"} className={"text-gray-700 block px-4 py-2 text-sm"}>포즈게시판</Link>*/}
-                                {/*        <Link to={"/Notice"} className={"text-gray-700 block px-4 py-2 text-sm"}>공지게시판</Link>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+                                <div className={"absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"} onClick={isUserIdEmpty}>
+                                    <div className={"py-1"}>
+                                        <Link to={"/Board"} className={"text-gray-700 block px-4 py-2 text-sm"}>공유게시판</Link>
+                                        <Link to={"/Pose"} className={"text-gray-700 block px-4 py-2 text-sm"}>포즈게시판</Link>
+                                        <Link to={"/Notice"} className={"text-gray-700 block px-4 py-2 text-sm"}>공지게시판</Link>
+                                    </div>
+                                </div>
                             </div>
                             <Link to={"/FindFriend"}
                                   className={"block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"}
