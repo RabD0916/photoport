@@ -14,7 +14,6 @@ import Login from "./Pages/mypage/Login";
 import Signup from "./Pages/mypage/Signup";
 import FindID from "./Pages/mypage/FindID";
 import FindPW from "./Pages/mypage/FindPW";
-import Join from "./Pages/mypage/Join"
 import EventPage from "./Pages/Event/Event";
 import Notice from "./Pages/Notice/Notice";
 import NoticeDetail from "./Pages/Notice/NoticeDetail";
@@ -82,7 +81,6 @@ function App() {
                   <Route path={"/signup"} element={<Signup/>}></Route>
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
-                  <Route path={"/join"} element={<Join/>}></Route>
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
                   <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
                   <Route path={"/compoTest"} element={<Test1/>}></Route>

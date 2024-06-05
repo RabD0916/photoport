@@ -2,7 +2,6 @@ import React, {Suspense, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import styled from 'styled-components';
-import "../Number/First.scss";
 import like from "../../../img/like.png";
 import comment from "../../../img/comment.png";
 import sub from "../../../img/sub.png";

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "./css/login.scss"
 import {Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -49,57 +48,49 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
         }
     };
     return (
-        <div className="legend_box">
-            <div className="container">
-                <ul className="links">
-                    <li>
-                        <a href="#" id="signin">로그인</a>
-                    </li>
-                </ul>
+        <div className="bg-white rounded-lg py-5">
+            <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
+                <div className={"flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable"}>
+                    <div className={"flex items-center justify-center w-full lg:p-12"}>
+                        <div className={"flex items-center xl:p-10"}>
+                            <form className={"flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl"} onSubmit={handleSubmit} method="post">
+                                <h3 className="mb-3 text-4xl font-extrabold text-dark-grey-900">Sign In</h3>
+                                <p className="mb-4 text-grey-700">Enter your ID and password</p>
+                                <div
+                                    className={"flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl" +
+                                        "text-grey-900 bg-grey-300 hover:bg-grey-400 focus:ring-4 focus:ring-grey-300"}>
+                                </div>
+                                <label htmlFor="id" className="mb-2 text-sm text-start text-grey-900">ID*</label>
+                                <input type="text" placeholder="Enter a ID"
+                                       name="id" value={formData.id}
+                                       onChange={handleChange}
+                                       className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none focus:bg-grey-400 mb-7 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border"/>
+                                <label htmlFor="password"
+                                       className="mb-2 text-sm text-start text-grey-900">Password*</label>
+                                <input type="password" placeholder="Enter a password" name={"password"}
+                                       value={formData.password} onChange={handleChange}
+                                       className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none focus:bg-grey-400 placeholder:text-grey-700 bg-grey-200 text-dark-grey-900 rounded-2xl border"/>
+                                <div className="flex flex-row justify-between mb-8">
+                                    <Link to={"/findID"}
+                                          className="mr-4 text-sm font-medium text-purple-blue-500">Forget ID?</Link>
+                                    <Link to={"/findPW"}
+                                          className="mr-4 text-sm font-medium text-purple-blue-500">Forget password?</Link>
+                                </div>
+                                <button
+                                    className="mt-3 w-full px-6 py-5 mb-5 text-sm font-bold leading-none text-black transition duration-300 md:w-96 rounded-2xl hover:bg-purple-blue-600 focus:ring-4 focus:ring-purple-blue-100 bg-blue-300">Sign
+                                    In
+                                </button>
+                                <img className="h-10 mx-auto" src="/kakao_login.png" alt="카카오 로그인"
+                                     onClick={handleKakaoLogin} style={{cursor: 'pointer'}}/>
+                                <p className="mt-10 text-sm leading-relaxed text-gray-900">Not registered yet?
+                                    <Link to={"/Signup"} className="font-bold text-gray-700"> Create an Account</Link>
+                                </p>
+                            </form>
 
-                <form onSubmit={handleSubmit} method="post">
-                    <div className="first-input input__block first-input__block">
-                        <input type="text" placeholder="아이디를 입력해주세요" className="input" name="id" value={formData.id}
-                               onChange={handleChange}/>
+                        </div>
                     </div>
-                    <div className="input__block">
-                        <input type="password" placeholder="비밀번호를 입력해주세요" className="input" name="password"
-                               value={formData.password} onChange={handleChange}/>
-                    </div>
-                    <button className="signin__btn">
-                        로그인
-                    </button>
-                </form>
-
-                <div className="separator">
-                    <p>OR</p>
                 </div>
-
-                    <img className="signin__btn" src="/kakao_login.png" alt="카카오 로그인" onClick={handleKakaoLogin} style={{ cursor: 'pointer' }}/>
-
-                {/*<button className="github__btn">*/}
-                {/*    <i className="fa fa-github"></i>*/}
-                {/*    <Link to={"/kakaoLogin"}>카카오</Link>*/}
-                {/*</button>*/}
-
-                {/*<button className="github__btn">*/}
-                {/*    <i className="fa fa-github"></i>*/}
-                {/*    <a href="src={Kakao">카카오</a>*/}
-                {/*</button>*/}
-
-                {/*<button className="github__btn">*/}
-                {/*    <i className="fa fa-github"></i>*/}
-                {/*    <a href="src={Kakao">카카오</a>*/}
-                {/*</button>*/}
-                <br/>
-                <br/>
-                <p className={"id_role"}>
-                    <Link to={"/join"}>가입하기</Link>
-                    <Link to={"/findID"}>아이디 찾기</Link>
-                    <Link to={"/findPW"}>비밀번호 찾기</Link>
-                </p>
             </div>
-
         </div>
     );
 }

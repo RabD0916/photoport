@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./css/MyPage.scss";
+// import "./css/MyPage.scss";
 import { MAIN_DATA } from "./MainData";
 import First from "./Number/First";
 import Second from "./Number/Second";
