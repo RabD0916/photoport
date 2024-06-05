@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 const FindPW=({ handleLogin }) =>{
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [email, setEmail] = useState('');
     const [authNum, setAuthNum] = useState('');
     const [inputVisible, setInputVisible] = useState(false);
@@ -20,7 +21,7 @@ const FindPW=({ handleLogin }) =>{
     const handleCheckUserId = async () => {
         try {
             // 사용자 아이디 존재 여부 확인 요청
-            const response = await axios.post('http://localhost:8080/api/checkUserId', {
+            const response = await axios.post(`${SERVER_IP}/api/checkUserId`, {
                 id
             });
             const res = response;
@@ -40,7 +41,7 @@ const FindPW=({ handleLogin }) =>{
     const handleSendAuthCode = async () => {
         try {
             // 이메일 인증번호 발송 요청
-            const response = await axios.post('http://localhost:8080/api/mailSend',
+            const response = await axios.post(`${SERVER_IP}/api/mailSend`,
                 {email}
             );
             const res = response.data;
@@ -61,7 +62,7 @@ const FindPW=({ handleLogin }) =>{
 
         try {
             // 인증번호 확인 요청
-            const response = await axios.post('http://localhost:8080/api/newPw', { // URL 경로를 소문자로 시작하는 것으로 수정
+            const response = await axios.post(`${SERVER_IP}/api/newPw`, { // URL 경로를 소문자로 시작하는 것으로 수정
                 email,
                 authNum
             });

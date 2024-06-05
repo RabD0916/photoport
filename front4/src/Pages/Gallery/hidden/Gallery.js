@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 const Gallery = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     //const {userId} = useParams();
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
@@ -15,7 +16,7 @@ const Gallery = () => {
         console.log(accessToken);
         async function getCategoryList() {
             const result = await axios.get(
-                `http://localhost:8080/api/sendCategory/${userId}`,
+                `${SERVER_IP}/api/sendCategory/${userId}`,
                 {
                     headers : {
                         Authorization : `Bearer ${accessToken}`

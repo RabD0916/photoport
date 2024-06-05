@@ -8,7 +8,7 @@ import { useNavigate} from "react-router-dom";
 
 
 const Main = () => {
-
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [isVisible1, setIsVisible1] = useState(false); // 포즈 이벤트
     const [isVisible2, setIsVisible2] = useState(false); // 프레임 이벤트
     const navigate = useNavigate();
@@ -140,7 +140,7 @@ const Main = () => {
     //게시판 정렬
     const getBoardList = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/NORMAL/${sortValue}/${sortOrder}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/type/NORMAL/${sortValue}/${sortOrder}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -156,7 +156,7 @@ const Main = () => {
     }, []);
     const getPoseList = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/type/POSE/${sortValue}/${sortOrder}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/type/POSE/${sortValue}/${sortOrder}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

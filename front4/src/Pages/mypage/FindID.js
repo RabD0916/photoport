@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const FindID = ({ handleLogin }) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [email, setEmail] = useState('');
     const [authNum, setAuthNum] = useState('');
     const [inputVisible, setInputVisible] = useState(false);
@@ -38,7 +39,7 @@ const FindID = ({ handleLogin }) => {
     const handleSendAuthCode = async () => {
         try {
             // 이메일 인증번호 발송 요청
-            const response = await axios.post('http://localhost:8080/api/mailSend',
+            const response = await axios.post(`${SERVER_IP}/api/mailSend`,
                 {email}
             );
             const res = response.data;
@@ -60,7 +61,7 @@ const FindID = ({ handleLogin }) => {
 
         try {
             // 인증번호 확인 요청
-            const response = await axios.post('http://localhost:8080/api/mailauthCheck', { // URL 경로를 소문자로 시작하는 것으로 수정
+            const response = await axios.post(`${SERVER_IP}/api/mailauthCheck`, { // URL 경로를 소문자로 시작하는 것으로 수정
                 email,
                 authNum
             });

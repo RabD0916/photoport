@@ -13,6 +13,7 @@ const GalleryContainer = styled.div`
   flex-wrap: wrap;
 `;
 const InCategory = (props) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
@@ -49,7 +50,7 @@ const InCategory = (props) => {
         // setAccessToken(localStorage.getItem("accessToken"));
         async function getMediaList() {
             const result = await axios.get(
-                `http://localhost:8080/api/sendMedia/${cateId}`,
+                `${SERVER_IP}/api/sendMedia/${cateId}`,
                 {
                     headers : {
                         Authorization : `Bearer ${accessToken}`
@@ -63,7 +64,7 @@ const InCategory = (props) => {
 
     async function createM(mediaNames) {
         const result = await axios.post(
-            `http://localhost:8080/api/createMedia`,
+            `${SERVER_IP}/api/createMedia`,
             {mediaNames: mediaNames},
             {
                 headers : {
@@ -76,7 +77,7 @@ const InCategory = (props) => {
 
     async function moveM(mediaNames, nextCateName) {
         const result = await axios.patch(
-            `http://localhost:8080/api/moveMedia/${mediaNames}/${nextCateName}`,
+            `${SERVER_IP}/api/moveMedia/${mediaNames}/${nextCateName}`,
             {},
             {
                 headers : {
@@ -93,7 +94,7 @@ const InCategory = (props) => {
         }
 
         const result = await axios.delete(
-            `http://localhost:8080/api/deleteMedia/${mediaNames}`,
+            `${SERVER_IP}/api/deleteMedia/${mediaNames}`,
             {
                 headers : {
                     Authorization : `Bearer ${accessToken}`

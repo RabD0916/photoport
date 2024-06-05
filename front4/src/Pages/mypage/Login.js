@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자로 변경
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
 
     const handleKakaoLogin = () => {
         window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=ab365f86f03b47b75738f7a3f6bd64ab&redirect_uri=http://localhost:3000/oauth/kakao&response_type=code`;
@@ -30,7 +31,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
 
         try {
             console.log(formData);
-            const response = await axios.post('http://localhost:8080/api/signin', formData);
+            const response = await axios.post(`${SERVER_IP}/api/signin`, formData);
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
 

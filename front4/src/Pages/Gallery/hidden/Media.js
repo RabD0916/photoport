@@ -13,6 +13,7 @@ const GalleryContainer = styled.div`
   flex-wrap: wrap;
 `;
 const Media = ({onChildClick}) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const {cateId} = useParams();
     const [media, setMedia] = useState([]);
     const [selectedMediaNames, setSelectedMediaNames] = useState([]);
@@ -48,7 +49,7 @@ const Media = ({onChildClick}) => {
         // setAccessToken(localStorage.getItem("accessToken"));
         async function getMediaList() {
             const result = await axios.get(
-                `http://localhost:8080/api/sendMedia/${cateId}`,
+                `${SERVER_IP}/api/sendMedia/${cateId}`,
                 {
                     headers : {
                         Authorization : `Bearer ${accessToken}`

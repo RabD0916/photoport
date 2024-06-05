@@ -4,6 +4,7 @@ import axios from 'axios';
 import NoticeShow from './NoticeShow';
 
 const NoticeDetail = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const { id } = useParams();
     const userId = localStorage.getItem("id");
     const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ const NoticeDetail = () => {
 
     const getNotice = async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/board/${id}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/board/${id}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -40,7 +41,7 @@ const NoticeDetail = () => {
     /*axios url 수정해야함 */
     const deleteNotice = async () => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/delete/board/${id}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/delete/board/${id}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

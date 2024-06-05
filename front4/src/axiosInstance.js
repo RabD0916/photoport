@@ -1,8 +1,10 @@
 import axios from 'axios';
+const SERVER_IP = process.env.REACT_APP_SERVER_IP;
+
 
 // Axios 인스턴스 생성
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/api', // 서버의 기본 URL 설정
+    baseURL: `${SERVER_IP}/api`, // 서버의 기본 URL 설정
 });
 
 // 응답 인터셉터 추가
@@ -19,7 +21,7 @@ instance.interceptors.response.use(
                 const userId = localStorage.getItem('id');
 
                 // 새 액세스 토큰 요청
-                const response = await axios.post('http://localhost:8080/api/token', {
+                const response = await axios.post(`${SERVER_IP}/api/token`, {
                     id: userId,
                     refreshToken: refreshToken
                 });

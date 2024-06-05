@@ -16,6 +16,7 @@ const GalleryContainer = styled.div`
 const Report = React.lazy(() => import('../../Board/Report'));
 
 const First = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [profileImage, setProfileImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null); // 이미지 미리보기 URL을 위한 상태
     const accessToken = localStorage.getItem("accessToken");
@@ -32,7 +33,7 @@ const First = () => {
         console.log(accessToken);
         async function getCategoryList() {
             const result = await axios.get(
-                `http://localhost:8080/api/sendCategory/${userId}`,
+                `${SERVER_IP}/api/sendCategory/${userId}`,
                 {
                     headers : {
                         Authorization : `Bearer ${accessToken}`
@@ -46,7 +47,7 @@ const First = () => {
 
     const getUserBoardList = async () => {
         try {
-            const resp = await axios.get('http://localhost:8080/api/myBoards', {
+            const resp = await axios.get(`${SERVER_IP}/api/myBoards`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -65,7 +66,7 @@ const First = () => {
 
     useEffect(() => {
         {boardList.map(post => (
-            axios.get(`http://localhost:8080/api/profile/${post.writerId}`, {
+            axios.get(`${SERVER_IP}/api/profile/${post.writerId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'application/json'
@@ -79,7 +80,7 @@ const First = () => {
     })
     const open_board = async (postId) => {
         try {
-            const resp = await axios.get(`http://localhost:8080/api/board/${postId}`, {
+            const resp = await axios.get(`${SERVER_IP}/api/board/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -104,7 +105,7 @@ const First = () => {
             content: newComment
         };
         try {
-            const resp = await axios.post(`http://localhost:8080/api/comments/${selectedPost.id}`, data, {
+            const resp = await axios.post(`${SERVER_IP}/api/comments/${selectedPost.id}`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -123,7 +124,7 @@ const First = () => {
     // 게시글 삭제 요청
     const deletePost = async (postId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/delete/board/${postId}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/delete/board/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

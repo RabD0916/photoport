@@ -6,6 +6,7 @@ import './css/Notice.css'
 /* createdAt 수정해야함*/
 /*createdBy 도 로그인된 관리자계정으로 수정*/
 const NoticeShow = ({id, title, createdBy, contents, tags, createdAt}) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const navigate = useNavigate();
     const accessToken = localStorage.getItem("accessToken");
 
@@ -15,7 +16,7 @@ const NoticeShow = ({id, title, createdBy, contents, tags, createdAt}) => {
     /*axios url 수정해야함 */
     const deleteNotice = async () => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/delete/board/${id}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/delete/board/${id}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useEffect, useState} from "react";
 import { useLocation } from 'react-router-dom';
 const Search = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const accessToken = localStorage.getItem("accessToken");
     const [boardList, setboardList] = useState([]);
     const location = useLocation();
@@ -10,7 +11,7 @@ const Search = () => {
     useEffect(() => {
         const fetchSearchResults = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/keywordSearch`, {
+                const response = await axios.get(`${SERVER_IP}/api/keywordSearch`, {
                     params: { keyword: decodeURIComponent(keyword) }, // URL 디코드
                     headers: {
                         Authorization: `Bearer ${accessToken}`

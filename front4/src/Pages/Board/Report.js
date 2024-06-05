@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./BoardCss/Report.scss";
 
 const Report = ({ selectedPost }) => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedReason, setSelectedReason] = useState(""); // 선택된 이유를 상태로 관리합니다.
     const [otherReason, setOtherReason] = useState(""); // 기타 이유를 입력하는 상태를 추가합니다.
@@ -35,7 +36,7 @@ const Report = ({ selectedPost }) => {
 
         const reason = selectedReason === "기타" ? otherReason : selectedReason;
 
-        fetch("http://localhost:8080/api/blacklist/report", {
+        fetch(`${SERVER_IP}/api/blacklist/report`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

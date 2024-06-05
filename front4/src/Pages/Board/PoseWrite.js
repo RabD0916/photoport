@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./BoardCss/BoardWrite.scss";
 
 const PoseWrite = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem('id');
     const navigate = useNavigate();
@@ -93,7 +94,7 @@ const PoseWrite = () => {
         });
         console.log(formData)
         try {
-            const response = await axios.post('http://localhost:8080/api/poseBoard', formData, {
+            const response = await axios.post(`${SERVER_IP}/api/poseBoard`, formData, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     // 'Content-Type'을 명시적으로 설정하지 않습니다.

@@ -3,6 +3,7 @@ import axios from "axios";
 // import "./BoardCss/BlackList.scss";
 
 const ReportList = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [reports, setReports] = useState([]);
     const [selectedUserPosts, setSelectedUserPosts] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
@@ -17,7 +18,7 @@ const ReportList = () => {
     //신고받은 리스트 보기
     const getReports = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/reportUser", { //영우가 설정해 놓은 주소로 변경해야함
+            const response = await axios.get(`${SERVER_IP}/api/reportUser`, { //영우가 설정해 놓은 주소로 변경해야함
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -32,7 +33,7 @@ const ReportList = () => {
     //신고당한 게시글 보기
     const fetchUserPosts = async (blackUser) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/blackBoards/${blackUser}`, {
+            const response = await axios.get(`${SERVER_IP}/api/blackBoards/${blackUser}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -48,7 +49,7 @@ const ReportList = () => {
     //블랙리스트 추가
     const handleBlacklist = async (blackId) => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/accept/${blackId}`, {}, {
+            const response = await axios.post(`${SERVER_IP}/api/accept/${blackId}`, {}, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -63,7 +64,7 @@ const ReportList = () => {
     //반송
     const handleReject = async (blackId) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/reject/${blackId}`, {
+            const response = await axios.delete(`${SERVER_IP}/api/reject/${blackId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const BookList = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [BookmarkedBoards, setBookmarkedBoards] = useState([]);
     const accessToken = localStorage.getItem("accessToken");
 
@@ -9,7 +10,7 @@ const BookList = () => {
         const getBookmarkedBoards = async () => {
             try {
                 // URL 경로 확인
-                const response = await axios.get(`http://localhost:8080/api/bookmarkedBoards`, {
+                const response = await axios.get(`${SERVER_IP}/api/bookmarkedBoards`, {
                     headers: {
                         // 토큰 포맷 확인
                         Authorization: `Bearer ${accessToken}`

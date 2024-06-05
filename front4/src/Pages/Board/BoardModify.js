@@ -4,6 +4,7 @@ import axios from "axios";
 import "./BoardCss/Modify.scss"
 
 const BoardModify = () => {
+    const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const userId = localStorage.getItem('id');
     const { id } = useParams(); // URL에서 게시물 ID 가져오기
     const [title, setTitle] = useState(""); // 게시물 제목 상태
@@ -23,7 +24,7 @@ const BoardModify = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const resp = await axios.get(`http://localhost:8080/api/board/${id}`, {
+                const resp = await axios.get(`${SERVER_IP}/api/board/${id}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }
@@ -53,7 +54,7 @@ const BoardModify = () => {
     const handleSave = async () => {
         try {
             // 변경된 제목과 내용, 태그를 서버에 전송
-            const response = await axios.post(`http://localhost:8080/api/update/board/${id}`, board, {
+            const response = await axios.post(`${SERVER_IP}/api/update/board/${id}`, board, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
