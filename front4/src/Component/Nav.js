@@ -104,19 +104,25 @@ function Nav() {
                         <div className="relative inline-block text-left" onMouseEnter={() => setVisible(true)}
                              onMouseLeave={() => setVisible(false)}>
                             <div
-                                className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 cursor-pointer">
+                                className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 cursor-pointer"
+                                style={{padding: '12px 16px'}}>
                                 게시판
                             </div>
                             {visible && (
-                                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <div
+                                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="py-1" onClick={isUserIdEmpty}>
-                                        <Link to="/Board" className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공유게시판</Link>
-                                        <Link to="/Pose" className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">포즈게시판</Link>
-                                        <Link to="/Notice" className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공지게시판</Link>
+                                        <Link to="/Board"
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공유게시판</Link>
+                                        <Link to="/Pose"
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">포즈게시판</Link>
+                                        <Link to="/Notice"
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공지게시판</Link>
                                     </div>
                                 </div>
                             )}
                         </div>
+
                         <Link to={"/FindFriend"}
                               className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
                               onClick={isUserIdEmpty}>친구추가</Link>
@@ -137,7 +143,7 @@ function Nav() {
                         placeholder="검색어를 입력하세요"
                     />
                     <button className="absolute right-0 top-0 mt-3 mr-2" onClick={searchContent}>
-                        <img className="text-gray-600 h-4 w-4 fill-current" src={Search} alt="검색사진" />
+                        <img className="text-gray-600 h-4 w-4 fill-current" src={Search} alt="검색사진"/>
                     </button>
                 </div>
                 <div className="flex">
