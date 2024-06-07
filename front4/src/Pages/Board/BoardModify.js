@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import "./BoardCss/Modify.scss"
+// import "./BoardCss/Modify.scss"
 
 const BoardModify = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;

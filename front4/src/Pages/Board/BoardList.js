@@ -2,7 +2,7 @@ import React, {Suspense, useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-// import "./BoardCss/BoardList.scss";
+import "./BoardCss/BoardList.scss";
 import like from "../../img/like.png";
 import sub from "../../img/sub.png";
 import view from "../../img/view.png";
@@ -54,13 +54,22 @@ const BoardList = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [sortValue, setSortValue] = useState("createdAt");
     const [sortOrder, setSortOrder] = useState("desc");
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedPost.media.length);
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + selectedPost.media.length) % selectedPost.media.length);
+    };
 
     const getBoardList = async (page = 0) => {
         try {
             const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
-                    size: 5, // 한 페이지에 보여줄 게시글 수
+                    size: 6, // 한 페이지에 보여줄 게시글 수
                     sortValue,
                     sortOrder
                 },
@@ -245,171 +254,195 @@ const BoardList = () => {
                     <button onClick={moveToWrite} className={"mt-4 mb-4"}>글쓰기</button>
                     <div className="mx-auto">
                         <div className={`modal ${isModalOpen ? 'on' : ''} place-content-center`}>
-                            <div className="container mt-5 px-2 w-auto h-4/5 bg-white">
+                            <div className="container mt-5 px-2 w-auto h-auto bg-white overflow-auto rounded-2xl">
                                 <h3 className="mt-5">게시글 상세페이지</h3>
                                 {selectedPost && (
-                                    <div className="flex">
+                                    <div className="flex h-full">
                                         {/* 왼쪽 섹션 - 사진 */}
-                                        <div className="w-1/2 pr-4">
-                                            {selectedPost.media.map((media, index) => (
-                                                <img
-                                                    key={index}
-                                                    className="relative flex justify-center items-center w-full h-auto mb-4"
-                                                    src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
-                                                    alt={`사진 ${index + 1}`}
-                                                />
-                                            ))}
+                                        <div
+                                            className="w-1/2 pr-4 flex flex-col items-center justify-center overflow-auto border-r border-gray-300 relative">
+                                            <button onClick={handlePrevImage}
+                                                    className="absolute left-0 bg-gray-200 rounded-full px-2 py-1 m-2">◀
+                                            </button>
+                                            <img
+                                                className="w-3/5 h-auto mb-4 object-contain"
+                                                src={`./images/${selectedPost.writerId}/${selectedPost.media[currentImageIndex].categoryName}/${selectedPost.media[currentImageIndex].mediaName}`}
+                                                alt={`사진 ${currentImageIndex + 1}`}
+                                            />
+                                            <button onClick={handleNextImage}
+                                                    className="absolute right-0 bg-gray-200 rounded-full px-2 py-1 m-2">▶
+                                            </button>
                                         </div>
 
                                         {/* 오른쪽 섹션 - 내용 및 태그 */}
-                                        <div className="w-1/2 pl-4">
-                                            <h3 className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{selectedPost.title}</h3>
-                                            <div className="font-bold mt-3">Content</div>
-                                            <div
-                                                className="inline-block border-solid rounded-lg border-4 border-gray-500 w-full h-40 text-2xl p-2">{selectedPost.content}</div>
-                                            <div className="font-semibold text-sm mt-4 mb-2">#{selectedPost.tags}</div>
+                                        <div className="w-1/2 pl-4 flex flex-col justify-between">
+                                            <div>
+                                                <h3 className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{selectedPost.title}</h3>
+                                                <div
+                                                    className="inline-block border-solid rounded-lg border-4 border-gray-500 w-full h-auto text-sm p-2">{selectedPost.content}</div>
+                                                <div
+                                                    className="font-semibold text-sm mt-4 mb-2">#{selectedPost.tags}</div>
+                                            </div>
 
-                                            <Suspense fallback={<div>Loading...</div>}>
-                                                {selectedPost && <Report selectedPost={selectedPost}/>}
-                                            </Suspense>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {selectedPost && (
-                                    <div className="w-full bg-white rounded-lg border p-2 my-4 inline-block">
-                                        <h3 className="font-bold mt-4">Comments</h3>
-                                        <div className="flex flex-col max-h-60 overflow-y-auto">
-                                            {selectedPost.commentsDto.comments.map((comment) => (
-                                                <div key={comment.id} className="border rounded-md p-3 ml-3 my-3">
-                                                    <div className="flex gap-3 items-center">
-                                                        <img
-                                                            className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"
-                                                            src={profileImages[comment.writerId]}
-                                                            alt="profile"
-                                                        />
-                                                        <h3 className="font-bold">{comment.writerName}</h3>
-                                                    </div>
-                                                    <p className="text-black-600 mt-2 text-2xl">{comment.content}</p>
-                                                    {comment.writerId === userId && (
-                                                        <div>
-                                                            {comment.id === commentId && upComment ? (
-                                                                <>
-                                                                    <input type="text" value={content}
-                                                                           onChange={(e) => setContent(e.target.value)}/>
-                                                                    <button
-                                                                        onClick={() => comment_update(comment.id, content)}>수정완료
-                                                                    </button>
-                                                                </>
-                                                            ) : (
-                                                                <button
-                                                                    className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                                                                    onClick={() => {
-                                                                        setupComment(true);
-                                                                        setCommentId(comment.id);
-                                                                    }}
-                                                                >
-                                                                    수정
-                                                                </button>
-                                                            )}
-                                                            <button
-                                                                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                                                                onClick={() => comment_delete(comment.id)}
-                                                            >
-                                                                삭제
-                                                            </button>
+                                            {/* 댓글 섹션 */}
+                                            <div className="w-full bg-white rounded-lg border p-2 my-4 flex-grow">
+                                                <div className="flex flex-col max-h-60 overflow-y-auto">
+                                                    {selectedPost.commentsDto.comments.map((comment) => (
+                                                        <div key={comment.id}
+                                                             className="border rounded-md p-3 my-3 flex items-start">
+                                                            <img
+                                                                className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"
+                                                                src={profileImages[comment.writerId]}
+                                                                alt="profile"
+                                                            />
+                                                            <div className="ml-3 flex-1">
+                                                                <div className="flex justify-between items-center">
+                                                                    <h3 className="font-bold">{comment.writerName}</h3>
+                                                                    {comment.writerId === userId && (
+                                                                        <div className="flex space-x-2">
+                                                                            {comment.id === commentId && upComment ? (
+                                                                                <>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        value={content}
+                                                                                        onChange={(e) => setContent(e.target.value)}
+                                                                                        className="text-sm border border-gray-300 rounded px-2 py-1"
+                                                                                    />
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => comment_update(comment.id, content)}
+                                                                                    >
+                                                                                        수정완료
+                                                                                    </button>
+                                                                                </>
+                                                                            ) : (
+                                                                                <>
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => {
+                                                                                            setupComment(true);
+                                                                                            setCommentId(comment.id);
+                                                                                        }}
+                                                                                    >
+                                                                                        수정
+                                                                                    </button>
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => comment_delete(comment.id)}
+                                                                                    >
+                                                                                        삭제
+                                                                                    </button>
+                                                                                </>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-black-600 mt-2 text-sm">{comment.content}</p>
+                                                            </div>
                                                         </div>
-                                                    )}
+                                                    ))}
                                                 </div>
-                                            ))}
+
+                                                {/* 댓글 작성 창 */}
+                                                <div className="w-full px-3 my-2 flex">
+                                                    <textarea
+                                                        className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                                                        value={newComment}
+                                                        onChange={handleCommentChange}
+                                                        placeholder="댓글을 입력하세요"
+                                                    />
+                                                    <button
+                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-3 py-1.5 ml-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                        onClick={submitComment}
+                                                    >
+                                                        작성
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {/* 닫기 및 신고하기 버튼 */}
+                                            <div className="flex justify-end space-x-4 mt-4">
+                                                <button
+                                                    type="button"
+                                                    className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                    onClick={close_board}
+                                                >
+                                                    닫기
+                                                </button>
+                                                {selectedPost && selectedPost.writerId === userId && (
+                                                    <button
+                                                        type="button"
+                                                        className="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2"
+                                                        onClick={() => deletePost(selectedPost.id)}
+                                                    >
+                                                        삭제
+                                                    </button>
+                                                )}
+                                                <Suspense fallback={<div>Loading...</div>}>
+                                                    {selectedPost && <Report selectedPost={selectedPost}/>}
+                                                </Suspense>
+                                            </div>
                                         </div>
                                     </div>
-                                )}
-
-                                <div className="w-full px-3 my-2">
-                <textarea
-                    className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
-                    value={newComment}
-                    onChange={handleCommentChange}
-                    placeholder="댓글을 입력하세요"
-                />
-                                </div>
-                                <div className="w-full flex justify-center px-3">
-                                    <button
-                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                                        onClick={submitComment}
-                                    >
-                                        작성
-                                    </button>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                                    onClick={close_board}
-                                >
-                                    닫기
-                                </button>
-                                {selectedPost && selectedPost.writerId === userId && (
-                                    <button type="button" className="close_btn"
-                                            onClick={() => deletePost(selectedPost.id)}>
-                                        삭제
-                                    </button>
                                 )}
                             </div>
                         </div>
                     </div>
                     <GalleryContainer>
-                        <div className="flex items-center justify-between">
-                            <div className="gap-3.5 grid grid-cols-2 items-center">
-                                {boardList.map(post => (
-                                    <div key={post.id}
-                                         className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-[500px] h-[600px] flex flex-col justify-between mr-80">
+                    <div className="flex flex-wrap justify-center gap-4">
+                        {boardList.map(post => (
+                            <div key={post.id}
+                                 className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between">
+                                <div>
+                                    <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
+                                    <hr className="my-4 border-t-2 border-gray-300"/>
+                                    <div className="flex items-center px-2 py-3">
+                                        <img src={profileImages[post.writerId]} alt="Profile"
+                                             className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
                                         <div>
-                                            <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
-                                            <hr className="my-4 border-t-2 border-gray-300"/>
-                                            <div className="flex items-center px-2 py-3">
-                                                <img src={profileImages[post.writerId]} alt="Profile"
-                                                     className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
-                                                <div>
-                                <span
-                                    className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerName}</span>
-                                                </div>
-                                            </div>
+                            <span
+                                className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerName}</span>
                                         </div>
-                                        <div className="relative flex justify-center items-center w-full h-[300px]">
-                                            <img
-                                                className="max-w-full max-h-full object-contain rounded-xl"
-                                                src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
-                                                alt="#"
-                                                onClick={() => open_board(post.id)}
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="flex items-center justify-between mx-4 mt-3 mb-2">
-                                                <div className="flex gap-5">
-                                                    <button onClick={() => handleLike(post.id)}>
-                                                        <img className="h-6 w-6 text-indigo-600 mb-1.5" src={like}
-                                                             alt="좋아요"/>{post.like}
-                                                    </button>
-                                                    <button onClick={() => handleBookmark(post.id)}>
-                                                        <img className="h-6 w-6 text-indigo-600 mb-1.5" src={sub}
-                                                             alt="북마크"/>{post.bookmark}
-                                                    </button>
-                                                    <div className="view_">
-                                                        <img className="h-6 w-6 text-indigo-600 mb-1.5" src={view}
-                                                             alt="view"/>{post.view}
-                                                    </div>
-                                                </div>
+                                    </div>
+                                </div>
+                                <div className="relative flex justify-center items-center w-full h-[300px]">
+                                    <img
+                                        className="max-w-full max-h-full object-contain rounded-xl"
+                                        src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                        alt="#"
+                                        onClick={() => open_board(post.id)}
+                                    />
+                                </div>
+                                <hr className="my-4 border-t-2 border-gray-300"/>
+                                <div>
+                                    <div className="flex items-center justify-between mx-4 mt-3 mb-2">
+                                        <div className="flex gap-5">
+                                            <button onClick={() => handleLike(post.id)}>
+                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={like}
+                                                     alt="좋아요"/>{post.like}
+                                            </button>
+                                            <button onClick={() => handleBookmark(post.id)}>
+                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={sub}
+                                                     alt="북마크"/>{post.bookmark}
+                                            </button>
+                                            <div className="view_">
+                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={view}
+                                                     alt="view"/>{post.view}
                                             </div>
-                                            <div className="font-semibold text-sm mx-4 mt-2 mb-4">
-                                                #{post.tags}
+                                            <div>
+
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                    <hr className="my-4 border-t-2 border-gray-300"/>
+                                    <div className="font-semibold text-sm mx-4 mt-2 mb-4">
+                                        #{post.tags}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </GalleryContainer>
+                        ))}
+                    </div>
+                </GalleryContainer>
+
 
 
                     <PaginationContainer>
@@ -430,7 +463,8 @@ const BoardList = () => {
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 };
 
 export default BoardList;

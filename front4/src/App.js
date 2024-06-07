@@ -8,8 +8,6 @@ import Main from "./Component/Main";
 import Footer from "./Component/Footer";
 import InGallery from "./Pages/Gallery/InGallery";
 import InCategory from "./Pages/Gallery/InCategory";
-import HiddenGallery from "./Pages/Gallery/hidden/Gallery";
-import HiddenCategory from "./Pages/Gallery/hidden/Media";
 import Login from "./Pages/mypage/Login";
 import Signup from "./Pages/mypage/Signup";
 import FindID from "./Pages/mypage/FindID";
@@ -61,8 +59,6 @@ function App() {
                   <Route path={"/Create"} element={<Create/>}></Route>
                   <Route path={"/gallery/:userId"} element={<InGallery />}></Route>
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
-                  <Route path={"/gallery/hidden/:userId"} element={<HiddenGallery />}></Route>
-                  <Route path={"/gallery/hidden/:userId/:cateId"} element={<HiddenCategory />}></Route>
                   <Route path={"/FindFriend"} element={<FindFriend/>}></Route>
                   <Route path={"/Board"} element={<BoardList/>}></Route>
                   <Route path={"/BoardDetail"} element={<BoardDetail/>}></Route>
