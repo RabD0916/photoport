@@ -143,22 +143,29 @@ const InCategory = (props) => {
                     <h1 className={"sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"}>{userId}님의 추억</h1>
                     <p className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>{decodeURI(decodeURIComponent(cateId.replaceAll("&", "%")))}</p>
                 </div>
-            <div className={"flex flex-col text-center w-full mb-20"}>
-                <button onClick={createMedia} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>미디어 생성</button>
-                <button onClick={moveMedia} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>미디어 이동</button>
-                <button onClick={deleteMedia} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>미디어 삭제</button>
-            </div>
+                <div className="flex justify-center space-x-4 my-4">
+                    <button onClick={createMedia}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">미디어 추가
+                    </button>
+                    <button onClick={moveMedia}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">미디어 이동
+                    </button>
+                    <button onClick={deleteMedia}
+                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">미디어 삭제
+                    </button>
+                </div>
                 <h1> 선택된 사진</h1>
                 <div className={"grid grid-cols-4 gap-4 place-content-center"}>
-                        {selectedMediaNames && (
-                            selectedMediaNames.map((mediaName, index) => (
-                                <img
-                                    key={index}
-                                    className={"h-auto max-w-full rounded-lg"} src={"/images/" + userId + "/" + cateId + "/" + mediaName}
-                                    alt="Selected"
-                                    onClick={() => handleImageClick(mediaName)}/>
-                            ))
-                        )}
+                    {selectedMediaNames && (
+                        selectedMediaNames.map((mediaName, index) => (
+                            <img
+                                key={index}
+                                className={"h-auto max-w-full rounded-lg"}
+                                src={"/images/" + userId + "/" + cateId + "/" + mediaName}
+                                alt="Selected"
+                                onClick={() => handleImageClick(mediaName)}/>
+                        ))
+                    )}
                 </div>
                 <hr className="my-8 border-t-2 border-gray-300" />
                 <GalleryContainer className={"grid grid-cols-4 gap-4 place-content-center mt-10"}>

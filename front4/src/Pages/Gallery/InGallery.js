@@ -164,32 +164,49 @@ const InGallery = () => {
                     <h1 className={"sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"}>{userId}님의 추억</h1>
                     <p className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>Categories</p>
                 </div>
-                <div className="flex flex-col text-center w-full mb-20">
-                    <button onClick={createCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 추가</button>
-                    <button onClick={deleteCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 삭제</button>
-                    <button onClick={renameCategory} className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>앨범 수정</button>
+                <div className="flex justify-center space-x-4 my-4">
+                    <button onClick={createCategory}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">앨범 추가
+                    </button>
+                    <button onClick={deleteCategory}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">앨범 삭제
+                    </button>
+                    <button onClick={renameCategory}
+                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">앨범 수정
+                    </button>
                 </div>
 
-                <div className={"flex flex-wrap -m-4 place-content-center"}>
-                    <div className="lg:w-2/3 sm:w-1/2 p-4">
-                        {cate.map((category) => (
-                            <Link key={category["name"]} to={"/gallery/" + userId + "/" + category["name"]}
-                                  className={"flex relative mt-4 group"}>
-                                {category["thumbnail"] !== "Empty" ?
-                                    <img className={"absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100"}
-                                         src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
-                                         alt={category["thumbnail"]}
-                                    ></img>
-                                    : <div className={"absolute inset-0 w-full h-full object-cover object-center mt-4"}></div>}
-                                <div className={"px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-100 group-hover:opacity-0"}>
-                                    <div className={"tracking-widest text-2xl title-font font-medium text-black mb-1"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
+                <div className="flex flex-wrap justify-center -m-4">
+                    {cate.map((category) => (
+                        <div key={category["name"]} className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+                            <Link to={"/gallery/" + userId + "/" + category["name"]}
+                                  className={"block relative h-48 rounded overflow-hidden group"}>
+                                {category["thumbnail"] !== "Empty" ? (
+                                    <img
+                                        className={"absolute inset-0 w-full h-full object-cover object-center opacity-100 group-hover:opacity-100 transition duration-300 ease-in-out"}
+                                        src={"/images/" + userId + "/" + category["name"] + "/" + category["thumbnail"]}
+                                        alt={category["thumbnail"]}
+                                    />
+                                ) : (
+                                    <div
+                                        className="absolute inset-0 w-full h-full flex items-center justify-center bg-gray-200">
+                                        <span
+                                            className="text-gray-500 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">NO IMAGE</span>
+                                    </div>
+                                )}
+                                <div
+                                    className={"px-8 py-10 relative z-10 w-full border-4 border-gray-200 bg-white opacity-100 group-hover:opacity-0 transition duration-300 ease-in-out"}>
+                                    <div
+                                        className={"tracking-widest text-2xl title-font font-medium text-black mb-1"}>{decodeURI(decodeURIComponent(category["name"].replaceAll("&", "%")))}</div>
                                 </div>
                             </Link>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
+    
+
     );
 }
 

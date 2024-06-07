@@ -20,21 +20,6 @@ const PaginationContainer = styled.div`
     margin-top: 20px;
 `;
 
-const PageButton = styled.button`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-    }
-`;
-
-// Report 컴포넌트를 동적으로 로드하기 위한 Lazy 로딩
 const Report = React.lazy(() => import('./Report'));
 
 const PostList = () => {
@@ -53,6 +38,16 @@ const PostList = () => {
     const [sortOrder, setSortOrder] = useState("desc");
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedPost.media.length);
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + selectedPost.media.length) % selectedPost.media.length);
+    };
+
 
     const getBoardList = async (page = 0) => {
         try {
@@ -126,7 +121,7 @@ const PostList = () => {
 
     useEffect(() => {
         getBoardList(currentPage);
-    }, [currentPage, sortValue, sortOrder]); // currentPage, sortValue, sortOrder 변경 시 데이터를 다시 가져옴
+    }, [currentPage, sortValue, sortOrder]);
 
     const updateProfileImages = async (boards) => {
         let newImages = { ...profileImages };
@@ -199,101 +194,191 @@ const PostList = () => {
     };
 
     return (
-        <div>
-            <div>
-                <button onClick={moveToWrite}>글쓰기</button>
-            </div>
-            <div className={"Detail_page"}>
-                <div className={`modal ${isModalOpen ? 'on' : ''}`}>
-                    <div className="report_popup">
-                        <h3>게시글 상세페이지</h3>
-                        {selectedPost && (
-                            <div>
-                                <p>제목: {selectedPost.title}</p>
-                                <p>사진:</p>
-                                {selectedPost.media.map((media, index) => (
-                                    <img
-                                        key={index}
-                                        className={"detail_img"}
-                                        src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
-                                        alt={`사진 ${index + 1}`}
-                                    />
-                                ))}
-                                <p>내용: {selectedPost.content}</p>
-                                <div className="comments">
-                                    <h4>댓글</h4>
-                                    {selectedPost.commentsDto.comments.map((comment) => (
-                                        <div key={comment.id}>
-                                            <p>{comment.writerName}: {comment.content}</p>
+        <div className="h-full w-full bg-gray-50 flex items-center justify-center">
+            <div className="border max-w-screen-xl bg-white mt-6 rounded-2xl p-4">
+                <div className="mx-auto lg:mx-0">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">포즈 게시판</h2>
+                    <hr className="my-4 border-t-2 border-gray-300"/>
+                    <button onClick={moveToWrite}
+                            className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500" +
+                                " group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}><span
+                        className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black">
+                            글쓰기
+                            </span>
+                    </button>
+                    <div className="mx-auto">
+                        <div className={`modal ${isModalOpen ? 'on' : ''} place-content-center`}>
+                            <div className="container mt-5 px-2 w-auto h-auto bg-white overflow-auto rounded-2xl">
+                                <h3 className="mt-5">게시글 상세페이지</h3>
+                                {selectedPost && (
+                                    <div className="flex h-full">
+                                        {/* 왼쪽 섹션 - 사진 */}
+                                        <div
+                                            className="w-1/2 pr-4 flex flex-col items-center justify-center overflow-auto border-r border-gray-300 relative">
+                                            <button onClick={handlePrevImage}
+                                                    className="absolute left-0 bg-gray-200 rounded-full px-2 py-1 m-2">◀
+                                            </button>
+                                            <img
+                                                className="w-3/5 h-auto mb-4 object-contain"
+                                                src={`./images/${selectedPost.writerId}/${selectedPost.media[currentImageIndex].categoryName}/${selectedPost.media[currentImageIndex].mediaName}`}
+                                                alt={`사진 ${currentImageIndex + 1}`}
+                                            />
+                                            <button onClick={handleNextImage}
+                                                    className="absolute right-0 bg-gray-200 rounded-full px-2 py-1 m-2">▶
+                                            </button>
                                         </div>
-                                    ))}
-                                </div>
-                                <div className={"comment-write"}>
-                                    <h4>댓글 쓰기</h4>
-                                    <textarea
-                                        value={newComment}
-                                        onChange={handleCommentChange}
-                                        placeholder="댓글을 입력하세요"
-                                    />
-                                    <button onClick={submitComment}>작성</button>
-                                </div>
-                            </div>
-                        )}
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <Report selectedPost={selectedPost}/>
-                        </Suspense>
-                        <button type="button" className="close_btn" onClick={close_board}>닫기</button>
-                        {selectedPost && selectedPost.writerId === userId && (
-                            <button type="button" className="close_btn"
-                                    onClick={() => deletePost(selectedPost.id)}>삭제</button>
-                        )}
-                    </div>
-                </div>
-            </div>
-            <GalleryContainer>
-                <div className="main_board">
-                    {boardList.map(post => (
-                        <div key={post.id} className="board_item">
-                            {post.title}
-                            <div className={"board_content"}>
-                                <img src={profileImages[post.writerId]} alt="Profile" className="profile" />
-                                {post.writerName}</div>
-                            <div className={"img_box"}>
-                                <img className="board_img" src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`} alt="#"
-                                     onClick={() => open_board(post.id)}
-                                />
-                            </div>
-                            <div className={"click_evt"}>
-                                <button onClick={() => handleLike(post.id)}><img className={"nav-img"} src={like}
-                                                                                 alt={"좋아요"}/>{post.like}</button>
-                                <button onClick={() => handleBookmark(post.id)}><img className={"nav-img"} src={sub}
-                                                                                     alt={"북마크"}/>{post.bookmark}
-                                </button>
-                                <div className={"view_"}><img className={"nav-img"} src={view} alt={"view"}/>{post.view}
-                                </div>
-                            </div>
-                            <div>
-                                태그: {post.tags}
+
+                                        {/* 오른쪽 섹션 - 내용 및 태그 */}
+                                        <div className="w-1/2 pl-4 flex flex-col justify-between">
+                                            <div>
+                                                <h3 className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">{selectedPost.title}</h3>
+                                                <div
+                                                    className="inline-block border-solid rounded-lg border-4 border-gray-500 w-full h-auto text-sm p-2">{selectedPost.content}</div>
+                                                <div
+                                                    className="font-semibold text-sm mt-4 mb-2">#{selectedPost.tags}</div>
+                                            </div>
+
+                                            {/* 댓글 섹션 */}
+                                            <div className="w-full bg-white rounded-lg border p-2 my-4 flex-grow">
+                                                <div className="flex flex-col max-h-60 overflow-y-auto">
+                                                    {selectedPost.commentsDto.comments.map((comment) => (
+                                                        <div key={comment.id}
+                                                             className="border rounded-md p-3 my-3 flex items-start">
+                                                            <img
+                                                                className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"
+                                                                src={profileImages[comment.writerId]}
+                                                                alt="profile"
+                                                            />
+                                                            <div className="ml-3 flex-1">
+                                                                <div className="flex justify-between items-center">
+                                                                    <h3 className="font-bold">{comment.writerName}</h3>
+                                                                </div>
+                                                                <p className="text-black-600 mt-2 text-sm">{comment.content}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* 댓글 작성 창 */}
+                                                <div className="w-full px-3 my-2 flex">
+                                                    <textarea
+                                                        className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                                                        value={newComment}
+                                                        onChange={handleCommentChange}
+                                                        placeholder="댓글을 입력하세요"
+                                                    />
+                                                    <button
+                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-3 py-1.5 ml-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                        onClick={submitComment}
+                                                    >
+                                                        작성
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {/* 닫기 및 신고하기 버튼 */}
+                                            <div className="flex justify-end space-x-4 mt-4">
+                                                <button
+                                                    type="button"
+                                                    className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                    onClick={close_board}
+                                                >
+                                                    닫기
+                                                </button>
+                                                {selectedPost && selectedPost.writerId === userId && (
+                                                    <button
+                                                        type="button"
+                                                        className="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2"
+                                                        onClick={() => deletePost(selectedPost.id)}
+                                                    >
+                                                        삭제
+                                                    </button>
+                                                )}
+                                                <Suspense fallback={<div>Loading...</div>}>
+                                                    {selectedPost && <Report selectedPost={selectedPost}/>}
+                                                </Suspense>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    ))}
+                    </div>
+                    <GalleryContainer>
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {boardList.map(post => (
+                                <div key={post.id}
+                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
+                                    <div>
+                                        <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
+                                        <hr className="my-4 border-t-2 border-gray-300"/>
+                                        <div className="flex items-center px-2 py-3">
+                                            <img src={profileImages[post.writerId]} alt="Profile"
+                                                 className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
+                                            <div>
+                            <span
+                                className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerName}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="relative flex justify-center items-center w-full h-[300px]">
+                                        <img
+                                            className="max-w-full max-h-full object-contain rounded-xl"
+                                            src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                            alt="#"
+                                            onClick={() => open_board(post.id)}
+                                        />
+                                    </div>
+                                    <hr className="my-4 border-t-2 border-gray-300"/>
+                                    <div>
+                                        <div className="flex items-center justify-between mx-4 mt-3 mb-2">
+                                            <div className="flex gap-5">
+                                                <button onClick={() => handleLike(post.id)}>
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={like}
+                                                         alt="좋아요"/>{post.like}
+                                                </button>
+                                                <button onClick={() => handleBookmark(post.id)}>
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={sub}
+                                                         alt="북마크"/>{post.bookmark}
+                                                </button>
+                                                <div className="view_">
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={view}
+                                                         alt="view"/>{post.view}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr className="my-4 border-t-2 border-gray-300"/>
+                                        <div className="font-semibold text-sm mx-4 mt-2 mb-4">
+                                            #{post.tags}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </GalleryContainer>
+
+
+                    <PaginationContainer>
+                        <button  className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>이전</span>
+                        </button>
+                        {Array.from({length: totalPages}, (_, index) => (
+                            <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                                " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} key={index} onClick={() => handlePageChange(index)}
+                                    disabled={index === currentPage}>
+                                <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>{index +1}</span>
+                            </button>
+                        ))}
+                        <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages - 1}>
+                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>다음</span>
+                        </button>
+                    </PaginationContainer>
                 </div>
-            </GalleryContainer>
-            <PaginationContainer>
-                <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                    이전
-                </PageButton>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <PageButton key={index} onClick={() => handlePageChange(index)} disabled={currentPage === index}>
-                        {index + 1}
-                    </PageButton>
-                ))}
-                <PageButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
-                    다음
-                </PageButton>
-            </PaginationContainer>
+            </div>
         </div>
-    );
+    )
 };
 
 export default PostList;

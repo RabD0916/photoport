@@ -20,20 +20,6 @@ const PaginationContainer = styled.div`
     margin-top: 20px;
 `;
 
-const PageButton = styled.button`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-    }
-`;
-
 const Report = React.lazy(() => import('./Report'));
 
 const BoardList = () => {
@@ -251,10 +237,17 @@ const BoardList = () => {
             <div className="border max-w-screen-xl bg-white mt-6 rounded-2xl p-4">
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">공유 게시판</h2>
-                    <button onClick={moveToWrite} className={"mt-4 mb-4"}>글쓰기</button>
+                    <hr className="my-4 border-t-2 border-gray-300"/>
+                    <button onClick={moveToWrite}
+                            className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500" +
+                                " group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}><span
+                            className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black">
+                            글쓰기
+                            </span>
+                    </button>
                     <div className="mx-auto">
                         <div className={`modal ${isModalOpen ? 'on' : ''} place-content-center`}>
-                            <div className="container mt-5 px-2 w-auto h-auto bg-white overflow-auto rounded-2xl">
+                        <div className="container mt-5 px-2 w-auto h-auto bg-white overflow-auto rounded-2xl">
                                 <h3 className="mt-5">게시글 상세페이지</h3>
                                 {selectedPost && (
                                     <div className="flex h-full">
@@ -388,77 +381,76 @@ const BoardList = () => {
                         </div>
                     </div>
                     <GalleryContainer>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {boardList.map(post => (
-                            <div key={post.id}
-                                 className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between">
-                                <div>
-                                    <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
-                                    <hr className="my-4 border-t-2 border-gray-300"/>
-                                    <div className="flex items-center px-2 py-3">
-                                        <img src={profileImages[post.writerId]} alt="Profile"
-                                             className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
-                                        <div>
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {boardList.map(post => (
+                                <div key={post.id}
+                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
+                                    <div>
+                                        <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
+                                        <hr className="my-4 border-t-2 border-gray-300"/>
+                                        <div className="flex items-center px-2 py-3">
+                                            <img src={profileImages[post.writerId]} alt="Profile"
+                                                 className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
+                                            <div>
                             <span
                                 className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerName}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="relative flex justify-center items-center w-full h-[300px]">
-                                    <img
-                                        className="max-w-full max-h-full object-contain rounded-xl"
-                                        src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
-                                        alt="#"
-                                        onClick={() => open_board(post.id)}
-                                    />
-                                </div>
-                                <hr className="my-4 border-t-2 border-gray-300"/>
-                                <div>
-                                    <div className="flex items-center justify-between mx-4 mt-3 mb-2">
-                                        <div className="flex gap-5">
-                                            <button onClick={() => handleLike(post.id)}>
-                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={like}
-                                                     alt="좋아요"/>{post.like}
-                                            </button>
-                                            <button onClick={() => handleBookmark(post.id)}>
-                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={sub}
-                                                     alt="북마크"/>{post.bookmark}
-                                            </button>
-                                            <div className="view_">
-                                                <img className="h-6 w-6 text-indigo-600 mb-1.5" src={view}
-                                                     alt="view"/>{post.view}
-                                            </div>
-                                            <div>
-
-                                            </div>
-                                        </div>
+                                    <div className="relative flex justify-center items-center w-full h-[300px]">
+                                        <img
+                                            className="max-w-full max-h-full object-contain rounded-xl"
+                                            src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                            alt="#"
+                                            onClick={() => open_board(post.id)}
+                                        />
                                     </div>
                                     <hr className="my-4 border-t-2 border-gray-300"/>
-                                    <div className="font-semibold text-sm mx-4 mt-2 mb-4">
-                                        #{post.tags}
+                                    <div>
+                                        <div className="flex items-center justify-between mx-4 mt-3 mb-2">
+                                            <div className="flex gap-5">
+                                                <button onClick={() => handleLike(post.id)}>
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={like}
+                                                         alt="좋아요"/>{post.like}
+                                                </button>
+                                                <button onClick={() => handleBookmark(post.id)}>
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={sub}
+                                                         alt="북마크"/>{post.bookmark}
+                                                </button>
+                                                <div className="view_">
+                                                    <img className="h-6 w-6 text-indigo-600 mb-1.5" src={view}
+                                                         alt="view"/>{post.view}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr className="my-4 border-t-2 border-gray-300"/>
+                                        <div className="font-semibold text-sm mx-4 mt-2 mb-4">
+                                            #{post.tags}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                </GalleryContainer>
-
+                            ))}
+                        </div>
+                    </GalleryContainer>
 
 
                     <PaginationContainer>
-                        <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                            이전
-                        </PageButton>
+                        <button  className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>이전</span>
+                        </button>
                         {Array.from({length: totalPages}, (_, index) => (
-                            <PageButton key={index} onClick={() => handlePageChange(index)}
+                            <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                                " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} key={index} onClick={() => handlePageChange(index)}
                                         disabled={index === currentPage}>
-                                {index + 1}
-                            </PageButton>
+                                <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>{index +1}</span>
+                            </button>
                         ))}
-                        <PageButton onClick={() => handlePageChange(currentPage + 1)}
+                        <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage + 1)}
                                     disabled={currentPage === totalPages - 1}>
-                            다음
-                        </PageButton>
+                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>다음</span>
+                        </button>
                     </PaginationContainer>
                 </div>
             </div>
