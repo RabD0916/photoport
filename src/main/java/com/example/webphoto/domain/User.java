@@ -2,10 +2,7 @@ package com.example.webphoto.domain;
 
 import com.example.webphoto.domain.enums.UserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -15,8 +12,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name="user_")
 public class User {
 
@@ -53,44 +51,24 @@ public class User {
     @Column(name = "profile")
     private String userProfile;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Media> medias = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LookedBoard> lookedBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikedBoard> likedBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> friendshipList = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "receiver")
-//    private List<Alarm> receiveAlarms = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "sender")
-//    private List<Alarm> sendAlarms = new ArrayList<>();
-
-
-    public User(String id, String password, String userNick, String phone, String birth, String email, LocalDateTime userConn, UserType userType, boolean userAgree, String userProfile) {
-        this.id = id;
-        this.password = password;
-        this.userNick = userNick;
-        this.phone = phone;
-        this.birth = birth;
-        this.email = email;
-        this.userConn = userConn;
-        this.userType = userType;
-        this.userAgree = userAgree;
-        this.userProfile = userProfile;
-    }
 }

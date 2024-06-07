@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -30,65 +31,72 @@ public class MediaService {
     private final MediaRepository mediaRepository;
     private final UserService userService;
 
+    // 미디어 생성
     public String create(String nowUser, String nowCate, String selectedMedia) {
         User user = userService.findById(nowUser);
         String[] mediaNames = selectedMedia.split("[\\[\\],]");
-        for(int i=1; i<mediaNames.length-1; i++) {
-            mediaRepository.save(new Media(null, mediaNames[i].replaceAll("\"", ""), LocalDateTime.now(), nowCate, user));
+        for (int i = 1; i < mediaNames.length - 1; i++) {
+            mediaRepository.save(Media.builder()
+                    .name(mediaNames[i].replaceAll("\"", ""))
+                    .date(LocalDateTime.now())
+                    .category(nowCate)
+                    .owner(user)
+                    .build());
         }
         return "Success";
     }
 
+    // 미디어 전송
     public List<MediaResponse> send(String nowUser, String cateName) {
         String dir = path + nowUser + "/" + cateName;
-        System.out.println(dir);
         String[] mediaNames = getFileNames(dir);
-        System.out.println(Arrays.asList(mediaNames));
         List<MediaResponse> mediaResponseList = new ArrayList<>();
-        if(mediaNames != null) {
+        if (mediaNames != null) {
             for (String mediaName : mediaNames) {
                 mediaResponseList.add(new MediaResponse(mediaName, cateName));
             }
         }
-        System.out.println(mediaResponseList);
         return mediaResponseList;
     }
 
+    // 미디어 이동
     public String move(String nowUser, String nowCate, String selectedMedia, String nextCateName) {
         String[] mediaNames = selectedMedia.split(",");
-        for(String mediaName : mediaNames) {
+        for (String mediaName : mediaNames) {
             String prevDir = path + nowUser + "/" + nowCate + "/" + mediaName;
             Path prevPath = Paths.get(prevDir);
-            Path nextPath = Paths.get(path + nowUser + "/" +
-                    URLEncoder.encode(nextCateName, StandardCharsets.UTF_8).replaceAll("%", "&") + "/" + mediaName);
+            Path nextPath = Paths.get(path + nowUser + "/" + URLEncoder.encode(nextCateName, StandardCharsets.UTF_8).replaceAll("%", "&") + "/" + mediaName);
             try {
                 Files.move(prevPath, nextPath, StandardCopyOption.ATOMIC_MOVE);
                 deleteFile(prevDir);
-            } catch(Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                log.error("File move error: {}", e.getMessage());
                 return "Fail";
             }
         }
         return "Success";
     }
 
+    // 미디어 삭제
     public String delete(String nowUser, String nowCate, String selectedMedia) {
         String[] arr = selectedMedia.split(",");
-        for(String mediaName : arr) {
+        for (String mediaName : arr) {
             String dir = path + nowUser + "/" + nowCate + "/" + mediaName;
             String result = deleteFile(dir);
-            if(!result.equals("Success")) {
+            if (!result.equals("Success")) {
                 return result;
             }
         }
         return "Success";
     }
 
+    // 디렉토리 내 파일 이름 목록 가져오기
     public String[] getFileNames(String dir) {
         File folder = new File(dir);
         return folder.list();
     }
 
+    // 파일 삭제
     private String deleteFile(String dir) {
         File file = new File(dir);
         if (file.exists()) {
@@ -104,6 +112,11 @@ public class MediaService {
         if (res == null) {
             throw new EntityNotFoundException("해당 유저를 찾을 수 없습니다");
         }
-        return mediaRepository.save(new Media(null, fileURL, LocalDateTime.now(), "pose", res));
+        return mediaRepository.save(Media.builder()
+                .name(fileURL)
+                .date(LocalDateTime.now())
+                .category("pose")
+                .owner(res)
+                .build());
     }
 }

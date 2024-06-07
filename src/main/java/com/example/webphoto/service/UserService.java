@@ -1,13 +1,11 @@
 package com.example.webphoto.service;
 
-import com.example.webphoto.domain.Friendship;
 import com.example.webphoto.domain.FriendshipStatus;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.UserRequest;
 import com.example.webphoto.dto.UserResponse;
 import com.example.webphoto.dto.UserSearchResult;
-import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -15,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,46 +30,54 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final FriendshipRepository friendshipRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final String path = "./front4/public/images/";
 
-    public User findByUserNick(String userNick) {
-        return userRepository.findByUserNick(userNick)
-                .orElseThrow(() -> new NotFoundException("User not found with usreNick" + userNick));
-    }
 
     // 이메일을 이용하여 사용자의 아이디를 찾는 메소드
     public String findUserIdByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            User res = user.get();
-            return res.getId();
-        } else {
-            return null;
-        }
+        return userRepository.findByEmail(email)
+                .map(User::getId)
+                .orElse(null);
     }
 
-
-    // dto를 user엔티티로 저장
+    // dto를 user 엔티티로 저장
     private User requestToEntity(UserRequest dto) {
-        Optional<User> existingUserById = userRepository.findById(dto.getId());
-        if (existingUserById.isPresent()) {
+        validateUser(dto);
+
+        String password = bCryptPasswordEncoder.encode(dto.getPassword());
+        User.UserBuilder userBuilder = User.builder()
+                .id(dto.getId())
+                .password(password)
+                .userNick(dto.getUserNick())
+                .phone(dto.getPhone())
+                .birth(dto.getBirth())
+                .email(dto.getEmail())
+                .userConn(LocalDateTime.now())
+                .userProfile("/images/profile.png")
+                .userAgree(true);
+
+        if ("ADMIN".equals(dto.getId())) {
+            userBuilder.userType(UserType.ADMIN);
+        } else {
+            userBuilder.userType(UserType.USER);
+        }
+
+        return userBuilder.build();
+    }
+
+    // 유저 데이터 검증
+    private void validateUser(UserRequest dto) {
+        if (userRepository.existsById(dto.getId())) {
             throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
         }
 
-        Optional<User> existingUserByEmail = userRepository.findByEmail(dto.getEmail());
-        if (existingUserByEmail.isPresent()) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        String password = bCryptPasswordEncoder.encode(dto.getPassword());
-        if (dto.getId().equals("ADMIN")) {
-            return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(), dto.getBirth(), dto.getEmail(), LocalDateTime.now(), UserType.ADMIN, true, "/images/profile.png");
-        } else {
-            return new User(dto.getId(), password, dto.getUserNick(),
-                    dto.getPhone(), dto.getBirth(), dto.getEmail(), LocalDateTime.now(), UserType.USER, true, "/images/profile.png");
+        if (userRepository.findByUserNick(dto.getUserNick()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
     }
 
@@ -84,47 +88,56 @@ public class UserService {
 
     // 사용자를 추가하는 메소드
     public UserResponse addUser(UserRequest dto) {
-        if (userRepository.existsById(dto.getId())) {
-            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다.");
-        }
-
         User user = userRepository.save(requestToEntity(dto));
-        String dir = path + user.getId();
-        File folder = new File(dir);
-        File poseFolder = new File(dir + "/pose");
-        System.out.println(folder.mkdir());
-        System.out.println(poseFolder.mkdir());
+        try {
+            createDirectories(user.getId());
+        } catch (IOException e) {
+            log.error("디렉토리 생성 실패: " + user.getId(), e);
+            throw new RuntimeException("사용자 디렉토리 생성에 실패했습니다.");
+        }
         return entityToResponse(user);
     }
 
+    // 사용자 디렉토리 생성
+    private void createDirectories(String userId) throws IOException {
+        String dir = path + userId;
+        if (!new File(dir).mkdir() || !new File(dir + "/pose").mkdir()) {
+            throw new IOException("Failed to create directories for user: " + userId);
+        }
+    }
 
     // 사용자 프로필을 수정하는 메소드
     public UserResponse updateUserProfile(String userId, String fileURL) {
-        Optional<User> res = userRepository.findById(userId);
-        if (res.isEmpty()) {
-            throw new EntityNotFoundException("해당 프로필이 없습니다.");
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 프로필이 없습니다."));
 
-        User user = res.get();
         user.setUserProfile(fileURL);
-        User newUser = userRepository.save(user);
-        return entityToResponse(newUser);
+        return entityToResponse(userRepository.save(user));
     }
+
+
+    // 사용자 닉네임을 수정하는 메소드
+    public UserResponse updateUserNick(String userId, String userNick) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다"));
+
+        user.setUserNick(userNick);
+        return entityToResponse(userRepository.save(user));
+    }
+
 
     // 사용자를 삭제하는 메소드
     @Transactional
-    public void deleteUser(String userId) throws IOException {
+    public void deleteUser(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with userId: " + userId));
 
-        // 유저 삭제
         userRepository.delete(user);
-
-        // 사용자 폴더 삭제
-        String userDirPath = path + userId;
-        Path userDir = Paths.get(userDirPath);
-        if (Files.exists(userDir)) {
-            deleteDirectory(userDir);
+        try {
+            deleteDirectory(Paths.get(path + userId));
+        } catch (IOException e) {
+            log.error("디렉토리 삭제 실패: " + userId, e);
+            throw new RuntimeException("사용자 디렉토리 삭제에 실패했습니다.");
         }
     }
 
@@ -142,55 +155,52 @@ public class UserService {
 
     // 유저 아이디로 검색
     public User findById(String id) {
-        Optional<User> res = userRepository.findById(id);
-        return res.orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
+
 
     // 사용자 비밀번호 재설정
     public UserResponse findByNewPw(String id, String password) {
         log.info("user id={}", id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
-        String newPassword = bCryptPasswordEncoder.encode(password);
-        user.setPassword(newPassword);
-        User newUser = userRepository.save(user);
-        return entityToResponse(newUser);
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        return entityToResponse(userRepository.save(user));
     }
 
+    // 사용자 비밀번호 변경
+    public UserResponse updatePassword(String userId, String oldPassword, String newPassword) {
+        log.info("user id={}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+        if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            return entityToResponse(userRepository.save(user));
+        } else {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다!!");
+        }
+    }
+
+
     // 사용자 이메일로 유저 찾기(친구 검색)
-    public List<UserSearchResult> searchUsersByEmail(String email, String id) throws Exception {
-        // 현재 사용자 불러움
-        User currentUser = userRepository.findById(id).orElse(null);
+    public List<UserSearchResult> searchUsersByEmail(String email, String id) {
+        User currentUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
-        // 현재 사용자의 친구 관계 및 친구 요청 목록을 가져옴
-        List<Friendship> friendshipList = currentUser.getFriendshipList();
-
-        // 이메일로 모든 유저 검색
         List<User> userList = userRepository.findByEmailStartingWith(email);
         if (userList.isEmpty()) {
-            throw new Exception("검색 결과가 없습니다.");
+            throw new IllegalArgumentException("검색 결과가 없습니다.");
         }
 
-        // 필터링: 자기 자신, 이미 친구이거나 친구 요청을 보낸 유저 제외
-        List<UserSearchResult> resultDtoList = userList.stream()
-                .filter(user -> !user.getId().equals(id)) // 자기 자신 제외
-                .filter(user -> friendshipList.stream()
+        return userList.stream()
+                .filter(user -> !user.getId().equals(id))
+                .filter(user -> currentUser.getFriendshipList().stream()
                         .noneMatch(friendship ->
                                 (friendship.getFriendEmail().equals(user.getEmail()) &&
                                         (friendship.getStatus().equals(FriendshipStatus.ACCEPT) ||
-                                                friendship.getStatus().equals(FriendshipStatus.WAITING))))
-                ) // 이미 친구이거나 친구 요청을 보낸 유저 제외
-                .map(user -> {
-                    UserSearchResult dto = new UserSearchResult();
-                    dto.setUserId(user.getId());
-                    dto.setUserEmail(user.getEmail());
-                    dto.setUserNick(user.getUserNick());
-                    return dto;
-                }).collect(Collectors.toList());
-
-        return resultDtoList;
-
+                                                friendship.getStatus().equals(FriendshipStatus.WAITING)))))
+                .map(user -> new UserSearchResult(user.getId(), user.getEmail(), user.getUserNick()))
+                .collect(Collectors.toList());
     }
-
 }

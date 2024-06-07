@@ -131,7 +131,7 @@ const BoardList = () => {
 
     useEffect(() => {
         getBoardList(currentPage);
-    }, [currentPage, sortValue, sortOrder]);
+    }, [currentPage]);
 
     const updateProfileImages = async (boards) => {
         let newImages = {...profileImages};
@@ -237,6 +237,10 @@ const BoardList = () => {
         }
     };
 
+    const encodeURIPath = (path) => {
+        return path.split('/').map(encodeURIComponent).join('/');
+    };
+
     return (
         <div className="h-full w-full bg-gray-50 flex items-center justify-center">
             <div className="border max-w-screen-xl bg-white mt-6 rounded-2xl p-4">
@@ -255,7 +259,7 @@ const BoardList = () => {
                                                 <img
                                                     key={index}
                                                     className="relative flex justify-center items-center w-full h-auto mb-4"
-                                                    src={`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`}
+                                                    src={encodeURIPath(`./images/${selectedPost.writerId}/${media.categoryName}/${media.mediaName}`)}
                                                     alt={`사진 ${index + 1}`}
                                                 />
                                             ))}

@@ -3,8 +3,8 @@ package com.example.webphoto.domain;
 import com.example.webphoto.domain.enums.BoardShare;
 import com.example.webphoto.domain.enums.BoardType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +20,7 @@ import java.util.List;
 @Table(name = "board_")
 @NoArgsConstructor
 public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="board_id")
@@ -36,13 +37,13 @@ public class Board {
     private String content;
 
     @Column(name="board_view", length = 100)
-    private int view;
+    private int view = 0;
 
     @Column(name="board_like", length = 100)
-    private int like;
+    private int like = 0;
 
     @Column(name="board_bookmark", length = 100)
-    private int bookmark;
+    private int bookmark = 0;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name="board_share")
@@ -57,66 +58,62 @@ public class Board {
     private User writer;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MediaBoard> media = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardTag> tags = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LookedBoard> lookedBoards = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikedBoard> likedBoards = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookmarkedBoard> bookmarkedBoards = new ArrayList<>();
 
+    @Builder
     public Board(Long id, String title, LocalDateTime createdAt, String content, List<MediaBoard> media, List<BoardTag> tags, int view, int like, int bookmark, BoardShare share, BoardType type, User writer) {
+        this.id = id;
         this.title = title;
         this.createdAt = createdAt;
         this.content = content;
-        setMedia(media);
-        setTags(tags);
         this.view = view;
         this.like = like;
         this.bookmark = bookmark;
         this.share = share;
         this.type = type;
         this.writer = writer;
-    }
-
-    public Board(Long id, String title, LocalDateTime createdAt, String content, List<MediaBoard> media, List<BoardTag> tags, BoardShare share, BoardType type, User writer) {
-        this(id, title, createdAt, content, media, tags, 0, 0, 0, share, type, writer);
-    }
-
-    public Board(Long id, String title, LocalDateTime createdAt, String content, BoardShare share, BoardType type, User writer) {
-        this(id, title, createdAt, content, null, null, 0, 0, 0, share, type, writer);
+        if (media != null) {
+            setMedia(media);
+        }
+        if (tags != null) {
+            setTags(tags);
+        }
     }
 
     public void setTags(List<BoardTag> list) {
+        this.tags.clear();
         for (BoardTag boardTag : list) {
-            if (!this.tags.contains(boardTag)) {
-                this.tags.add(boardTag);
-                boardTag.setBoard(this);
-            }
+            this.tags.add(boardTag);
+            boardTag.setBoard(this);
         }
     }
 
     public void setMedia(List<MediaBoard> list) {
+        this.media.clear();
         for (MediaBoard mediaBoard : list) {
-            if (!this.media.contains(mediaBoard)) {
-                this.media.add(mediaBoard);
-                mediaBoard.setBoard(this);
-            }
+            this.media.add(mediaBoard);
+            mediaBoard.setBoard(this);
         }
     }
 }

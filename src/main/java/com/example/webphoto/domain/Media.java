@@ -3,10 +3,7 @@ package com.example.webphoto.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,8 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "media_")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,12 +38,4 @@ public class Media {
     @JsonIgnore
     @OneToMany(mappedBy = "media")
     private List<MediaBoard> boards = new ArrayList<>();
-
-    public Media(Long id, String name, LocalDateTime date, String category, User owner) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.category = category;
-        this.owner = owner;
-    }
 }
