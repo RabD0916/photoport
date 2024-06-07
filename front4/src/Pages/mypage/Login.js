@@ -45,6 +45,7 @@ const Login = ({ handleLogin }) => { // 함수 컴포넌트 이름을 대문자�
             localStorage.setItem('userNick', response.data.userNick);
             navigate("/")
         } catch (error) {
+            alert("아이디 또는 비밀번호를 잘못 입력하였습니다");
             console.error('Error:', error);
         }
     };
