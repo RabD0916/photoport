@@ -42,6 +42,18 @@ public class EventService {
         }
     }
 
+    // 관리자가 작성한 이벤트 게시글 조회
+    public List<BoardResponse> getEventBoard() {
+        // 관리자 작성 이벤트 게시글을 조회
+        List<Board> adminEventBoards = boardRepository.findByWriterTypeAndType(UserType.ADMIN, BoardType.EVENT);
+
+        return adminEventBoards.stream()
+                .map(this::entityToResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    // 이벤트에 참여한 게시글들 리스트
     public List<BoardResponse> getEventBoards() {
         // 먼저 관리자 작성 이벤트 게시글을 조회
         List<Board> adminEventBoards = boardRepository.findByWriterTypeAndType(UserType.ADMIN, BoardType.EVENT);

@@ -1,11 +1,13 @@
 package com.example.webphoto.service;
 
+import com.example.webphoto.domain.Friendship;
 import com.example.webphoto.domain.FriendshipStatus;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.domain.enums.UserType;
 import com.example.webphoto.dto.UserRequest;
 import com.example.webphoto.dto.UserResponse;
 import com.example.webphoto.dto.UserSearchResult;
+import com.example.webphoto.repository.FriendshipRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FriendshipRepository friendshipRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final String path = "./front4/public/images/";
 
@@ -182,10 +185,30 @@ public class UserService {
         }
     }
 
+//    // 사용자 이메일로 유저 찾기(친구 검색)
+//    public List<UserSearchResult> searchUsersByEmail(String email, String id) {
+//        User currentUser = userRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+//
+//        List<User> userList = userRepository.findByEmailStartingWith(email);
+//        if (userList.isEmpty()) {
+//            throw new IllegalArgumentException("검색 결과가 없습니다.");
+//        }
+//
+//        return userList.stream()
+//                .filter(user -> !user.getId().equals(id))
+//                .filter(user -> currentUser.getFriendshipList().stream()
+//                        .noneMatch(friendship ->
+//                                (friendship.getFriendEmail().equals(user.getEmail()) &&
+//                                        (friendship.getStatus().equals(FriendshipStatus.ACCEPT) ||
+//                                                friendship.getStatus().equals(FriendshipStatus.WAITING)))))
+//                .map(user -> new UserSearchResult(user.getId(), user.getEmail(), user.getUserNick()))
+//                .collect(Collectors.toList());
+//    }
 
-    // 사용자 이메일로 유저 찾기(친구 검색)
-    public List<UserSearchResult> searchUsersByEmail(String email, String id) {
-        User currentUser = userRepository.findById(id)
+    // 사용자 이메일로 유저 찾기(친구 검색)에서 차단된 친구 필터링
+    public List<UserSearchResult> searchUsersByEmail(String email, String userId) {
+        User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 
         List<User> userList = userRepository.findByEmailStartingWith(email);
@@ -193,8 +216,14 @@ public class UserService {
             throw new IllegalArgumentException("검색 결과가 없습니다.");
         }
 
+        List<String> blockedEmails = friendshipRepository.findByUsersAndStatus(currentUser, FriendshipStatus.BLOCKED)
+                .stream()
+                .map(Friendship::getFriendEmail)
+                .collect(Collectors.toList());
+
         return userList.stream()
-                .filter(user -> !user.getId().equals(id))
+                .filter(user -> !user.getId().equals(userId))
+                .filter(user -> !blockedEmails.contains(user.getEmail()))
                 .filter(user -> currentUser.getFriendshipList().stream()
                         .noneMatch(friendship ->
                                 (friendship.getFriendEmail().equals(user.getEmail()) &&
@@ -203,4 +232,5 @@ public class UserService {
                 .map(user -> new UserSearchResult(user.getId(), user.getEmail(), user.getUserNick()))
                 .collect(Collectors.toList());
     }
+
 }

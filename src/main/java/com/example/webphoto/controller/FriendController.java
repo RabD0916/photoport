@@ -2,9 +2,13 @@ package com.example.webphoto.controller;
 
 import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.Friend.*;
+import com.example.webphoto.dto.FriendshipBlockResponse;
+import com.example.webphoto.dto.FriendshipUnblockResponse;
+import com.example.webphoto.dto.UserSearchResult;
 import com.example.webphoto.service.FriendshipService;
 import com.example.webphoto.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,9 +70,41 @@ public class FriendController {
     }
 
     // 친구 차단
-//    @DeleteMapping("/user/friends/block/{friendshipId}")
-//    public ResponseEntity<FriendshipRemovalResponse> blockFriend(@PathVariable("friendshipId") Long friendshipId) throws Exception {
-//        FriendshipRemovalResponse response = friendshipService.blockFriendship(friendshipId);
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/block/{friendshipId}")
+    public ResponseEntity<FriendshipBlockResponse> blockFriend(@PathVariable("friendshipId") Long friendshipId) throws Exception {
+        try {
+            FriendshipBlockResponse response = friendshipService.blockFriendship(friendshipId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FriendshipBlockResponse.builder()
+                    .friendshipId(friendshipId)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    // 친구 차단 해제
+    @PostMapping("/unblock/{friendshipId}")
+    public ResponseEntity<FriendshipUnblockResponse> unblockFriend(@PathVariable("friendshipId") Long friendshipId) throws Exception {
+        try {
+            FriendshipUnblockResponse response = friendshipService.unblockFriendship(friendshipId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FriendshipUnblockResponse.builder()
+                    .friendshipId(friendshipId)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    // 차단된 친구 목록 조회
+    @GetMapping("/blocked/{userId}")
+    public ResponseEntity<List<FriendDTO>> getBlockedFriends(@PathVariable("userId") String userId) {
+        try {
+            List<FriendDTO> blockedFriends = friendshipService.getBlockedFriends(userId);
+            return ResponseEntity.ok(blockedFriends);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 }

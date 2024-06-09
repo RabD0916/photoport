@@ -11,12 +11,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -43,6 +47,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final LookedBoardRepository lookedBoardRepository;
     private final EventService eventService;
+    private final MediaService mediaService;
 
     private BoardPreviewResponse entityToPreviewResponse(Board board) {
         MediaResponse thumbnail = new MediaResponse();
@@ -300,6 +305,92 @@ public class BoardService {
 
         return entityToResponse(boardRepository.save(board));
     }
+
+    // 게시글 수정(제목, 내용, 태그, 사진)
+    @Transactional
+    public BoardResponse updatePose(Long id, BoardRequest dto, List<MultipartFile> newFiles) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다: " + id));
+
+        board.setTitle(dto.getTitle());
+        board.setContent(dto.getContent());
+
+        // 기존의 모든 태그 삭제
+        if (!board.getTags().isEmpty()) {
+            boardTagRepository.deleteAll(board.getTags());
+            board.getTags().clear();
+        }
+
+        // 새 태그 처리
+        Arrays.stream(dto.getTags().split("[#@]"))
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .forEach(tagName -> {
+                    Tag tag = tagRepository.findByName(tagName).stream().findFirst().orElseGet(() -> tagRepository.save(new Tag(null, tagName)));
+                    board.getTags().add(new BoardTag(null, board, tag));
+                });
+
+        // 포즈 게시판(Pose)일 경우에만 사진 처리
+        if (board.getType() == BoardType.POSE && newFiles != null && !newFiles.isEmpty()) {
+            String path = "./front4/public/images/";
+            String dir = path + board.getWriter().getId() + "/pose";
+            File folder = new File(dir);
+
+            if (!folder.exists() && !folder.mkdirs()) {
+                throw new RuntimeException("사진 저장 디렉토리를 생성할 수 없습니다.");
+            }
+
+            // 기존 파일 삭제
+            for (MediaBoard mediaBoard : board.getMedia()) {
+                Media media = mediaBoard.getMedia();
+                String filePath = folder.getAbsolutePath() + "/" + media.getName();
+                File file = new File(filePath);
+                if (file.exists()) {
+                    file.delete();
+                }
+                mediaRepository.deleteById(media.getId());
+            }
+            board.getMedia().clear();
+
+            // 새로운 파일 저장 및 Media, MediaBoard 연관 데이터 추가
+            for (MultipartFile file : newFiles) {
+                try {
+                    String fileName = file.getOriginalFilename();
+                    Path filePath = Paths.get(folder.getAbsolutePath() + "/" + fileName);
+
+                    // 파일 이름 중복 확인
+                    if (Files.exists(filePath)) {
+                        // 중복되는 경우 UUID를 사용하여 파일 이름 변경
+                        String randomFileName = UUID.randomUUID() + "_" + fileName;
+                        filePath = Paths.get(folder.getAbsolutePath() + "/" + randomFileName);
+                        fileName = randomFileName;
+                    }
+
+                    // 파일 쓰기
+                    Files.write(filePath, file.getBytes(), StandardOpenOption.CREATE_NEW);
+
+                    // Media 엔티티 생성 및 저장
+                    Media media = Media.builder()
+                            .name(fileName)
+                            .date(LocalDateTime.now())
+                            .category("pose")
+                            .owner(board.getWriter())
+                            .build();
+                    mediaRepository.save(media);
+
+                    // MediaBoard 엔티티 생성 및 저장
+                    MediaBoard mediaBoard = new MediaBoard(null, media, board);
+                    board.getMedia().add(mediaBoard);
+                    mediaBoardRepository.save(mediaBoard);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return new BoardResponse();
+                }
+            }
+        }
+
+        return entityToResponse(boardRepository.save(board));
+    }
+
 
     @Transactional
     public void deleteBoard(Long id, String userId) throws IOException {

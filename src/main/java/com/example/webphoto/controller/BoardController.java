@@ -12,6 +12,7 @@ import com.example.webphoto.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,7 +79,9 @@ public class BoardController {
 
     // 포즈 추천 게시글 등록
     @PostMapping("/poseBoard")
-    public ResponseEntity<BoardResponse> addPoseBoard(Principal userId, @RequestPart(value = "dto") BoardRequest dto, @RequestPart("files") List<MultipartFile> files) {
+    public ResponseEntity<BoardResponse> addPoseBoard(Principal userId,
+                                                      @RequestPart(value = "dto") BoardRequest dto,
+                                                      @RequestPart("files") List<MultipartFile> files) {
         System.out.println(userId);
         System.out.println(dto);
         System.out.println(files);
@@ -120,6 +123,13 @@ public class BoardController {
     public ResponseEntity<List<BoardResponse>> getEventBoards() {
         List<BoardResponse> participationPosts = eventService.getEventBoards();
         return ResponseEntity.ok(participationPosts);
+    }
+
+    // 관리자가 개최한 이벤트 불러오기
+    @GetMapping("/eventBoard")
+    public ResponseEntity<List<BoardResponse>> getEventBoard() {
+        List<BoardResponse> adminBoard = eventService.getEventBoard();
+        return ResponseEntity.ok(adminBoard);
     }
 
 
@@ -229,6 +239,20 @@ public class BoardController {
         BoardResponse response = boardService.updateBoard(id, dto);
 
         return ResponseEntity.ok(response);
+    }
+
+    // pose 게시판 게시글 수정
+    @PostMapping("/update/poseBoard/{id}")
+    public ResponseEntity<BoardResponse> updatePoseBoard(@PathVariable("id") Long id,
+                                                         @RequestPart("dto") BoardRequest dto,
+                                                         @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+        try {
+            BoardResponse response = boardService.updatePose(id, dto, files);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
     }
 
     // 사용자가 작성한 게시글 삭제하기

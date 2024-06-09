@@ -36,6 +36,6 @@ public class Media {
     private User owner;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "media")
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MediaBoard> boards = new ArrayList<>();
 }
