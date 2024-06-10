@@ -21,7 +21,7 @@ export const MAIN_DATA = [
     },
     {
         id: 5,
-        text: '친한친구',
+        text: '태그 당한 게시물',
         name: 'fifth',
     },
 ];

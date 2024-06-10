@@ -84,6 +84,21 @@ const Second = () => {
         }
     };
 
+    const removeCloseFriend = async (friendId) => {
+        try {
+            await axios.delete(`${SERVER_IP}/api/close-friends/remove`, {
+                data: { userId, friendId },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            alert("친한 친구에서 제거되었습니다!");
+            fetchCloseFriendsList(); // Refresh the close friends list
+        } catch (error) {
+            console.error('친한 친구에서 제거하는데 실패했습니다', error);
+        }
+    };
+
     const blockFriend = async (friendshipId) => {
         try {
             await axios.post(`${SERVER_IP}/api/block/${friendshipId}`, {}, {
@@ -100,6 +115,21 @@ const Second = () => {
             fetchBlockedFriendsList(); // Refresh the blocked friends list
         } catch (error) {
             console.error('친구를 차단하는데 실패했습니다', error);
+        }
+    };
+
+    const unblockFriend = async (friendshipId) => {
+        try {
+            await axios.post(`${SERVER_IP}/api/unblock/${friendshipId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setBlockedFriendsList(blockedFriendsList.filter(friend => friend.friendshipId !== friendshipId));
+            fetchFriendsList(); // Refresh the friends list
+            alert("친구 차단이 해제되었습니다!");
+        } catch (error) {
+            console.error('친구 차단을 해제하는데 실패했습니다', error);
         }
     };
 
@@ -139,18 +169,32 @@ const Second = () => {
                         <h3 className="mt-1 truncate text-base leading-5 text-gray-500">{friend.friendEmail}</h3>
                     </div>
                     <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                        <div onClick={() => removeFriend(friend.friendshipId)}
-                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                            친구 삭제
-                        </div>
-                        <div onClick={() => addCloseFriend(friend.friendName)}
-                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                            친한 친구 추가
-                        </div>
-                        <div onClick={() => blockFriend(friend.friendshipId)}
-                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                            친구 차단
-                        </div>
+                        {activeList === "closeFriends" ? (
+                            <div onClick={() => removeCloseFriend(friend.friendId)}
+                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                친한 친구 제거
+                            </div>
+                        ) : activeList === "blockedFriends" ? (
+                            <div onClick={() => unblockFriend(friend.friendshipId)}
+                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                차단 해제
+                            </div>
+                        ) : (
+                            <>
+                                <div onClick={() => removeFriend(friend.friendshipId)}
+                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                    친구 삭제
+                                </div>
+                                <div onClick={() => addCloseFriend(friend.friendId)}
+                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                    친한 친구 추가
+                                </div>
+                                <div onClick={() => blockFriend(friend.friendshipId)}
+                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                    친구 차단
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </li>

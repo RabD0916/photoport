@@ -1,43 +1,16 @@
-// import './css/nav.scss';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Search from '../img/search.png';
-import Mypag from '../img/mypage.png';
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import LogoutIcon from '../img/logout.png';
-import ListIcon from '../img/list.png';
 import axios from "axios";
 
 function Nav() {
     const storedUsername = localStorage.getItem("id");
-    const location = useLocation();
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [visible, setVisible] = useState(false);
     const [keyword, setKeyword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isWidth, setIsWidth] = useState(false);
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false); // New state to track admin status
-
-    const toggleSidebar = () => {
-        setSidebarVisible(!isSidebarVisible);
-    };
-
-    useEffect(() => {
-        const handleResize = () => {
-            const windowWidth = window.innerWidth;
-            setIsWidth(windowWidth > 600);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -48,7 +21,20 @@ function Nav() {
                 setUserId(storedUsername);
             }
         }
-    });
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.dropdown')) {
+                setVisible(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const isUserIdEmpty = (e) => {
         if (userId.length < 1) {
@@ -83,9 +69,13 @@ function Nav() {
         }
     };
 
+    const toggleVisible = () => {
+        setVisible(!visible);
+    };
+
     return (
         <>
-            <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-t-2 border-blue-700">
+            <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-t-2 border-blue-700 relative">
                 <div className="flex justify-between lg:w-auto w-full lg:border-b-0 pl-6 pr-2 border-solid border-b-2 border-gray-300 pb-5 lg:pb-0">
                     <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
                         <Link to={"/"} className="font-semibold text-xl tracking-tight">포토포트</Link>
@@ -96,35 +86,41 @@ function Nav() {
                         </button>
                     </div>
                 </div>
-                <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
+                <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8 relative">
                     <div className="text-md font-bold text-blue-700 lg:flex-grow">
                         <Link to={"/gallery/" + userId}
                               className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
                               onClick={isUserIdEmpty}>갤러리</Link>
-                        <div className="relative inline-block text-left" onMouseEnter={() => setVisible(true)}
-                             onMouseLeave={() => setVisible(false)}>
+                        <div className="relative inline-block text-left dropdown">
                             <div
                                 className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 cursor-pointer"
-                                style={{padding: '12px 16px'}}>
+                                style={{ padding: '12px 16px' }}
+                                onClick={toggleVisible}
+                            >
                                 게시판
                             </div>
                             {visible && (
                                 <div
-                                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div className="py-1" onClick={isUserIdEmpty}>
+                                    className="absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    style={{ top: '100%', left: '0', transform: 'translateY(0)' }}
+                                >
+                                    <div className="py-1">
                                         <Link to="/Board"
-                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공유게시판</Link>
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                              onClick={isUserIdEmpty}>공유게시판</Link>
                                         <Link to="/Pose"
-                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">포즈게시판</Link>
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                              onClick={isUserIdEmpty}>포즈게시판</Link>
                                         <Link to="/Notice"
-                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공지게시판</Link>
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                              onClick={isUserIdEmpty}>공지게시판</Link>
                                         <Link to="/EventList"
-                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">이벤트게시판</Link>
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                              onClick={isUserIdEmpty}>이벤트게시판</Link>
                                     </div>
                                 </div>
                             )}
                         </div>
-
                         <Link to={"/FindFriend"}
                               className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
                               onClick={isUserIdEmpty}>친구추가</Link>
@@ -156,14 +152,14 @@ function Nav() {
                                 MyPage
                             </Link>
                             <button
-                                className="block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
+                                className="block text-md px-4 ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0"
                                 onClick={logoutHandler}>
                                 Logout
                             </button>
                         </>
                     ) : (
                         <Link to={"/login"}
-                              className="block text-md px-4  ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                              className="block text-md px-4 ml-2 py-2 rounded text-blue-700 font-bold hover:text-white mt-4 hover:bg-blue-700 lg:mt-0">
                             Login
                         </Link>
                     )}
