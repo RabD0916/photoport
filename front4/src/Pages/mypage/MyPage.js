@@ -4,6 +4,7 @@ import First from "./Number/First";
 import Second from "./Number/Second";
 import LikeList from "./Number/LikeList";
 import BookList from "./Number/BookList";
+import BestFriend from "./Number/BestFriendlist";
 import axiosInstance from "../../axiosInstance";
 
 function MyPage() {
@@ -84,6 +85,8 @@ function MyPage() {
         second: <Second />,
         third: <LikeList />,
         fourth: <BookList />,
+        fifth: <BestFriend />,
+
     };
 
     return (

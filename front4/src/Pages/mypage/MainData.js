@@ -19,4 +19,9 @@ export const MAIN_DATA = [
         text: '북마크',
         name: 'fourth',
     },
+    {
+        id: 5,
+        text: '친한친구',
+        name: 'fifth',
+    },
 ];

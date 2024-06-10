@@ -4,8 +4,12 @@ import axios from "axios";
 const Second = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [friendsList, setFriendsList] = useState([]);
+    const [closeFriendsList, setCloseFriendsList] = useState([]);
+    const [blockedFriendsList, setBlockedFriendsList] = useState([]);
     const [profileImages, setProfileImages] = useState({});
+    const [activeList, setActiveList] = useState("friends"); // "friends", "closeFriends", "blockedFriends"
     const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("id");
 
     const fetchFriendsList = async () => {
         try {
@@ -21,6 +25,34 @@ const Second = () => {
         }
     };
 
+    const fetchCloseFriendsList = async () => {
+        try {
+            const response = await axios.get(`${SERVER_IP}/api/close-friends/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setCloseFriendsList(response.data);
+            getProfileImages(response.data);
+        } catch (error) {
+            console.error('친한 친구 목록을 가져오는데 실패했습니다', error);
+        }
+    };
+
+    const fetchBlockedFriendsList = async () => {
+        try {
+            const response = await axios.get(`${SERVER_IP}/api/blocked/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setBlockedFriendsList(response.data);
+            getProfileImages(response.data);
+        } catch (error) {
+            console.error('차단 친구 목록을 가져오는데 실패했습니다', error);
+        }
+    };
+
     const getProfileImages = async (friends) => {
         const images = {};
         for (const friend of friends) {
@@ -30,8 +62,7 @@ const Second = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                console.log(response);
-                images[friend.id] = response.data.userProfile;
+                images[friend.friendId] = response.data.userProfile;
             } catch (error) {
                 console.error('프로필 이미지를 가져오는데 실패했습니다', error);
             }
@@ -39,18 +70,49 @@ const Second = () => {
         setProfileImages(images);
     };
 
-    const removeFriend = async (friendName) => {
+    const addCloseFriend = async (friendId) => {
         try {
-            await axios.delete(`${SERVER_IP}/api/user/friends/remove/${friendName}`, {
+            const response = await axios.post(`${SERVER_IP}/api/close-friends/add`, { userId, friendId }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
-            // 성공적으로 삭제된 후, 친구 목록에서 해당 친구를 제거합니다.
-            setFriendsList(friendsList.filter(friend => friend.friendName !== friendName));
-            // 해당 친구의 프로필 이미지도 제거합니다.
+            alert("친한 친구로 추가되었습니다!");
+            fetchCloseFriendsList(); // Refresh the close friends list
+        } catch (error) {
+            console.error('친한 친구로 추가하는데 실패했습니다', error);
+        }
+    };
+
+    const blockFriend = async (friendshipId) => {
+        try {
+            await axios.post(`${SERVER_IP}/api/block/${friendshipId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setFriendsList(friendsList.filter(friend => friend.friendshipId !== friendshipId));
             setProfileImages(prevImages => {
-                const { [friendName]: _, ...newImages } = prevImages;
+                const { [friendshipId]: _, ...newImages } = prevImages;
+                return newImages;
+            });
+            alert("친구가 차단되었습니다!");
+            fetchBlockedFriendsList(); // Refresh the blocked friends list
+        } catch (error) {
+            console.error('친구를 차단하는데 실패했습니다', error);
+        }
+    };
+
+    const removeFriend = async (friendshipId) => {
+        try {
+            await axios.delete(`${SERVER_IP}/api/user/friends/remove/${friendshipId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setFriendsList(friendsList.filter(friend => friend.friendshipId !== friendshipId));
+            setProfileImages(prevImages => {
+                const { [friendshipId]: _, ...newImages } = prevImages;
                 return newImages;
             });
             alert("친구 삭제가 성공적으로 되었습니다!")
@@ -61,50 +123,72 @@ const Second = () => {
 
     useEffect(() => {
         fetchFriendsList();
+        fetchCloseFriendsList();
+        fetchBlockedFriendsList();
     }, []);
+
+    const renderFriendsList = (list) => {
+        return list.map((friend) => (
+            <li key={friend.friendshipId} className="flex justify-between gap-x-6 py-5">
+                <div className="flex min-w-0 gap-x-4">
+                    <img className="h-16 w-16 flex-none rounded-full bg-gray-50"
+                         src={profileImages[friend.friendId]}
+                         alt={`${friend.friendshipId}의 프로필`} />
+                    <div className="min-w-0 flex-auto">
+                        <h3 className="text-lg font-semibold leading-6 text-gray-900">{friend.friendName}</h3>
+                        <h3 className="mt-1 truncate text-base leading-5 text-gray-500">{friend.friendEmail}</h3>
+                    </div>
+                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                        <div onClick={() => removeFriend(friend.friendshipId)}
+                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                            친구 삭제
+                        </div>
+                        <div onClick={() => addCloseFriend(friend.friendName)}
+                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                            친한 친구 추가
+                        </div>
+                        <div onClick={() => blockFriend(friend.friendshipId)}
+                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                            친구 차단
+                        </div>
+                    </div>
+                </div>
+            </li>
+        ));
+    };
 
     return (
         <div>
             <div>
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-3">친구목록</h2>
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-3">친구 목록</h2>
+                <div className="flex justify-center mb-4">
+                    <button
+                        className={`px-4 py-2 mx-2 ${activeList === "friends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                        onClick={() => setActiveList("friends")}
+                    >
+                        친구
+                    </button>
+                    <button
+                        className={`px-4 py-2 mx-2 ${activeList === "closeFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                        onClick={() => setActiveList("closeFriends")}
+                    >
+                        친한 친구
+                    </button>
+                    <button
+                        className={`px-4 py-2 mx-2 ${activeList === "blockedFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                        onClick={() => setActiveList("blockedFriends")}
+                    >
+                        차단 친구
+                    </button>
                 </div>
-                <ul className={"divide-y divide-gray-100"}>
-                    {friendsList.map((friend) => (
-                        <li key={friend.friendshipId} className="flex justify-between gap-x-6 py-5">
-                            <div className="flex min-w-0 gap-x-4">
-                                <img className="h-16 w-16 flex-none rounded-full bg-gray-50"
-                                     src={profileImages[friend.friendId]}
-                                     alt={`${friend.friendshipId}의 프로필`}/>
-                                <div className={"min-w-0 flex-auto"}>
-                                    <h3 className="text-lg font-semibold leading-6 text-gray-900">{friend.friendName}</h3>
-                                    <h3 className="mt-1 truncate text-base leading-5 text-gray-500">{friend.friendEmail}</h3>
-                                </div>
-                                <div className={"hidden shrink-0 sm:flex sm:flex-col sm:items-end"}>
-                                    <div onClick={() => removeFriend(friend.friendshipId)}
-                                            className={"inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"}>친구 삭제
-                                    </div>
-                                    <p className="text-sm leading-6 text-gray-900">{friend.role}</p>
-                                    {friend.lastSeen ? (
-                                        <p className="mt-1 text-xs leading-5 text-gray-500">
-                                            Last seen <time dateTime={friend.lastSeenDateTime}>{friend.lastSeen}</time>
-                                        </p>
-                                    ) : (
-                                        <div className="mt-1 flex items-center gap-x-1.5">
-                                            <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"/>
-                                            </div>
-                                            <p className="text-xs leading-5 text-gray-500">Online</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </li>
-                        ))}
+                <ul className="divide-y divide-gray-100">
+                    {activeList === "friends" && renderFriendsList(friendsList)}
+                    {activeList === "closeFriends" && renderFriendsList(closeFriendsList)}
+                    {activeList === "blockedFriends" && renderFriendsList(blockedFriendsList)}
                 </ul>
             </div>
         </div>
     );
-}
+};
 
 export default Second;
