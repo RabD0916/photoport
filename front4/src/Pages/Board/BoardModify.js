@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-// import "./BoardCss/Modify.scss"
 
 const BoardModify = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
@@ -13,12 +12,11 @@ const BoardModify = () => {
     const navigate = useNavigate();
     const accessToken = localStorage.getItem("accessToken");
     const [selectedPost, setSelectedPost] = useState(null);
-    const [board, setBoard] = useState( {
+    const [board, setBoard] = useState({
         title: '',
-        content:'',
-        tags:''
+        content: '',
+        tags: ''
     })
-
 
     // 게시물 데이터 불러오기
     useEffect(() => {
@@ -30,7 +28,7 @@ const BoardModify = () => {
                     }
                 });
                 const { title, content, tags } = resp.data;
-                setBoard( {
+                setBoard({
                     title,
                     content,
                     tags: tags.join(', ')
@@ -70,14 +68,44 @@ const BoardModify = () => {
     };
 
     return (
-        <div>
-            <h2>게시물 수정하기</h2>
+        <div className="max-w-2xl mx-auto mt-10 p-8 bg-white shadow-md rounded-lg">
+            <h2 className="text-2xl font-bold mb-6">게시물 수정하기</h2>
             {/* 수정 폼 구성 */}
-            <p className={"up-title"}>제목<input type="text" name="title" value={board.title} className={"up-main"} onChange={onChange}/></p>
-            <p className={"up-title"}>내용<input type="text" name="content" value={board.content} onChange={onChange}/></p>
-            <p className={"up-tag"}>태그<input name="tags" placeholder={"#을 붙혀주세요"} value={board.tags} onChange={onChange} /></p>
-            <button onClick={handleSave}>수정 완료</button>
-
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">제목</label>
+                <input
+                    type="text"
+                    name="title"
+                    value={board.title}
+                    onChange={onChange}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="content">내용</label>
+                <textarea
+                    name="content"
+                    value={board.content}
+                    onChange={onChange}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-48"
+                />
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tags">태그</label>
+                <input
+                    name="tags"
+                    placeholder="#을 붙혀주세요"
+                    value={board.tags}
+                    onChange={onChange}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+            </div>
+            <button
+                onClick={handleSave}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+                수정 완료
+            </button>
         </div>
     );
 };

@@ -11,7 +11,6 @@
     "antd": "^5.15.1",
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
-    "bootstrap": "^5.3.3",
     "framer-motion": "^11.1.7",
     "http-proxy-middleware": "^2.0.6",
     "json2mq": "^0.2.0",
