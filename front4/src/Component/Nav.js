@@ -118,6 +118,8 @@ function Nav() {
                                               className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">포즈게시판</Link>
                                         <Link to="/Notice"
                                               className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">공지게시판</Link>
+                                        <Link to="/EventList"
+                                              className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">이벤트게시판</Link>
                                     </div>
                                 </div>
                             )}

@@ -54,7 +54,7 @@ const PostList = () => {
             const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
-                    size: 5, // 한 페이지에 보여줄 게시글 수
+                    size: 6, // 한 페이지에 보여줄 게시글 수
                     sortValue,
                     sortOrder
                 },

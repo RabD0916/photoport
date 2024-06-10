@@ -31,23 +31,14 @@ import PoseList from "./Pages/Board/PoseList";
 import PoseWrite from "./Pages/Board/PoseWrite";
 import KakaoRedirect from "./Pages/mypage/KakaoRedirect";
 // import Report from "./Pages/Board/Report";
+import EventList from "./Pages/Board/EventList";
 import ModalModel from "./Component/ModalModel";
 import BoardModify from "./Pages/Board/BoardModify";
 import Search from "./Component/Search";
 import WritePage from "./Pages/Admin/WritePage";
 import BlackList from "./Pages/Admin/BlackList";
 import ReportList from "./Pages/Admin/ReportList";
-import Testtailwind1 from "./Testtailwind";
-
-/*
-function Eventpage() {
-    return null;
-}
-
-function Noticepage() {
-    return null;
-}
-*/
+import Eventwrite from "./Pages/Board/Eventwrite";
 function App() {
   return (
       <div className="App">
@@ -88,7 +79,8 @@ function App() {
                   <Route path={"/WritePage"} element={<WritePage/>}></Route>
                   <Route path={"/ReportList"} element={<ReportList/>}></Route>
                   <Route path={"/BlackList"} element={<BlackList/>}></Route>
-                  <Route path={"/tailwind"} element={<Testtailwind1/>}></Route>
+                  <Route path={"/EventList"} element={<EventList/>}></Route>
+                  <Route path={"/Eventwrite"} element={<Eventwrite/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>
