@@ -229,46 +229,46 @@ public class BoardService {
                 .map(lookedBoard -> lookedBoard.getBoard().getId())
                 .toList();
 
-        List<Board> allBoards;
-        if (user.getUserType() == UserType.ADMIN) {
-            // 관리자는 모든 게시글을 필터링 없이 가져옴
-            allBoards = boardRepository.findByType(boardType, sort).stream()
-                    .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
-                    .collect(Collectors.toList());
-        } else {
-            allBoards = boardRepository.findByType(boardType, sort).stream()
-                    .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
-                    .filter(board -> board.getShare() == BoardShare.PUBLIC ||
-                            (board.getShare() == BoardShare.FRIEND && (friendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
-                            (board.getShare() == BoardShare.CLOSE_FRIEND && (closeFriendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
-                            (board.getShare() == BoardShare.PRIVATE && board.getWriter().getId().equals(user.getId())) || board.getWriter().getId().equals(user.getId()))
-                    .collect(Collectors.toList());
-        }
+        List<Board> allBoards = boardRepository.findByType(boardType, sort).stream()
+                .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
+                .collect(Collectors.toList());
 
-        // 필터링된 게시글에서 한번도 보지 않은 게시글들을 상위에 추가
-        List<BoardPreviewResponse> newBoards = allBoards.stream()
+        // 관리자가 작성한 이벤트 게시글을 먼저 필터링
+        List<Board> adminEventBoards = allBoards.stream()
+                .filter(board -> board.getWriter().getUserType() == UserType.ADMIN)
+                .collect(Collectors.toList());
+
+        // 유저가 작성한 이벤트 게시글을 필터링
+        List<Board> userEventBoards = allBoards.stream()
+                .filter(board -> board.getWriter().getUserType() != UserType.ADMIN)
+                .collect(Collectors.toList());
+
+        // 한번도 보지 않은 게시글들을 상위에 추가
+        List<BoardPreviewResponse> newBoards = userEventBoards.stream()
                 .filter(board -> !lookedBoardIds.contains(board.getId()))
                 .map(this::entityToPreviewResponse)
                 .toList();
 
-        // 필터링된 게시글들 중 이미 본 게시글들을 아래에 추가(가장 최근에 봤던 게시글이 가장 아래로감)
+        // 이미 본 게시글들을 아래에 추가(가장 최근에 봤던 게시글이 가장 아래로감)
         List<BoardPreviewResponse> seenBoards = lookedBoardRepository.findByUser(user).stream()
                 .filter(lookedBoard -> lookedBoard.getBoard().getType() == boardType)
                 .sorted(Comparator.comparing(LookedBoard::getDate))
                 .map(lookedBoard -> entityToPreviewResponse(lookedBoard.getBoard()))
                 .toList();
 
-        List<BoardPreviewResponse> sortedBoards = new ArrayList<>();
-        sortedBoards.addAll(newBoards);
-        sortedBoards.addAll(seenBoards);
+        List<BoardPreviewResponse> finalSortedBoards = new ArrayList<>();
+        finalSortedBoards.addAll(adminEventBoards.stream().map(this::entityToPreviewResponse).toList());
+        finalSortedBoards.addAll(newBoards);
+        finalSortedBoards.addAll(seenBoards);
 
         // 필터링된 결과로 페이지 객체 생성
-        int start = Math.min((int) pageable.getOffset(), sortedBoards.size());
-        int end = Math.min((start + pageable.getPageSize()), sortedBoards.size());
-        List<BoardPreviewResponse> paginatedBoards = sortedBoards.subList(start, end);
+        int start = Math.min((int) pageable.getOffset(), finalSortedBoards.size());
+        int end = Math.min((start + pageable.getPageSize()), finalSortedBoards.size());
+        List<BoardPreviewResponse> paginatedBoards = finalSortedBoards.subList(start, end);
 
         return new PageImpl<>(paginatedBoards, pageable, allBoards.size());
     }
+
 
     // 전체 게시글
     public List<BoardPreviewResponse> findAll(String sortType, boolean isDesc) {
