@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CloseFriendResponse {
     private String userId;
-    private String friendId;
-    private String friendNickname;
+    private String friendName;
+    private String friendEmail;
 }

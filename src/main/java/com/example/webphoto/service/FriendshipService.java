@@ -182,19 +182,33 @@ public class FriendshipService {
     // 친구 목록
     public List<FriendDTO> findFriendsByUserEmail(String userEmail) throws Exception {
         // 유저 존재 여부 검증
-        if (userRepository.findByEmail(userEmail) == null) {
-            throw new Exception("해당 이메일을 가진 유저가 존재하지 않습니다: " + userEmail);
-        }
+//        if (userRepository.findByEmail(userEmail) == null) {
+//            throw new Exception("해당 이메일을 가진 유저가 존재하지 않습니다: " + userEmail);
+//        }
+        // 유저 존재 여부 검증
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new Exception("해당 이메일을 가진 유저가 존재하지 않습니다: " + userEmail));
+
+        // 차단된 유저 가져오기
+        List<FriendDTO> blockFriends = getBlockedFriends(user.getId());
+        List<String> blockEmails = blockFriends.stream()
+                .map(FriendDTO::getFriendEmail)
+                .toList();
+
 
         List<Friendship> results = friendshipRepository.findFriendsByUserIdNative(userEmail);
         List<FriendDTO> friends = new ArrayList<>();
         for (Friendship result : results) {
-            Long friendId = result.getFriendshipId();
-            Long friendshipId = result.getFriendshipId();
-            String friendEmail = result.getUsers().getEmail();
-            String friendName = result.getUsers().getId();
+            String email = result.getFriendEmail();
 
-            friends.add(new FriendDTO(friendId, friendshipId, friendEmail, friendName));
+            if (!blockEmails.contains(email)) {
+                Long friendId = result.getFriendshipId();
+                Long friendshipId = result.getFriendshipId();
+                String friendEmail = result.getUsers().getEmail();
+                String friendName = result.getUsers().getId();
+
+                friends.add(new FriendDTO(friendId, friendshipId, friendEmail, friendName));
+            }
         }
         return friends;
     }
@@ -244,7 +258,7 @@ public class FriendshipService {
 
         // 친구 상태를 BLOCKED로 변경
         friendship.setStatus(FriendshipStatus.BLOCKED);
-        counterFriendship.setStatus(FriendshipStatus.BLOCKED);
+         counterFriendship.setStatus(FriendshipStatus.BLOCKED); // 상대방의 상태는 변경하지 않음
 
         // 변경된 상태를 데이터베이스에 저장
         friendshipRepository.save(friendship);
@@ -289,13 +303,13 @@ public class FriendshipService {
 
         List<Friendship> blockedFriendships = friendshipRepository.findByUsersAndStatus(user, FriendshipStatus.BLOCKED);
         return blockedFriendships.stream()
+                .filter(friendship -> friendship.getUsers().getId().equals(userId))
                 .map(friendship -> new FriendDTO(
                         friendship.getFriendshipId(),
                         friendship.getCounterpartId(),
                         friendship.getFriendEmail(),
-                        userRepository.findByEmail(friendship.getFriendEmail()).orElseThrow(() -> new IllegalArgumentException("친구 정보를 찾을 수 없습니다.")).getUserNick()
+                        userRepository.findByEmail(friendship.getFriendEmail()).orElseThrow(() -> new IllegalArgumentException("친구 정보를 찾을 수 없습니다.")).getId()
                 ))
                 .collect(Collectors.toList());
     }
-
 }

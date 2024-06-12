@@ -61,8 +61,15 @@ function AddFriendPage() {
                     Authorization: `Bearer ${accessToken}`,
                 }
             });
+            const results = response.data
             setSearchResults(response.data); // 검색 결과를 업데이트합니다.
+
+            if (results.length === 0) {
+                alert("검색 결과가 존재하지 않습니다!");
+            }
+
         } catch (error) {
+            alert("검색 결과가 존재하지 않습니다!");
             console.error("검색 중 오류가 발생했습니다.", error);
         }
     };
@@ -76,6 +83,7 @@ function AddFriendPage() {
                 },
             });
             alert("친구 요청을 보냈습니다!");
+            setSearchResults(prevResults => prevResults.filter(user => user.userEmail !== email));
         } catch (error) {
             console.error("친구 추가 중 오류가 발생했습니다.", error);
         }

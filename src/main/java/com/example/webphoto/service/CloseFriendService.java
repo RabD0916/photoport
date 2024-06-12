@@ -26,7 +26,7 @@ public class CloseFriendService {
     public CloseFriendResponse addCloseFriend(CloseFriendRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        User friend = userRepository.findById(request.getFriendId())
+        User friend = userRepository.findById(request.getFriendName())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid friend ID"));
 
         // 친구 관계 확인
@@ -57,7 +57,7 @@ public class CloseFriendService {
                 .map(closeFriend -> new CloseFriendResponse(
                         closeFriend.getUser().getId(),
                         closeFriend.getFriend().getId(),
-                        closeFriend.getFriend().getUserNick()))
+                        closeFriend.getFriend().getEmail()))
                 .collect(Collectors.toList());
     }
 
@@ -77,7 +77,7 @@ public class CloseFriendService {
     public void removeCloseFriend(CloseFriendRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        User friend = userRepository.findById(request.getFriendId())
+        User friend = userRepository.findById(request.getFriendName())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid friend ID"));
 
         CloseFriend closeFriend = closeFriendRepository.findByUserAndFriend(user, friend)

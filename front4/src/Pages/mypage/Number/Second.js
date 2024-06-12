@@ -47,7 +47,7 @@ const Second = () => {
                 }
             });
             setBlockedFriendsList(response.data);
-            getProfileImages(response.data);
+            await getProfileImages(response.data); // 수정된 친구 목록에 대해 프로필 이미지를 가져옴
         } catch (error) {
             console.error('차단 친구 목록을 가져오는데 실패했습니다', error);
         }
@@ -62,7 +62,7 @@ const Second = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                images[friend.friendId] = response.data.userProfile;
+                images[friend.friendName] = response.data.userProfile;
             } catch (error) {
                 console.error('프로필 이미지를 가져오는데 실패했습니다', error);
             }
@@ -70,30 +70,33 @@ const Second = () => {
         setProfileImages(images);
     };
 
-    const addCloseFriend = async (friendId) => {
+    const addCloseFriend = async (friendName) => {
         try {
-            const response = await axios.post(`${SERVER_IP}/api/close-friends/add`, { userId, friendId }, {
+            const response = await axios.post(`${SERVER_IP}/api/close-friends/add`, { userId, friendName }, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
             alert("친한 친구로 추가되었습니다!");
             fetchCloseFriendsList(); // Refresh the close friends list
+            fetchFriendsList(); // Refresh the friends list
         } catch (error) {
             console.error('친한 친구로 추가하는데 실패했습니다', error);
         }
     };
 
-    const removeCloseFriend = async (friendId) => {
+    const removeCloseFriend = async (friendName) => {
+        console.log(friendName);
         try {
-            await axios.delete(`${SERVER_IP}/api/close-friends/remove`, {
-                data: { userId, friendId },
+            await axios.delete(`${SERVER_IP}/api/close-friends/remove`,  {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
-                }
+                },
+                data : { userId, friendName }
             });
-            alert("친한 친구에서 제거되었습니다!");
-            fetchCloseFriendsList(); // Refresh the close friends list
+            alert("친한 친구에서 삭제하였습니다!");
+            fetchCloseFriendsList();
+            fetchFriendsList(); // Refresh the friends list
         } catch (error) {
             console.error('친한 친구에서 제거하는데 실패했습니다', error);
         }
@@ -106,14 +109,11 @@ const Second = () => {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
-            setFriendsList(friendsList.filter(friend => friend.friendshipId !== friendshipId));
-            setProfileImages(prevImages => {
-                const { [friendshipId]: _, ...newImages } = prevImages;
-                return newImages;
-            });
             alert("친구가 차단되었습니다!");
+            fetchFriendsList(); // Refresh the friends list
             fetchBlockedFriendsList(); // Refresh the blocked friends list
         } catch (error) {
+            alert("친한 친구는 차단 할 수 없습니다. 친한 친구부터 해제 해주세요!")
             console.error('친구를 차단하는데 실패했습니다', error);
         }
     };
@@ -125,9 +125,9 @@ const Second = () => {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
-            setBlockedFriendsList(blockedFriendsList.filter(friend => friend.friendshipId !== friendshipId));
-            fetchFriendsList(); // Refresh the friends list
             alert("친구 차단이 해제되었습니다!");
+            fetchBlockedFriendsList(); // Refresh the blocked friends list
+            fetchFriendsList(); // Refresh the friends list
         } catch (error) {
             console.error('친구 차단을 해제하는데 실패했습니다', error);
         }
@@ -140,12 +140,8 @@ const Second = () => {
                     Authorization: `Bearer ${accessToken}`
                 }
             });
-            setFriendsList(friendsList.filter(friend => friend.friendshipId !== friendshipId));
-            setProfileImages(prevImages => {
-                const { [friendshipId]: _, ...newImages } = prevImages;
-                return newImages;
-            });
             alert("친구 삭제가 성공적으로 되었습니다!")
+            fetchFriendsList(); // Refresh the friends list
         } catch (error) {
             console.error('친구를 삭제하는데 실패했습니다', error);
         }
@@ -162,15 +158,15 @@ const Second = () => {
             <li key={friend.friendshipId} className="flex justify-between gap-x-6 py-5">
                 <div className="flex min-w-0 gap-x-4">
                     <img className="h-16 w-16 flex-none rounded-full bg-gray-50"
-                         src={profileImages[friend.friendId]}
-                         alt={`${friend.friendshipId}의 프로필`} />
+                         src={profileImages[friend.friendName]}
+                         alt={`${friend.friendName}의 프로필`} />
                     <div className="min-w-0 flex-auto">
                         <h3 className="text-lg font-semibold leading-6 text-gray-900">{friend.friendName}</h3>
                         <h3 className="mt-1 truncate text-base leading-5 text-gray-500">{friend.friendEmail}</h3>
                     </div>
                     <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                         {activeList === "closeFriends" ? (
-                            <div onClick={() => removeCloseFriend(friend.friendId)}
+                            <div onClick={() => removeCloseFriend(friend.friendName)}
                                  className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
                                 친한 친구 제거
                             </div>
@@ -185,7 +181,7 @@ const Second = () => {
                                      className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
                                     친구 삭제
                                 </div>
-                                <div onClick={() => addCloseFriend(friend.friendId)}
+                                <div onClick={() => addCloseFriend(friend.friendName)}
                                      className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
                                     친한 친구 추가
                                 </div>

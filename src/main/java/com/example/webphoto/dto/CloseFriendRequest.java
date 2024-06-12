@@ -11,5 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CloseFriendRequest {
     private String userId;
-    private String friendId;
+    private String friendName;
 }
