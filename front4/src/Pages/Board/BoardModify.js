@@ -68,7 +68,7 @@ const BoardModify = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto mt-10 p-8 bg-white shadow-md rounded-lg">
+        <div className="max-w-2xl mx-auto mt-10 p-8 bg-main-image shadow-md rounded-lg">
             <h2 className="text-2xl font-bold mb-6">게시물 수정하기</h2>
             {/* 수정 폼 구성 */}
             <div className="mb-4">

@@ -233,7 +233,7 @@ const BoardList = () => {
     };
 
     return (
-        <div className="h-full w-full bg-gray-50 flex items-center justify-center">
+        <div className="h-full w-full bg-pink-100 flex items-center justify-center">
             <div className="border max-w-screen-xl bg-white mt-6 rounded-2xl p-4">
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">공유 게시판</h2>

@@ -68,8 +68,8 @@ const EventList = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">이벤트 star 게시판</h2>
+        <div className="min-h-screen bg-pink-100 p-4">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">이벤트 게시판</h2>
             <div className="flex justify-end mb-4">
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded shadow"

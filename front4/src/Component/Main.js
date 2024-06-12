@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './css/main.scss';
 import Mainlogo from '../img/photoport.png';
 import { Link } from "react-router-dom";
 import { ScrollAnimation } from "./ScrollAnimation";
@@ -18,7 +17,6 @@ const Main = () => {
     const [poseList, setPoseList] = useState([]);
     const [boardList, setBoardList] = useState([]);
 
-    //포즈 사진 효과
     useEffect(() => {
         const observer1 = new IntersectionObserver(
             ([entry]) => {
@@ -42,7 +40,6 @@ const Main = () => {
         };
     }, [imageRef1]);
 
-    // 프레임 사진 효과
     useEffect(() => {
         const observer2 = new IntersectionObserver(
             ([entry]) => {
@@ -67,7 +64,6 @@ const Main = () => {
         };
     }, [imageRef2]);
 
-    // 글씨 이벤트
     useEffect(() => {
         const observer3 = new IntersectionObserver(
             ([entry]) => {
@@ -127,47 +123,70 @@ const Main = () => {
     }, []);
 
     const searchContent = () => {
-        navigate(`/event?keyword=#event`);
+        navigate(`/EventList`);
     };
 
     return (
-        <div>
-            <div className="mainBar">
-                <li className="mainMenu left1"><Link to={"/Notice"} className={"main_nav"}>공지사항</Link></li>
-                <li className="mainMenu right1"><button onClick={searchContent} className={"main_nav"}>이벤트</button></li>
+        <div className={"bg-pink-100"}>
+            <div className="flex justify-center py-4 bg-white shadow-lg">
+                <div className="flex space-x-8">
+                    <Link to="/Notice" className="text-lg font-semibold text-gray-700">공지사항</Link>
+                    <button onClick={searchContent} className="text-lg font-semibold text-gray-700">이벤트</button>
+                </div>
             </div>
+            <hr className="my-2 border-gray-300" />
 
-            <div className="main_first">
-                <div className="first_left">
+            <div className="flex flex-col md:flex-row items-center justify-between mt-10 px-6">
+                <div className="w-full md:w-1/2">
                     <ScrollAnimation>
-                        <img src={Mainlogo} className={"main_logo"} alt={"메인로고"} />
+                        <img src={Mainlogo} className="w-full md:w-1/2 mx-auto" alt="메인로고" />
                     </ScrollAnimation>
                 </div>
-                <ScrollAnimation className={"font_font"}>
-                    <div ref={textRef} className={isVisible2 ? "first_right" : ""}>
+                <ScrollAnimation className="font_font w-full md:w-1/2">
+                    <div ref={textRef} className={`transition-opacity duration-1000 ${isVisible2 ? 'opacity-100' : 'opacity-0'}`}>
                         간단하게 스캔하여 저장하자!! <br />네컷앨범을 사용해 보세요
                     </div>
                 </ScrollAnimation>
             </div>
-            <p className={"font_font"}>르세라핌과 사진 콜라보 이벤트!!</p>
-            <div className={"third_div"}>
-                <div>
-                    <img className={"event_div"} src="/main_img/event.png" alt="이벤트 이미지" />
-                </div>
+            <p className="text-center text-xl font-semibold mt-10">르세라핌과 사진 콜라보 이벤트!!</p>
+            <div className="flex justify-center my-10">
+                <img className="w-full max-w-4xl" src="/main_img/event.png" alt="이벤트 이미지" />
             </div>
-            <p className="font_font">요즘은 사진을 어떻게 찍을까?</p>
-            <div className="main_div">
+            <p className="text-center text-xl font-semibold">요즘은 사진을 어떻게 찍을까?</p>
+            <div className="flex flex-wrap justify-center mt-6">
                 {boardList.map((board) => (
-                    <div className="third" key={board.id}>
-                        <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1} />
+                    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4" key={board.id}>
+                        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                            <h3 className="text-lg font-semibold text-gray-800 p-4">{board.title}</h3>
+                            <img
+                                className={`transition-transform duration-500 ${isVisible1 ? 'transform scale-100' : 'transform scale-95'} w-full h-64 object-cover`}
+                                src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`}
+                                alt="프레임1"
+                                ref={imageRef1}
+                            />
+                            <div className="p-4">
+                                <p className="text-sm text-gray-600">#{board.tags}</p>
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
-            <p className="font_font">내가 만든 포즈 한번봐줘!</p>
-            <div className="main_div">
+            <p className="text-center text-xl font-semibold mt-10">내가 만든 포즈 한번봐줘!</p>
+            <div className="flex flex-wrap justify-center mt-6">
                 {poseList.map((board) => (
-                    <div className="third" key={board.id}>
-                        <img className={isVisible1 ? "frame-in1" : "frame-out1"} src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`} alt={"프레임1"} ref={imageRef1} />
+                    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4" key={board.id}>
+                        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                            <h3 className="text-lg font-semibold text-gray-800 p-4">{board.title}</h3>
+                            <img
+                                className={`transition-transform duration-500 ${isVisible1 ? 'transform scale-100' : 'transform scale-95'} w-full h-64 object-cover`}
+                                src={`./images/${board.writerId}/${board.media.categoryName}/${board.media.mediaName}`}
+                                alt="프레임1"
+                                ref={imageRef1}
+                            />
+                            <div className="p-4">
+                                <p className="text-sm text-gray-600">#{board.tags}</p>
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>

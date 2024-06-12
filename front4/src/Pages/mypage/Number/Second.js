@@ -159,8 +159,8 @@ const Second = () => {
 
     const renderFriendsList = (list) => {
         return list.map((friend) => (
-            <li key={friend.friendshipId} className="flex justify-between gap-x-6 py-5">
-                <div className="flex min-w-0 gap-x-4">
+            <li key={friend.friendshipId} className="flex justify-between items-center gap-x-6 py-5">
+                <div className="flex items-center gap-x-4">
                     <img className="h-16 w-16 flex-none rounded-full bg-gray-50"
                          src={profileImages[friend.friendId]}
                          alt={`${friend.friendshipId}의 프로필`} />
@@ -168,69 +168,67 @@ const Second = () => {
                         <h3 className="text-lg font-semibold leading-6 text-gray-900">{friend.friendName}</h3>
                         <h3 className="mt-1 truncate text-base leading-5 text-gray-500">{friend.friendEmail}</h3>
                     </div>
-                    <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                        {activeList === "closeFriends" ? (
-                            <div onClick={() => removeCloseFriend(friend.friendId)}
-                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                                친한 친구 제거
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-2">
+                    {activeList === "closeFriends" ? (
+                        <div onClick={() => removeCloseFriend(friend.friendId)}
+                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                            친한 친구 제거
+                        </div>
+                    ) : activeList === "blockedFriends" ? (
+                        <div onClick={() => unblockFriend(friend.friendshipId)}
+                             className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                            차단 해제
+                        </div>
+                    ) : (
+                        <>
+                            <div onClick={() => removeFriend(friend.friendshipId)}
+                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                친구 삭제
                             </div>
-                        ) : activeList === "blockedFriends" ? (
-                            <div onClick={() => unblockFriend(friend.friendshipId)}
-                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                                차단 해제
+                            <div onClick={() => addCloseFriend(friend.friendId)}
+                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                친한 친구 추가
                             </div>
-                        ) : (
-                            <>
-                                <div onClick={() => removeFriend(friend.friendshipId)}
-                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                                    친구 삭제
-                                </div>
-                                <div onClick={() => addCloseFriend(friend.friendId)}
-                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                                    친한 친구 추가
-                                </div>
-                                <div onClick={() => blockFriend(friend.friendshipId)}
-                                     className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 mt-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
-                                    친구 차단
-                                </div>
-                            </>
-                        )}
-                    </div>
+                            <div onClick={() => blockFriend(friend.friendshipId)}
+                                 className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 cursor-pointer">
+                                친구 차단
+                            </div>
+                        </>
+                    )}
                 </div>
             </li>
         ));
     };
 
     return (
-        <div>
-            <div>
-                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-3">친구 목록</h2>
-                <div className="flex justify-center mb-4">
-                    <button
-                        className={`px-4 py-2 mx-2 ${activeList === "friends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
-                        onClick={() => setActiveList("friends")}
-                    >
-                        친구
-                    </button>
-                    <button
-                        className={`px-4 py-2 mx-2 ${activeList === "closeFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
-                        onClick={() => setActiveList("closeFriends")}
-                    >
-                        친한 친구
-                    </button>
-                    <button
-                        className={`px-4 py-2 mx-2 ${activeList === "blockedFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
-                        onClick={() => setActiveList("blockedFriends")}
-                    >
-                        차단 친구
-                    </button>
-                </div>
-                <ul className="divide-y divide-gray-100">
-                    {activeList === "friends" && renderFriendsList(friendsList)}
-                    {activeList === "closeFriends" && renderFriendsList(closeFriendsList)}
-                    {activeList === "blockedFriends" && renderFriendsList(blockedFriendsList)}
-                </ul>
+        <div className="flex flex-col items-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mt-3">친구 목록</h2>
+            <div className="flex justify-center mb-4">
+                <button
+                    className={`px-4 py-2 mx-2 ${activeList === "friends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                    onClick={() => setActiveList("friends")}
+                >
+                    친구
+                </button>
+                <button
+                    className={`px-4 py-2 mx-2 ${activeList === "closeFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                    onClick={() => setActiveList("closeFriends")}
+                >
+                    친한 친구
+                </button>
+                <button
+                    className={`px-4 py-2 mx-2 ${activeList === "blockedFriends" ? "bg-blue-500" : "bg-gray-300"} text-white rounded-lg`}
+                    onClick={() => setActiveList("blockedFriends")}
+                >
+                    차단 친구
+                </button>
             </div>
+            <ul className="divide-y divide-gray-100 w-full max-w-4xl">
+                {activeList === "friends" && renderFriendsList(friendsList)}
+                {activeList === "closeFriends" && renderFriendsList(closeFriendsList)}
+                {activeList === "blockedFriends" && renderFriendsList(blockedFriendsList)}
+            </ul>
         </div>
     );
 };
