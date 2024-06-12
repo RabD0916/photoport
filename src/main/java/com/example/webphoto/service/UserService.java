@@ -224,6 +224,7 @@ public class UserService {
         return userList.stream()
                 .filter(user -> !user.getId().equals(userId))
                 .filter(user -> !blockedEmails.contains(user.getEmail()))
+                .filter(user -> !user.getUserType().equals(UserType.ADMIN))
                 .filter(user -> currentUser.getFriendshipList().stream()
                         .noneMatch(friendship ->
                                 (friendship.getFriendEmail().equals(user.getEmail()) &&

@@ -127,10 +127,29 @@ public class BoardService {
                 .sorted(Comparator.comparing(boardTag -> boardTag.getBoard().getCreatedAt(), Comparator.reverseOrder())) // 태그가 포함된 게시글 목록을 작성 시간 기준으로 내림 차순
                 .map(boardTag -> {
                     Board board = boardTag.getBoard();
+                    User writer = board.getWriter();
+
+                    List<MediaResponse> mediaList = board.getMedia().stream()
+                            .map(mediaBoard -> new MediaResponse(mediaBoard.getMedia().getName(), mediaBoard.getMedia().getCategory()))
+                            .collect(Collectors.toList());
+
+                    List<String> tagList = board.getTags().stream()
+                            .map(bt -> bt.getTag().getName())
+                            .collect(Collectors.toList());
+
                     TagAlaramResponse response = new TagAlaramResponse();
+                    response.setId(board.getId());
                     response.setTitle(board.getTitle());
                     response.setContent(board.getContent());
-                    response.setWriterId(board.getWriter().getId());
+                    response.setWriterId(writer.getId());
+                    response.setWriterName(writer.getUserNick());
+                    response.setMedia(mediaList);
+                    response.setTags(tagList);
+                    response.setView(board.getView());
+                    response.setLike(board.getLike());
+                    response.setBookmark(board.getBookmark());
+                    response.setCreatedAt(board.getCreatedAt());
+
                     return response;
                 })
                 .collect(Collectors.toList());
@@ -175,7 +194,12 @@ public class BoardService {
     public BoardResponse addBoard(BoardRequest dto) {
         User user = userService.findById(dto.getWriterId());
 
+        // 유저가 이벤트 게시글을 작성할 때 관리자가 작성한 이벤트 게시글이 있는지 체크
         if (user.getUserType() != UserType.ADMIN && dto.getType() == BoardType.EVENT) {
+            List<Board> adminEventBoards = boardRepository.findByWriterTypeAndType(UserType.ADMIN, BoardType.EVENT);
+            if (adminEventBoards.isEmpty()) {
+                throw new IllegalArgumentException("관리자가 작성한 이벤트 게시글이 없어서 이벤트 게시글을 작성할 수 없습니다.");
+            }
             List<String> adminEventTags = eventService.getAdminEventTags();
             eventService.validateEventTags(dto, adminEventTags);
         }
@@ -231,20 +255,14 @@ public class BoardService {
 
         List<Board> allBoards = boardRepository.findByType(boardType, sort).stream()
                 .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
-                .collect(Collectors.toList());
-
-        // 관리자가 작성한 이벤트 게시글을 먼저 필터링
-        List<Board> adminEventBoards = allBoards.stream()
-                .filter(board -> board.getWriter().getUserType() == UserType.ADMIN)
-                .collect(Collectors.toList());
-
-        // 유저가 작성한 이벤트 게시글을 필터링
-        List<Board> userEventBoards = allBoards.stream()
-                .filter(board -> board.getWriter().getUserType() != UserType.ADMIN)
+                .filter(board -> board.getShare() == BoardShare.PUBLIC ||
+                        (board.getShare() == BoardShare.FRIEND && friendUserIds.contains(board.getWriter().getId())) ||
+                        (board.getShare() == BoardShare.CLOSE_FRIEND && closeFriendUserIds.contains(board.getWriter().getId())) ||
+                        (board.getShare() == BoardShare.PRIVATE && board.getWriter().getId().equals(user.getId())))
                 .collect(Collectors.toList());
 
         // 한번도 보지 않은 게시글들을 상위에 추가
-        List<BoardPreviewResponse> newBoards = userEventBoards.stream()
+        List<BoardPreviewResponse> newBoards = allBoards.stream()
                 .filter(board -> !lookedBoardIds.contains(board.getId()))
                 .map(this::entityToPreviewResponse)
                 .toList();
@@ -257,7 +275,6 @@ public class BoardService {
                 .toList();
 
         List<BoardPreviewResponse> finalSortedBoards = new ArrayList<>();
-        finalSortedBoards.addAll(adminEventBoards.stream().map(this::entityToPreviewResponse).toList());
         finalSortedBoards.addAll(newBoards);
         finalSortedBoards.addAll(seenBoards);
 

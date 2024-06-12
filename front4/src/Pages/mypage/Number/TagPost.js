@@ -12,7 +12,7 @@ const GalleryContainer = styled.div`
     margin: 0;
 `;
 
-const TagPost = ({ tagName }) => {
+const TagPost = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [tagPosts, setTagPosts] = useState([]);
     const [profileImages, setProfileImages] = useState({});
@@ -20,6 +20,7 @@ const TagPost = ({ tagName }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const accessToken = localStorage.getItem("accessToken");
+    const tagName = localStorage.getItem("id");
 
     useEffect(() => {
         const getTagAlarms = async () => {
@@ -31,7 +32,7 @@ const TagPost = ({ tagName }) => {
                 });
                 console.log(response);
                 if (response.status === 200) {
-                    setTagPosts(response.data);
+                    setTagPosts(Array.isArray(response.data) ? response.data : []);
 
                     const profileImagesData = {};
                     for (const post of response.data) {
@@ -78,11 +79,15 @@ const TagPost = ({ tagName }) => {
     };
 
     const handleNextImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedPost.media.length);
+        if (selectedPost && selectedPost.media && selectedPost.media.length > 0) {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedPost.media.length);
+        }
     };
 
     const handlePrevImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + selectedPost.media.length) % selectedPost.media.length);
+        if (selectedPost && selectedPost.media && selectedPost.media.length > 0) {
+            setCurrentImageIndex((prevIndex) => (prevIndex - 1 + selectedPost.media.length) % selectedPost.media.length);
+        }
     };
 
     return (
@@ -103,10 +108,10 @@ const TagPost = ({ tagName }) => {
                                     alt="Profile"
                                     className="w-8 h-8 rounded-full border-2 border-emerald-400 shadow-emerald-400 mr-2"
                                 />
-                                <span>{post.writerName}</span>
+                                <span>{post.writerId}</span>
                             </div>
                             <div className="mb-2 flex justify-center">
-                                {post.media.length > 0 && (
+                                {post.media && post.media.length > 0 && (
                                     <img
                                         className="w-full h-48 object-cover rounded-lg cursor-pointer"
                                         src={`./images/${post.writerId}/${post.media[0].categoryName}/${post.media[0].mediaName}`}
