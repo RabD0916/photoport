@@ -239,25 +239,27 @@ public class BoardService {
 
         List<String> blacklistedUserIds = blackService.getBlackUser().stream()
                 .map(black -> black.getBlackUser().getId())
-                .toList();
+                .collect(Collectors.toList());
 
         List<String> friendUserIds = friendshipService.findFriendsByUserEmail(user.getEmail()).stream()
                 .map(FriendDTO::getFriendName)
-                .toList();
+                .collect(Collectors.toList());
 
         List<String> closeFriendUserIds = closeFriendService.getAddedByCloseFriends(user.getId()).stream()
                 .map(CloseFriendResponse::getUserId)
-                .toList();
+                .collect(Collectors.toList());
 
         List<Long> lookedBoardIds = lookedBoardRepository.findByUser(user).stream()
                 .map(lookedBoard -> lookedBoard.getBoard().getId())
-                .toList();
+                .collect(Collectors.toList());
 
         List<Board> allBoards = boardRepository.findByType(boardType, sort).stream()
                 .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
                 .filter(board -> board.getShare() == BoardShare.PUBLIC ||
-                        (board.getShare() == BoardShare.FRIEND && friendUserIds.contains(board.getWriter().getId())) ||
-                        (board.getShare() == BoardShare.CLOSE_FRIEND && closeFriendUserIds.contains(board.getWriter().getId())) ||
+                        (board.getShare() == BoardShare.FRIEND &&
+                                (friendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
+                        (board.getShare() == BoardShare.CLOSE_FRIEND &&
+                                (closeFriendUserIds.contains(board.getWriter().getId()) || board.getWriter().getId().equals(user.getId()))) ||
                         (board.getShare() == BoardShare.PRIVATE && board.getWriter().getId().equals(user.getId())))
                 .collect(Collectors.toList());
 
@@ -265,14 +267,14 @@ public class BoardService {
         List<BoardPreviewResponse> newBoards = allBoards.stream()
                 .filter(board -> !lookedBoardIds.contains(board.getId()))
                 .map(this::entityToPreviewResponse)
-                .toList();
+                .collect(Collectors.toList());
 
         // 이미 본 게시글들을 아래에 추가(가장 최근에 봤던 게시글이 가장 아래로감)
         List<BoardPreviewResponse> seenBoards = lookedBoardRepository.findByUser(user).stream()
                 .filter(lookedBoard -> lookedBoard.getBoard().getType() == boardType)
                 .sorted(Comparator.comparing(LookedBoard::getDate))
                 .map(lookedBoard -> entityToPreviewResponse(lookedBoard.getBoard()))
-                .toList();
+                .collect(Collectors.toList());
 
         List<BoardPreviewResponse> finalSortedBoards = new ArrayList<>();
         finalSortedBoards.addAll(newBoards);

@@ -194,7 +194,7 @@ const PostList = () => {
     };
 
     return (
-        <div className="h-full w-full bg-post-image flex items-center justify-center">
+        <div className="h-full w-full bg-main-image flex items-center justify-center">
             <div className="max-w-screen-xl mt-6 rounded-2xl p-4">
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">포즈 게시판</h2>
