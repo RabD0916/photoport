@@ -73,7 +73,7 @@ const BoardWrite = () => {
         content: '',
         fileName: [],
         tags: '',
-        share: 'FRIEND',
+        share: '',
         type: 'NORMAL',
         writer: userId
     });
@@ -106,10 +106,15 @@ const BoardWrite = () => {
         }
     };
 
-    const { title, tags, content } = board;
+    const { title, tags, content, share } = board;
 
     const saveBoard = async () => {
-        if (value[0] === null || value[0] === undefined || value[0] === '') {
+        if (!board.share) {
+            alert('공개 범위를 선택해 주세요!');
+            return;
+        }
+
+        if (!value[0]) {
             alert('사진을 추가해 주세요!');
             return;
         }
@@ -144,8 +149,15 @@ const BoardWrite = () => {
         setValue(newValue);
     };
 
+    const handleShareChange = (newShare) => {
+        setBoard({
+            ...board,
+            share: newShare
+        });
+    };
+
     return (
-        <div className="bg-white shadow p-4 py-8">
+        <div className="bg-main-image shadow p-4 py-8">
             <div className="heading text-center font-bold text-2xl m-5 text-gray-800 bg-white">New Share Post</div>
             <div className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl">
                 <div className={"my-4 flex"}>
@@ -160,6 +172,12 @@ const BoardWrite = () => {
                                className="description bg-gray-100 sec p-3 h-auto border border-gray-300 outline-none"
                                placeholder="#Tag" value={tags} onChange={onChange}></input>
                     </div>
+                </div>
+                <div className="flex justify-center my-4">
+                    <button className={`py-2 px-4 mx-2 ${share === 'PUBLIC' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`} onClick={() => handleShareChange('PUBLIC')}>전체</button>
+                    <button className={`py-2 px-4 mx-2 ${share === 'FRIEND' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`} onClick={() => handleShareChange('FRIEND')}>친구</button>
+                    <button className={`py-2 px-4 mx-2 ${share === 'CLOSE_FRIEND' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`} onClick={() => handleShareChange('CLOSE_FRIEND')}>친한친구</button>
+                    <button className={`py-2 px-4 mx-2 ${share === 'PRIVATE' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`} onClick={() => handleShareChange('PRIVATE')}>비공개</button>
                 </div>
                 <button className="icons flex text-gray-500 m-2" onClick={open_gal}>
                     <img className="mr-2 cursor-pointer hover:text-gray-700 border rounded-full p-1 h-7" alt={"사진추가"} src={plus} />

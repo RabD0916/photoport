@@ -7,7 +7,6 @@ import BookList from "./Number/BookList";
 import TagPost from "./Number/TagPost";
 import axiosInstance from "../../axiosInstance";
 
-
 function MyPage() {
     const [profileImage, setProfileImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
@@ -86,40 +85,39 @@ function MyPage() {
         second: <Second />,
         third: <LikeList />,
         fourth: <BookList />,
-        fifth: <TagPost/>,
-
+        fifth: <TagPost />,
     };
 
     return (
-        <>
-            <div className="bg-white">
-                <div className="pt-6">
-                    <div className="flex flex-col items-center">
-                        <div className="relative">
-                            <img src={previewImage || profileImage} alt="Profile"
-                                 className="inline-block h-32 w-32 rounded-full ring-2 ring-white mb-4"/>
-                            <button onClick={handleButtonClick}
-                                    className="absolute bottom-0 right-0 bg-blue-500 text-white text-sm p-1 rounded-full">사진 선택</button>
-                            {selectedFile && <button onClick={handleFileUpload}
-                                                     className="absolute bottom-0 left-0 bg-green-500 text-white text-sm p-1 rounded-full">사진 수정</button>}
-                        </div>
-                        <input type="file" onChange={handleChange} ref={fileInput} className="hidden"/>
-                        <h3 className="text-xl font-semibold mb-4">{userNick}</h3>
-                        <div className="flex space-x-2">
-                            {MAIN_DATA.map(data => (
-                                <button key={data.id} name={data.name} onClick={handleClickButton}
-                                        className="py-2 px-4 bg-gray-200 text-black rounded-md shadow-md hover:bg-gray-300">
-                                    {data.text}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="mt-6">
+        <div className="bg-pink-100 min-h-screen flex items-center justify-center">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl mt-10 mb-10">
+                <div className="flex flex-col items-center">
+                    <div className="relative">
+                        <img src={previewImage || profileImage} alt="Profile"
+                             className="inline-block h-32 w-32 rounded-full ring-2 ring-white mb-4"/>
+                        <button onClick={handleButtonClick}
+                                className="absolute bottom-0 right-0 bg-blue-500 text-white text-sm p-1 rounded-full">사진 선택</button>
+                        {selectedFile && <button onClick={handleFileUpload}
+                                                 className="absolute bottom-0 left-0 bg-green-500 text-white text-sm p-1 rounded-full">사진 수정</button>}
+                    </div>
+                    <input type="file" onChange={handleChange} ref={fileInput} className="hidden"/>
+                    <h3 className="text-xl font-semibold mb-4">{userNick}</h3>
+                    <div className="flex space-x-2">
+                        {MAIN_DATA.map(data => (
+                            <button key={data.id} name={data.name} onClick={handleClickButton}
+                                    className="py-2 px-4 bg-pink-300 text-white rounded-md shadow-md hover:bg-pink-400">
+                                {data.text}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="mt-6 w-full flex justify-center">
+                        <div className="w-full max-w-3xl">
                             {content && selectComponent[content] ? selectComponent[content] : <First />}
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

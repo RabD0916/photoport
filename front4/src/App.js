@@ -12,7 +12,6 @@ import Login from "./Pages/mypage/Login";
 import Signup from "./Pages/mypage/Signup";
 import FindID from "./Pages/mypage/FindID";
 import FindPW from "./Pages/mypage/FindPW";
-import EventPage from "./Pages/Event/Event";
 import Notice from "./Pages/Notice/Notice";
 import NoticeDetail from "./Pages/Notice/NoticeDetail";
 import NoticeWrite from "./Pages/Notice/NoticeWrite";
@@ -23,7 +22,6 @@ import MyPage from "./Pages/mypage/MyPage";
 import BoardList from "./Pages/Board/BoardList";
 import BoardWrite from "./Pages/Board/BoardWrite";
 import BoardDetail from "./Pages/Board/BoardDetail"
-import EventDetail from "./Pages/Event/EventDetail";
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
 import FindFriend from "./Pages/mypage/FindFriend";
@@ -57,7 +55,6 @@ function App() {
                   <Route path={"/Pose"} element={<PoseList/>}></Route>
                   <Route path={"/PoseWrite"} element={<PoseWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
-                  <Route path={"/Event"} element={<EventPage/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
                   <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
                   <Route path={"/Notice/:id"} element={<NoticeDetail/>}></Route>
@@ -69,7 +66,6 @@ function App() {
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
                   <Route path={"/CreateCut"} element={<Create/>}></Route>
-                  <Route path={"/EventDetail"} element={<EventDetail/>}></Route>
                   <Route path={"/compoTest"} element={<Test1/>}></Route>
                   <Route path={"/newPw"} element={<NewPw/>}></Route>
                   <Route path={"/Search"} element={<Search/>}></Route>

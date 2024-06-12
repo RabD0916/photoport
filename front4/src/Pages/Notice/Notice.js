@@ -52,7 +52,7 @@ const Notice = () => {
     };
 
     return (
-        <div>
+        <div className={"bg-pink-100"}>
             <Menu />
             <div>
                 &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;

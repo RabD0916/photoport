@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -18,7 +18,7 @@ const Report = React.lazy(() => import("../../Board/Report"));
 const First = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [profileImages, setProfileImages] = useState({});
-    const [previewImage, setPreviewImage] = useState(null);
+    // const [previewImage, setPreviewImage] = useState(null);
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("id");
     const [cate, setCate] = useState([]);
@@ -27,9 +27,7 @@ const First = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [BoardType, setBoardType] = useState("NORMAL");
-    const [currentPage, setCurrentPage] = useState(0);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedPost.media.length);
     };
@@ -117,9 +115,6 @@ const First = () => {
         setIsModalOpen(false);
     };
 
-    const handleCommentChange = (event) => {
-        setNewComment(event.target.value);
-    };
 
     const submitComment = async () => {
         const data = {
@@ -166,14 +161,9 @@ const First = () => {
             console.error("Error deleting post:", error);
         }
     };
-    const handlePageChange = (page) => {
-        if (page >= 0 && page < totalPages) {
-            setCurrentPage(page);
-        }
-    };
 
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <div className="relative">
                 <div
                     className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75 ${
@@ -279,11 +269,11 @@ const First = () => {
                         post.type === BoardType && (
                             <div
                                 key={post.id}
-                                className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between"
+                                className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between items-center"
                             >
-                                <div className="mb-4">
+                                <div className="mb-4 text-center">
                                     <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
-                                    <div className="flex items-center mb-2">
+                                    <div className="flex items-center justify-center mb-2">
                                         <img
                                             src={profileImages[post.writerId]}
                                             alt="Profile"
@@ -291,7 +281,7 @@ const First = () => {
                                         />
                                         <span>{post.writerName}</span>
                                     </div>
-                                    <div className="mb-2">
+                                    <div className="mb-2 flex justify-center">
                                         {post.media.length > 0 && (
                                             <img
                                                 className="w-full h-48 object-cover rounded-lg cursor-pointer"
@@ -301,19 +291,17 @@ const First = () => {
                                             />
                                         )}
                                     </div>
-                                    <div className="flex justify-between items-center mt-2">
-                                        <div className="flex items-center space-x-2">
-                                            <img className="w-6 h-6" src={like} alt="좋아요" />
-                                            <span>{post.like}</span>
-                                            <img className="w-6 h-6" src={comment} alt="댓글" />
-                                            <img className="w-6 h-6" src={sub} alt="북마크" />
-                                            <span>{post.bookmark}</span>
-                                        </div>
-                                        <div className="text-sm text-gray-600">
-                                            조회수 {post.view}
-                                        </div>
+                                    <div className="flex justify-center items-center mt-2 space-x-2">
+                                        <img className="w-6 h-6" src={like} alt="좋아요" />
+                                        <span>{post.like}</span>
+                                        <img className="w-6 h-6" src={comment} alt="댓글" />
+                                        <img className="w-6 h-6" src={sub} alt="북마크" />
+                                        <span>{post.bookmark}</span>
                                     </div>
-                                    <div className="mt-2 text-gray-700 text-sm">
+                                    <div className="text-sm text-gray-600 text-center">
+                                        조회수 {post.view}
+                                    </div>
+                                    <div className="mt-2 text-gray-700 text-sm text-center">
                                         태그: {post.tags}
                                     </div>
                                 </div>
