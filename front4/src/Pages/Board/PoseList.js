@@ -194,8 +194,8 @@ const PostList = () => {
     };
 
     return (
-        <div className="h-full w-full bg-pink-100 flex items-center justify-center">
-            <div className="border max-w-screen-xl bg-white mt-6 rounded-2xl p-4">
+        <div className="h-full w-full bg-post-image flex items-center justify-center">
+            <div className="max-w-screen-xl mt-6 rounded-2xl p-4">
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">포즈 게시판</h2>
                     <hr className="my-4 border-t-2 border-gray-300"/>
@@ -310,7 +310,7 @@ const PostList = () => {
                         <div className="flex flex-wrap justify-center gap-4">
                             {boardList.map(post => (
                                 <div key={post.id}
-                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-green-100 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
+                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-gray-400 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
                                     <div>
                                         <div className="mb-1 text-xl font-bold text-black">{post.title}</div>
                                         <hr className="my-4 border-t-2 border-blue-200"/>
