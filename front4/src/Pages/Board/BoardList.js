@@ -247,7 +247,7 @@ const BoardList = () => {
                     </button>
                     <div className="mx-auto">
                         <div className={`modal ${isModalOpen ? 'on' : ''} place-content-center`}>
-                        <div className="container mt-5 px-2 w-auto h-auto bg-white overflow-auto rounded-2xl">
+                        <div className="container mt-5 px-2 w-4/5 h-auto bg-white overflow-auto rounded-2xl mx-auto">
                                 <h3 className="mt-5">게시글 상세페이지</h3>
                                 {selectedPost && (
                                     <div className="flex h-full">
@@ -384,7 +384,7 @@ const BoardList = () => {
                         <div className="flex flex-wrap justify-center gap-4">
                             {boardList.map(post => (
                                 <div key={post.id}
-                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
+                                     className="bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-gray-400 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
                                     <div>
                                         <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
                                         <hr className="my-4 border-t-2 border-gray-300"/>

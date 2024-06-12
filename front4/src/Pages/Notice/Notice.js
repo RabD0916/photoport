@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
-import Menu from "./Menu.js";
 import { Link, useNavigate } from 'react-router-dom';
-import './css/Notice.css';
-import './css/CommonTable.css';
-import styled from "styled-components";
+import axios from 'axios';
 
 const Notice = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
@@ -24,7 +20,7 @@ const Notice = () => {
             const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
-                    size: 5, // 한 페이지에 보여줄 게시글 수
+                    size: 10, // 한 페이지에 보여줄 게시글 수
                     sortValue,
                     sortOrder
                 },
@@ -42,7 +38,7 @@ const Notice = () => {
     };
 
     useEffect(() => {
-        getBoardList(currentPage); // currentPage를 dependency로 추가
+        getBoardList(currentPage);
     }, [currentPage, sortValue, sortOrder]);
 
     const handlePageChange = (page) => {
@@ -52,73 +48,65 @@ const Notice = () => {
     };
 
     return (
-        <div className={"bg-pink-100"}>
-            <Menu />
-            <div>
-                &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-                {id === "ADMIN" && (
-                    <button id='select' onClick={() => navigate('/NoticeWrite')}>글쓰기</button>
-                )}
-            </div>
-            <br />
-            <div className='container'>
-                <table className='common-table'>
-                    <thead>
+        <div className="bg-pink-100 min-h-screen p-4 flex flex-col items-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">공지사항</h2>
+            <div className="container mx-auto">
+                <table className="min-w-full bg-white border border-gray-200 rounded-md">
+                    <thead className="bg-gray-100">
                     <tr>
-                        <th className="common-table-header-column">번호</th>
-                        <th className="common-table-header-column">제목</th>
-                        <th className="common-table-header-column">작성자</th>
+                        <th className="py-2 px-4 border-b">번호</th>
+                        <th className="py-2 px-4 border-b">제목</th>
+                        <th className="py-2 px-4 border-b">작성자</th>
                     </tr>
                     </thead>
                     <tbody>
                     {boardList.map((board, index) => (
-                        <tr key={board.id} className="common-table-row">
-                            <td className="common-table-column">{currentPage * 10 + (index + 1)}</td>
-                            <td className="common-table-column">
-                                <Link to={`/Notice/${board.id}`}>{board.title}</Link>
+                        <tr key={board.id} className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b text-center">{currentPage * 10 + (index + 1)}</td>
+                            <td className="py-2 px-4 border-b">
+                                <Link className="text-blue-500 hover:underline" to={`/Notice/${board.id}`}>{board.title}</Link>
                             </td>
-                            <td className="common-table-column">{board.writerId}</td>
+                            <td className="py-2 px-4 border-b text-center">{board.writerId}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
-            <PaginationContainer>
-                <PageButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+            <div className="w-full flex justify-end mt-4">
+                {id === "ADMIN" && (
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700" onClick={() => navigate('/NoticeWrite')}>
+                        글쓰기
+                    </button>
+                )}
+            </div>
+            <div className="flex justify-center mt-6">
+                <button
+                    className={`px-4 py-2 mx-1 ${currentPage === 0 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 0}
+                >
                     이전
-                </PageButton>
+                </button>
                 {Array.from({ length: totalPages }, (_, index) => (
-                    <PageButton key={index} onClick={() => handlePageChange(index)} disabled={index === currentPage}>
+                    <button
+                        key={index}
+                        className={`px-4 py-2 mx-1 ${index === currentPage ? "bg-blue-700 text-white" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                        onClick={() => handlePageChange(index)}
+                        disabled={index === currentPage}
+                    >
                         {index + 1}
-                    </PageButton>
+                    </button>
                 ))}
-                <PageButton onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                <button
+                    className={`px-4 py-2 mx-1 ${currentPage === totalPages - 1 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages - 1}
+                >
                     다음
-                </PageButton>
-            </PaginationContainer>
-            <br />
+                </button>
+            </div>
         </div>
     );
 };
-
-const PaginationContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-`;
-
-const PageButton = styled.button`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-    }
-`;
 
 export default Notice;
