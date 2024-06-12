@@ -1,57 +1,41 @@
-// import './css/nav.scss';
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import Search from '../img/search.png';
-import Mypag from '../img/mypage.png';
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import LogoutIcon from '../img/logout.png';
-import ListIcon from '../img/list.png';
-import axios from "axios";
 
 function Nav() {
     const storedUsername = localStorage.getItem("id");
-    const location = useLocation();
     const navigate = useNavigate();
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(storedUsername || '');
     const [visible, setVisible] = useState(false);
     const [keyword, setKeyword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isWidth, setIsWidth] = useState(false);
-    const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!storedUsername);
     const [isAdmin, setIsAdmin] = useState(false); // New state to track admin status
-
-    const toggleSidebar = () => {
-        setSidebarVisible(!isSidebarVisible);
-    };
-
-    useEffect(() => {
-        const handleResize = () => {
-            const windowWidth = window.innerWidth;
-            setIsWidth(windowWidth > 600);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        const storedUsername = localStorage.getItem("id");
-        if (token) {
+        if (token && storedUsername) {
             setIsLoggedIn(true);
-            if (storedUsername) {
-                setUserId(storedUsername);
-            }
+            setUserId(storedUsername);
+
+            // You can add more logic here to verify the token with your backend
+            // and set the admin status
+            // For example:
+            // axios.get(`${SERVER_IP}/api/verifyToken`, { headers: { Authorization: `Bearer ${token}` } })
+            //     .then(response => {
+            //         if (response.data.isAdmin) {
+            //             setIsAdmin(true);
+            //         }
+            //     }).catch(error => {
+            //         console.error("Token verification failed", error);
+            //     });
+        } else {
+            setIsLoggedIn(false);
+            setUserId('');
         }
-    });
+    }, [storedUsername]);
 
     const isUserIdEmpty = (e) => {
-        if (userId.length < 1) {
+        if (!userId) {
             alert("로그인 후에 이용 가능합니다!");
             navigate("/login");
             e.preventDefault();
@@ -83,6 +67,10 @@ function Nav() {
         }
     };
 
+    const toggleVisibility = () => {
+        setVisible(!visible);
+    };
+
     return (
         <>
             <nav className="flex items-center justify-between flex-wrap bg-white py-4 lg:px-12 shadow border-solid border-t-2 border-blue-700">
@@ -101,11 +89,10 @@ function Nav() {
                         <Link to={"/gallery/" + userId}
                               className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
                               onClick={isUserIdEmpty}>갤러리</Link>
-                        <div className="relative inline-block text-left" onMouseEnter={() => setVisible(true)}
-                             onMouseLeave={() => setVisible(false)}>
+                        <div className="relative inline-block text-left" onClick={toggleVisibility}>
                             <div
                                 className="block mt-4 lg:inline-block lg:mt-0 hover:text-white px-4 py-2 rounded hover:bg-blue-700 mr-2 cursor-pointer"
-                                style={{padding: '12px 16px'}}>
+                                style={{ padding: '12px 16px' }}>
                                 게시판
                             </div>
                             {visible && (

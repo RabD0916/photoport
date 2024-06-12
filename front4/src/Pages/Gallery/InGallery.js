@@ -159,7 +159,7 @@ const InGallery = () => {
 
     return (
         <section className={"text-gray-600 body-font"}>
-            <div className={"container mx-auto p-5 py-24"}>
+            <div className={"container mx-auto p-5 py-24 w-4/5 mt-10 mb-10"}>
                 <div className={"flex flex-col text-center w-full mb-20"}>
                     <h1 className={"sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"}>{userId}님의 추억</h1>
                     <p className={"lg:w-2/3 mx-auto leading-relaxed text-base"}>Categories</p>

@@ -16,18 +16,17 @@ import Notice from "./Pages/Notice/Notice";
 import NoticeDetail from "./Pages/Notice/NoticeDetail";
 import NoticeWrite from "./Pages/Notice/NoticeWrite";
 import NoticeUpdate from "./Pages/Notice/NoticeUpdate";
-import FQ from "./Pages/Notice/FQ";
 import Create from "./Pages/CreateCut/Create";
 import MyPage from "./Pages/mypage/MyPage";
 import BoardList from "./Pages/Board/BoardList";
 import BoardWrite from "./Pages/Board/BoardWrite";
-import BoardDetail from "./Pages/Board/BoardDetail"
 import Test1 from "./Pages/mypage/Test1";
 import NewPw from "./Pages/mypage/NewPw";
 import FindFriend from "./Pages/mypage/FindFriend";
 import PoseList from "./Pages/Board/PoseList";
 import PoseWrite from "./Pages/Board/PoseWrite";
 import KakaoRedirect from "./Pages/mypage/KakaoRedirect";
+import EventDetail from "./Pages/Board/EventDetail";
 // import Report from "./Pages/Board/Report";
 import EventList from "./Pages/Board/EventList";
 import ModalModel from "./Component/ModalModel";
@@ -50,18 +49,15 @@ function App() {
                   <Route path={"/gallery/:userId/:cateId"} element={<InCategory />}></Route>
                   <Route path={"/FindFriend"} element={<FindFriend/>}></Route>
                   <Route path={"/Board"} element={<BoardList/>}></Route>
-                  <Route path={"/BoardDetail"} element={<BoardDetail/>}></Route>
                   <Route path={"/BoardWrite"} element={<BoardWrite/>}></Route>
                   <Route path={"/Pose"} element={<PoseList/>}></Route>
                   <Route path={"/PoseWrite"} element={<PoseWrite/>}></Route>
                   <Route path={"/login"} element={<Login/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
-                  <Route path={"/NoticeDetail"} element={<NoticeDetail/>}></Route>
                   <Route path={"/Notice/:id"} element={<NoticeDetail/>}></Route>
                   <Route path={"/NoticeUpdate"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/update/:id"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/NoticeWrite"} element={<NoticeWrite/>}></Route>
-                  <Route path={"/FQ"} element={<FQ/>}></Route>
                   <Route path={"/signup"} element={<Signup/>}></Route>
                   <Route path={"/findID"} element={<FindID/>}></Route>
                   <Route path={"/findPW"} element={<FindPW/>}></Route>
@@ -77,6 +73,7 @@ function App() {
                   <Route path={"/BlackList"} element={<BlackList/>}></Route>
                   <Route path={"/EventList"} element={<EventList/>}></Route>
                   <Route path={"/Eventwrite"} element={<Eventwrite/>}></Route>
+                  <Route path={"/Event/:id"} element={<EventDetail/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>
