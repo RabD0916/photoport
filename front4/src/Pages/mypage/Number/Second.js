@@ -143,6 +143,7 @@ const Second = () => {
             alert("친구 삭제가 성공적으로 되었습니다!")
             fetchFriendsList(); // Refresh the friends list
         } catch (error) {
+            alert("친한 친구는 삭제할 수 없습니다");
             console.error('친구를 삭제하는데 실패했습니다', error);
         }
     };

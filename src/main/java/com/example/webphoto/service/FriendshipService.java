@@ -2,6 +2,7 @@ package com.example.webphoto.service;
 
 import com.example.webphoto.domain.Friendship;
 import com.example.webphoto.domain.FriendshipStatus;
+import com.example.webphoto.domain.LookedBoard;
 import com.example.webphoto.domain.User;
 import com.example.webphoto.dto.Friend.*;
 import com.example.webphoto.dto.FriendshipBlockResponse;
@@ -9,6 +10,7 @@ import com.example.webphoto.dto.FriendshipUnblockResponse;
 import com.example.webphoto.dto.UserSearchResult;
 import com.example.webphoto.repository.CloseFriendRepository;
 import com.example.webphoto.repository.FriendshipRepository;
+import com.example.webphoto.repository.LookedBoardRepository;
 import com.example.webphoto.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class FriendshipService {
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
     private final CloseFriendRepository closeFriendRepository;
+    private final LookedBoardRepository lookedBoardRepository;
 
     public FriendshipRequestResponse createFriendship(String toEmail, Principal user) throws Exception {
 
@@ -224,9 +227,26 @@ public class FriendshipService {
         Friendship counterFriendship = friendshipRepository.findById(friendship.getCounterpartId())
                 .orElseThrow(() -> new Exception("친구 요청 조회 실패"));
 
+        // 친한 친구 관계인지 확인
+        User user = friendship.getUsers();
+        User friend = userRepository.findByEmail(friendship.getFriendEmail())
+                .orElseThrow(() -> new Exception("친구 정보 조회 실패"));
+        if (closeFriendRepository.existsByUserAndFriend(user, friend)) {
+            throw new Exception("친한 친구 관계를 먼저 해제해야 합니다.");
+        }
+        if (closeFriendRepository.existsByUserAndFriend(friend, user)) {
+            throw new Exception("친한 친구 관계를 먼저 해제해야 합니다.");
+        }
+
         // 데이터베이스에서 두 친구 요청 모두 삭제
         friendshipRepository.delete(friendship);
         friendshipRepository.delete(counterFriendship);
+
+        // 이미 본 게시글 목록에서 해당 친구의 게시글 삭제
+        List<LookedBoard> lookedBoards = lookedBoardRepository.findByUser(friendship.getUsers());
+        lookedBoards.stream()
+                .filter(lookedBoard -> lookedBoard.getBoard().getWriter().getEmail().equals(friendship.getFriendEmail()))
+                .forEach(lookedBoard -> lookedBoardRepository.delete(lookedBoard));
 
         // 응답 객체 생성 및 반환
         FriendshipRemovalResponse responseDto = FriendshipRemovalResponse.builder()
@@ -253,6 +273,9 @@ public class FriendshipService {
         User friend = userRepository.findByEmail(friendship.getFriendEmail())
                 .orElseThrow(() -> new Exception("친구 정보 조회 실패"));
         if (closeFriendRepository.existsByUserAndFriend(user, friend)) {
+            throw new Exception("친한 친구 관계를 먼저 해제해야 합니다.");
+        }
+        if (closeFriendRepository.existsByUserAndFriend(friend, user)) {
             throw new Exception("친한 친구 관계를 먼저 해제해야 합니다.");
         }
 
@@ -286,6 +309,12 @@ public class FriendshipService {
         // 데이터베이스에서 두 친구 요청 모두 삭제
         friendshipRepository.delete(friendship);
         friendshipRepository.delete(counterFriendship);
+
+        // 이미 본 게시글 목록에서 해당 친구의 게시글 삭제
+        List<LookedBoard> lookedBoards = lookedBoardRepository.findByUser(friendship.getUsers());
+        lookedBoards.stream()
+                .filter(lookedBoard -> lookedBoard.getBoard().getWriter().getEmail().equals(friendship.getFriendEmail()))
+                .forEach(lookedBoard -> lookedBoardRepository.delete(lookedBoard));
 
         // 응답 객체 생성 및 반환
         FriendshipUnblockResponse responseDto = FriendshipUnblockResponse.builder()
