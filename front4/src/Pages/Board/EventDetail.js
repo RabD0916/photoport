@@ -11,6 +11,7 @@ const EventDetail = () => {
     const accessToken = localStorage.getItem("accessToken");
     const navigate = useNavigate();
 
+
     const getEvent = async () => {
         try {
             const resp = await axios.get(`${SERVER_IP}/api/board/${id}`, {
