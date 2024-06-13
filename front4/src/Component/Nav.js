@@ -124,7 +124,7 @@ function Nav() {
                         value={keyword}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress}
-                        placeholder="검색어를 입력하세요"
+                        placeholder="제목 또는 태그를 검색하세요"
                     />
                     <button className="absolute right-0 top-0 mt-3 mr-2" onClick={searchContent}>
                         <img className="text-gray-600 h-4 w-4 fill-current" src={Search} alt="검색사진"/>
