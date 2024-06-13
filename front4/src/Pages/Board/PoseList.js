@@ -194,17 +194,17 @@ const PostList = () => {
     };
 
     return (
-        <div className="h-full w-full bg-post-image flex items-center justify-center">
+        <div className="h-full w-full bg-cherry-image flex items-center justify-center">
             <div className="max-w-screen-xl mt-6 rounded-2xl p-4">
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">포즈 게시판</h2>
                     <hr className="my-4 border-t-2 border-gray-300"/>
                     <button onClick={moveToWrite}
-                            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-200 to-pink-400 group-hover:from-pink-300 group-hover:to-pink-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-pink-100 shadow-md">
-    <span
-        className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-pink-600">
-        글쓰기
-    </span>
+                            className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500" +
+                                " group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}><span
+                        className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black">
+                            글쓰기
+                            </span>
                     </button>
 
 
@@ -357,12 +357,6 @@ const PostList = () => {
                             ))}
                         </div>
                     </GalleryContainer>
-
-
-
-
-
-
                     <PaginationContainer>
                         <button  className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
                             " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>

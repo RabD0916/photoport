@@ -120,79 +120,93 @@ function AddFriendPage() {
     };
 
     return (
-        <div className={"bg-white p-8 rounded-md w-3/5 mx-auto"}>
-            <div className={"flex flex-col items-center pb-6"}>
-                <div>
-                    <h2 className={"text-gray-600 font-semibold"}>친구검색</h2>
+        <div className="bg-pink-100 min-h-screen flex items-center justify-center">
+            <div className="bg-white p-8 rounded-md w-3/5 shadow-lg">
+                <div className="text-center mb-8">
+                    <h2 className="text-gray-800 text-2xl font-bold">친구 검색</h2>
                 </div>
-                <div className={"flex flex-col items-center mt-4"}>
-                    <input className={"bg-gray-50 outline-none ml-1 block"}
-                           type="text"
-                           placeholder="친구 검색..."
-                           value={email}
-                           onChange={handleSearchChange}
+                <div className="flex flex-col items-center">
+                    <input
+                        className="bg-gray-50 outline-none p-2 rounded w-64 shadow-sm"
+                        type="text"
+                        placeholder="친구 검색..."
+                        value={email}
+                        onChange={handleSearchChange}
                     />
-                    <button className={"mt-2"} onClick={handleSearch}>검색</button>
+                    <button
+                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition-colors duration-200"
+                        onClick={handleSearch}
+                    >
+                        검색
+                    </button>
                 </div>
-                <div className={"mt-4"}>
-                    {searchResults.map((user) => (
-                        <div key={user.id} className={"flex items-center mt-2 border-black"}>
-                            {user.userId} - {user.userNick}
-                            <button className={"ml-4"} onClick={() => handleAddFriend(user.userEmail)}>친구 추가</button>
-                        </div>
-                    ))}
+                <div className="mt-8 w-full">
+                    <div className="text-lg font-semibold mb-4">검색 결과</div>
+                    <div className="bg-gray-100 p-4 rounded shadow-sm">
+                        {searchResults.length > 0 ? (
+                            searchResults.map((user) => (
+                                <div key={user.id}
+                                     className="flex items-center justify-between p-2 border-b border-gray-300">
+                                    <div>
+                                        <span className="font-medium">{user.userId}</span> - {user.userNick}
+                                    </div>
+                                    <button
+                                        className="bg-green-500 text-white px-3 py-1 rounded shadow hover:bg-green-600 transition-colors duration-200"
+                                        onClick={() => handleAddFriend(user.userEmail)}
+                                    >
+                                        친구 추가
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-gray-600">검색 결과가 없습니다.</div>
+                        )}
+                    </div>
                 </div>
-                <div className={"mt-6 w-full"}>
-                    받은 친구 요청
-                    <div className={"-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"}>
-                        <div className={"inline-block min-w-full shadow rounded-lg overflow-hidden"}>
-                            <table className={"min-w-full leading-normal"}>
-                                <thead className={"content-center text-center"}>
+                <div className="mt-8 w-full">
+                    <div className="text-lg font-semibold mb-4">받은 친구 요청</div>
+                    <div className="overflow-x-auto">
+                        <div className="inline-block min-w-full shadow-md rounded-lg overflow-hidden">
+                            <table className="min-w-full leading-normal">
+                                <thead>
                                 <tr>
-                                    <th
-                                        className={"px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"}>
-                                        아이디
-                                    </th>
-                                    <th
-                                        className={"px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"}>
-                                        닉네임
-                                    </th>
-                                    <th
-                                        className={"px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"}>
-                                        이메일
-                                    </th>
-                                    <th
-                                        className={"px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"}>
-                                        수락여부
-                                    </th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">아이디</th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">닉네임</th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">이메일</th>
+                                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">수락여부</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {receivedRequests.map((request) => (
-                                    <tr key={request.friendshipId}>
-                                        <td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm"}>
-                                            {request.friendshipId}
-                                        </td>
-                                        <td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm"}>
-                                            {request.friendName}
-                                        </td>
-                                        <td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm"}>
-                                            {request.friendEmail}
-                                        </td>
-                                        <td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm"}>
-                                            <button
-                                                className={"bg-blue-500 text-white px-4 py-2 rounded mr-2"}
-                                                onClick={() => handleApprove(request.friendshipId)}>
-                                                수락
-                                            </button>
-                                            <button
-                                                className={"bg-red-500 text-white px-4 py-2 rounded"}
-                                                onClick={() => handleReject(request.friendshipId)}>
-                                                거절
-                                            </button>
+                                {receivedRequests.length > 0 ? (
+                                    receivedRequests.map((request) => (
+                                        <tr key={request.friendshipId}>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{request.friendshipId}</td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{request.friendName}</td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{request.friendEmail}</td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between">
+                                                <button
+                                                    className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition-colors duration-200 mr-2"
+                                                    onClick={() => handleApprove(request.friendshipId)}
+                                                >
+                                                    수락
+                                                </button>
+                                                <button
+                                                    className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition-colors duration-200"
+                                                    onClick={() => handleReject(request.friendshipId)}
+                                                >
+                                                    거절
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="4"
+                                            className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center text-gray-600">받은
+                                            친구 요청이 없습니다.
                                         </td>
                                     </tr>
-                                ))}
+                                )}
                                 </tbody>
                             </table>
                         </div>
@@ -200,9 +214,7 @@ function AddFriendPage() {
                 </div>
             </div>
         </div>
-
     );
 }
 
 export default AddFriendPage;
-
