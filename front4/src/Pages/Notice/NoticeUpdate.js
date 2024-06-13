@@ -65,25 +65,60 @@ const NoticeUpdate = () => {
     };
 
     return (
-        <div>
-            <div>
-                <span>제목</span>
-                <input type="text" name="title" value={notice.title} onChange={onChange}/>
-            </div>
-            <br/>
-            <br/>
-            <div>
-                <span>내용</span>
-                <textarea name="content" cols="30" rows="10" value={notice.content} onChange={onChange}></textarea>
-            </div>
-            <div>
-                <span>태그</span>
-                <textarea name="tags" cols="30" rows="10" value={notice.tags} onChange={onChange}></textarea>
-            </div>
-            <br/>
-            <div>
-                <button onClick={updateNotice}>수정</button>
-                <button onClick={backToDetail}>취소</button>
+        <div className="min-h-screen flex items-center justify-center bg-pink-100">
+            <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-2xl">
+                <h2 className="text-2xl font-bold mb-6 text-center">공지사항 수정</h2>
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-gray-700">제목</label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={notice.title}
+                            onChange={onChange}
+                            placeholder="제목입력"
+                            className="w-full p-2 border border-gray-300 rounded mt-1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">내용</label>
+                        <textarea
+                            name="content"
+                            cols="30"
+                            rows="10"
+                            value={notice.content}
+                            onChange={onChange}
+                            placeholder="내용을 입력해주세요"
+                            className="w-full p-2 border border-gray-300 rounded mt-1"
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label className="block text-gray-700">태그</label>
+                        <textarea
+                            name="tags"
+                            cols="10"
+                            rows="5"
+                            value={notice.tags}
+                            onChange={onChange}
+                            placeholder="태그를 입력해주세요"
+                            className="w-full p-2 border border-gray-300 rounded mt-1"
+                        ></textarea>
+                    </div>
+                    <div className="flex justify-between mt-6">
+                        <button
+                            onClick={updateNotice}
+                            className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-200"
+                        >
+                            수정
+                        </button>
+                        <button
+                            onClick={backToDetail}
+                            className="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600 transition duration-200"
+                        >
+                            취소
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./BoardCss/Report.scss";
-
+import "./BoardCss/Report.scss"
 const Report = ({ selectedPost }) => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedReason, setSelectedReason] = useState(""); // 선택된 이유를 상태로 관리합니다.
-    const [otherReason, setOtherReason] = useState(""); // 기타 이유를 입력하는 상태를 추가합니다.
+    const [selectedReason, setSelectedReason] = useState("");
+    const [otherReason, setOtherReason] = useState("");
     const accessToken = localStorage.getItem("accessToken");
 
     useEffect(() => {
@@ -40,10 +39,10 @@ const Report = ({ selectedPost }) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`  // 올바른 인증 헤더를 추가합니다.
+                Authorization: `Bearer ${accessToken}`
             },
             body: JSON.stringify({
-                writerId: selectedPost.writerId,  // 작성자의 ID로 변경
+                writerId: selectedPost.writerId,
                 reason: reason,
             }),
         })
@@ -70,74 +69,88 @@ const Report = ({ selectedPost }) => {
         closeModal();
     };
 
-
     return (
         <div className="report">
-            {/* 신고하기 버튼 */}
             <button
                 type="button"
-                className={"justify-items-end mt-3 text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center" +
-                    " me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"} onClick={openModal}>
+                className="mt-3 text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 mb-2"
+                onClick={openModal}
+            >
                 신고하기
             </button>
 
-            {/* 모달 창 */}
-            <div className={`modal ${isModalOpen ? 'on' : ''}`}>
-                <div className="report_popup">
-                    <h3>신고하기</h3>
-                    <ul>
-                        <li>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="음란물"
-                                    checked={selectedReason === "음란물"}
-                                    onChange={handleReasonChange}
-                                />
-                                음란물
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="폭력성"
-                                    checked={selectedReason === "폭력성"}
-                                    onChange={handleReasonChange}
-                                />
-                                폭력성
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="기타"
-                                    checked={selectedReason === "기타"}
-                                    onChange={handleReasonChange}
-                                />
-                                기타
-                            </label>
-                            {/* 기타 항목에 대한 입력 칸 */}
-                            {selectedReason === "기타" && (
-                                <input
-                                    type="text"
-                                    placeholder="기타 이유를 입력하세요"
-                                    value={otherReason}
-                                    onChange={handleOtherReasonChange}
-                                />
-                            )}
-                        </li>
-                    </ul>
-                    <button type="button" className="submit_btn" onClick={handleSubmit}>신고</button>
-                    <button type="button" className="close_btn" onClick={closeModal}>닫기</button>
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <h3 className="text-2xl font-bold mb-4">신고하기</h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        value="음란물"
+                                        checked={selectedReason === "음란물"}
+                                        onChange={handleReasonChange}
+                                        className="form-radio text-indigo-600"
+                                    />
+                                    <span className="ml-2">음란물</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        value="폭력성"
+                                        checked={selectedReason === "폭력성"}
+                                        onChange={handleReasonChange}
+                                        className="form-radio text-indigo-600"
+                                    />
+                                    <span className="ml-2">폭력성</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label className="flex items-center">
+                                    <input
+                                        type="radio"
+                                        value="기타"
+                                        checked={selectedReason === "기타"}
+                                        onChange={handleReasonChange}
+                                        className="form-radio text-indigo-600"
+                                    />
+                                    <span className="ml-2">기타</span>
+                                </label>
+                                {selectedReason === "기타" && (
+                                    <input
+                                        type="text"
+                                        placeholder="기타 이유를 입력하세요"
+                                        value={otherReason}
+                                        onChange={handleOtherReasonChange}
+                                        className="mt-2 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-500"
+                                    />
+                                )}
+                            </li>
+                        </ul>
+                        <div className="mt-6 flex justify-end space-x-2">
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
+                                onClick={closeModal}
+                            >
+                                닫기
+                            </button>
+                            <button
+                                type="button"
+                                className="px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800"
+                                onClick={handleSubmit}
+                            >
+                                신고
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
-
     );
 };
 
 export default Report;
-
-

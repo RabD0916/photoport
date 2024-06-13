@@ -34,6 +34,9 @@ const PostList = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
+    const [upComment, setupComment] = useState(false);
+    const [content, setContent] = useState('');
+    const [commentId, setCommentId] = useState('');
     const [sortValue, setSortValue] = useState("createdAt");
     const [sortOrder, setSortOrder] = useState("desc");
     const [totalPages, setTotalPages] = useState(0);
@@ -171,6 +174,40 @@ const PostList = () => {
         }
     };
 
+    const comment_update = async (commentId, content) => {
+        try {
+            const data = { content: content }
+            const response = await axios.post(`${SERVER_IP}/api/updateComments/${commentId}`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            if (response.status === 200) {
+                alert("업데이트 완료.");
+                await open_board(selectedPost.id);
+                setupComment(false);
+                setContent('');
+            }
+        } catch (error) {
+            console.error("Error updating post:", error);
+        }
+    };
+
+    const comment_delete = async (postId) => {
+        try {
+            const response = await axios.delete(`${SERVER_IP}/api/deleteComments/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log("Post deleted:", response);
+            await open_board(selectedPost.id);
+            alert("해당 댓글이 삭제되었습니다.");
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
+
     const deletePost = async (postId) => {
         try {
             const response = await axios.delete(`${SERVER_IP}/api/delete/board/${postId}`, {
@@ -255,6 +292,44 @@ const PostList = () => {
                                                             <div className="ml-3 flex-1">
                                                                 <div className="flex justify-between items-center">
                                                                     <h3 className="font-bold">{comment.writerName}</h3>
+                                                                    {comment.writerId === userId && (
+                                                                        <div className="flex space-x-2">
+                                                                            {comment.id === commentId && upComment ? (
+                                                                                <>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        value={content}
+                                                                                        onChange={(e) => setContent(e.target.value)}
+                                                                                        className="text-sm border border-gray-300 rounded px-2 py-1"
+                                                                                    />
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => comment_update(comment.id, content)}
+                                                                                    >
+                                                                                        수정완료
+                                                                                    </button>
+                                                                                </>
+                                                                            ) : (
+                                                                                <>
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => {
+                                                                                            setupComment(true);
+                                                                                            setCommentId(comment.id);
+                                                                                        }}
+                                                                                    >
+                                                                                        수정
+                                                                                    </button>
+                                                                                    <button
+                                                                                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-2 py-1 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                                                        onClick={() => comment_delete(comment.id)}
+                                                                                    >
+                                                                                        삭제
+                                                                                    </button>
+                                                                                </>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                                 <p className="text-black-600 mt-2 text-sm">{comment.content}</p>
                                                             </div>
