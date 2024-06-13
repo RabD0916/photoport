@@ -1,0 +1,67 @@
+h2 {
+  text-align: center;
+}
+.report_popup li {
+  /* 리스트 항목 스타일링 */
+  list-style-type: none; /* 리스트 항목의 점을 제거합니다. */
+}
+
+.report_btn {
+  display: block;
+  margin: 40px auto;
+  padding: 10px 20px;
+  background-color: royalblue;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.report_btn:hover {
+  box-shadow: 3px 4px 11px 0px #00000040;
+}
+
+/* 모달 팝업 영역 스타일링 */
+.modal {
+  /* 팝업 배경 */
+  display: none; /* 초기에는 숨깁니다. */
+  position: fixed; /* 화면에 고정시킵니다. */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 어두운 배경색을 지정합니다. */
+  z-index: 999; /* 다른 요소 위에 나타나도록 설정합니다. */
+}
+
+.report_popup {
+  /* 팝업 */
+  position: absolute; /* 부모 요소에 대해 상대적으로 배치합니다. */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 수직 및 수평 가운데 정렬합니다. */
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 20px;
+}
+
+
+.report_popup .close_btn , .submit_btn{
+  display: block;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: rgb(116, 0, 0);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.report_popup .close_btn {
+  float: right; /* 오른쪽으로 정렬합니다. */
+}
+
+.report_popup .submit_btn {
+  float: left; /* 왼쪽으로 정렬합니다. */
+}

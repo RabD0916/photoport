@@ -18,6 +18,7 @@ const Search = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const keyword = queryParams.get('keyword');
+    const [profileImages, setProfileImages] = useState({});
 
     useEffect(() => {
         const fetchSearchResults = async () => {
@@ -28,7 +29,9 @@ const Search = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                setBoardList(response.data);
+                const boards = response.data;
+                setBoardList(boards);
+                await updateProfileImages(boards);
             } catch (error) {
                 console.error('Error fetching search results:', error);
             }
@@ -38,6 +41,26 @@ const Search = () => {
             fetchSearchResults();
         }
     }, [keyword]); // keyword가 변경될 때마다 useEffect가 실행됩니다.
+
+    const updateProfileImages = async (boards) => {
+        let newImages = {...profileImages};
+        for (const board of boards) {
+            if (!newImages[board.writerId]) {
+                try {
+                    const response = await axios.get(`${SERVER_IP}/api/profile/${board.writerId}`, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    newImages[board.writerId] = response.data.userProfile;
+                } catch (error) {
+                    console.error("Failed to load profile image", error);
+                }
+            }
+        }
+        setProfileImages(newImages);
+    };
 
     return (
         <div className="bg-pink-100 min-h-screen p-4 flex flex-col items-center">
@@ -52,7 +75,7 @@ const Search = () => {
                                 <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
                                 <hr className="my-4 border-t-2 border-gray-300"/>
                                 <div className="flex items-center px-2 py-3">
-                                    <img src={post.profileImage} alt="Profile"
+                                    <img src={profileImages[post.writerId]} alt="Profile"
                                          className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
                                     <div>
                                         <span className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerId}</span>
