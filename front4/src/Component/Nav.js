@@ -16,18 +16,6 @@ function Nav() {
         if (token && storedUsername) {
             setIsLoggedIn(true);
             setUserId(storedUsername);
-
-            // You can add more logic here to verify the token with your backend
-            // and set the admin status
-            // For example:
-            // axios.get(`${SERVER_IP}/api/verifyToken`, { headers: { Authorization: `Bearer ${token}` } })
-            //     .then(response => {
-            //         if (response.data.isAdmin) {
-            //             setIsAdmin(true);
-            //         }
-            //     }).catch(error => {
-            //         console.error("Token verification failed", error);
-            //     });
         } else {
             setIsLoggedIn(false);
             setUserId('');
@@ -52,9 +40,16 @@ function Nav() {
         navigate("/");
     };
 
-    const searchContent = () => {
+    const searchContent = (e) => {
         const encodedKeyword = encodeURIComponent(keyword);
-        navigate(`/search?keyword=${encodedKeyword}`);
+        if (!userId) {
+            alert("로그인 후에 이용 가능합니다!");
+            navigate("/login");
+            e.preventDefault();
+        }
+        else{
+            navigate(`/search?keyword=${encodedKeyword}`);
+        }
     };
 
     const handleInputChange = (e) => {
