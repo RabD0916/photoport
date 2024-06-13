@@ -35,6 +35,7 @@ const EventWrite = () => {
             navigate('/EventList');
         } catch (error) {
             alert("관리자가 개최한 이벤트가 없습니다");
+            navigate('/EventList');
             console.error('등록에 실패했습니다.', error);
         }
     };
