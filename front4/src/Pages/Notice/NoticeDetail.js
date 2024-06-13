@@ -20,7 +20,7 @@ const NoticeDetail = () => {
             });
             // 날짜 포매팅
             const date = new Date(...resp.data.createdAt);
-            const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+            const formattedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 
             // 데이터 세팅
             setNotice({
@@ -79,7 +79,7 @@ const NoticeDetail = () => {
                     </div>
                     <hr className="my-4"/>
                     <div className="text-gray-700 mb-4">
-                        <p className="text-sm">태그: {notice.tags}</p>
+                        <p className="text-sm">태그: #{notice.tags}</p>
                     </div>
                     {userId === "ADMIN" && (
                         <div className="flex justify-end space-x-4 mt-4">

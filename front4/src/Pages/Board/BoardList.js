@@ -241,13 +241,13 @@ const BoardList = () => {
                     <button onClick={moveToWrite}
                             className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500" +
                                 " group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}><span
-                            className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black">
+                        className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black">
                             글쓰기
                             </span>
                     </button>
                     <div className="mx-auto">
                         <div className={`modal ${isModalOpen ? 'on' : ''} place-content-center`}>
-                        <div className="container mt-5 px-2 w-4/5 h-auto bg-white overflow-auto rounded-2xl mx-auto">
+                            <div className="container mt-5 px-2 w-4/5 h-auto bg-white overflow-auto rounded-2xl mx-auto">
                                 <h3 className="mt-5">게시글 상세페이지</h3>
                                 {selectedPost && (
                                     <div className="flex h-full">
@@ -442,13 +442,13 @@ const BoardList = () => {
                         {Array.from({length: totalPages}, (_, index) => (
                             <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
                                 " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} key={index} onClick={() => handlePageChange(index)}
-                                        disabled={index === currentPage}>
+                                    disabled={index === currentPage}>
                                 <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>{index +1}</span>
                             </button>
                         ))}
                         <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
                             " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages - 1}>
+                                disabled={currentPage === totalPages - 1}>
                             <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>다음</span>
                         </button>
                     </PaginationContainer>

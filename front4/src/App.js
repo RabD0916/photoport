@@ -36,6 +36,7 @@ import WritePage from "./Pages/Admin/WritePage";
 import BlackList from "./Pages/Admin/BlackList";
 import ReportList from "./Pages/Admin/ReportList";
 import Eventwrite from "./Pages/Board/Eventwrite";
+import EventUpdate from "./Pages/Board/EventUpdate";
 function App() {
   return (
       <div className="App">
@@ -55,7 +56,6 @@ function App() {
                   <Route path={"/login"} element={<Login/>}></Route>
                   <Route path={"/Notice"} element={<Notice/>}></Route>
                   <Route path={"/Notice/:id"} element={<NoticeDetail/>}></Route>
-                  <Route path={"/NoticeUpdate"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/update/:id"} element={<NoticeUpdate/>}></Route>
                   <Route path={"/NoticeWrite"} element={<NoticeWrite/>}></Route>
                   <Route path={"/signup"} element={<Signup/>}></Route>
@@ -74,6 +74,7 @@ function App() {
                   <Route path={"/EventList"} element={<EventList/>}></Route>
                   <Route path={"/Eventwrite"} element={<Eventwrite/>}></Route>
                   <Route path={"/Event/:id"} element={<EventDetail/>}></Route>
+                  <Route path={"/update/:id"} element={<EventUpdate/>}></Route>
               </Routes>
           </BrowserRouter>
           <Footer/>

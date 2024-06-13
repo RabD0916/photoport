@@ -122,16 +122,21 @@ const Main = () => {
         getPoseList();
     }, []);
 
-    const searchContent = () => {
-        navigate(`/EventList`);
+    const checkLoginAndNavigate = (path) => {
+        if (accessToken) {
+            navigate(path);
+        } else {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
+        }
     };
 
     return (
         <div className={"bg-pink-100"}>
             <div className="flex justify-center py-4 bg-white shadow-lg">
                 <div className="flex space-x-8">
-                    <Link to="/Notice" className="text-lg font-semibold text-gray-700">공지사항</Link>
-                    <button onClick={searchContent} className="text-lg font-semibold text-gray-700">이벤트</button>
+                    <button onClick={() => checkLoginAndNavigate('/Notice')} className="text-lg font-semibold text-gray-700">공지사항</button>
+                    <button onClick={() => checkLoginAndNavigate('/EventList')} className="text-lg font-semibold text-gray-700">이벤트</button>
                 </div>
             </div>
             <hr className="my-2 border-gray-300" />
