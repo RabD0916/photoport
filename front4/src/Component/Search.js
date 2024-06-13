@@ -1,13 +1,24 @@
 import axios from "axios";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+
+const GalleryContainer = styled.div`
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+`;
+
 const Search = () => {
     const SERVER_IP = process.env.REACT_APP_SERVER_IP;
     const accessToken = localStorage.getItem("accessToken");
-    const [boardList, setboardList] = useState([]);
+    const [boardList, setBoardList] = useState([]);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const keyword = queryParams.get('keyword');
+
     useEffect(() => {
         const fetchSearchResults = async () => {
             try {
@@ -17,7 +28,7 @@ const Search = () => {
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                setboardList(response.data);
+                setBoardList(response.data);
             } catch (error) {
                 console.error('Error fetching search results:', error);
             }
@@ -28,24 +39,45 @@ const Search = () => {
         }
     }, [keyword]); // keyword가 변경될 때마다 useEffect가 실행됩니다.
 
-    return(
-        <div>
-            <h2>검색 결과</h2>
-            <p>검색어: {keyword}</p>
-            <ul>
-                {/* 검색 결과를 매핑하여 리스트로 표시합니다. */}
-                {boardList.map(post => (
-                    <div key={post.id}>
-                        <li>제목 : {post.title}</li>
-                        <li>글쓴이 : {post.writerId}</li>
-                        <img className="board_img"
-                             src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}/>
-                        <li>{post.tags.filter(tag => tag.trim() !== '').map(tag => `#${tag}`).join(', ')}</li>
-                    </div>
-
-                ))}
-            </ul>
+    return (
+        <div className="bg-pink-100 min-h-screen p-4 flex flex-col items-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">검색 결과</h2>
+            <p className="text-lg text-gray-700 mb-4">검색어: {keyword}</p>
+            <GalleryContainer>
+                {boardList.length > 0 ? (
+                    boardList.map(post => (
+                        <div key={post.id}
+                             className="bg-white px-6 pt-6 pb-2 m-4 rounded-xl shadow-lg transform hover:scale-105 transition duration-500 border-4 border-b-blue-200 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col justify-between flex-grow">
+                            <div>
+                                <div className="mb-1 text-xl font-bold text-indigo-600">{post.title}</div>
+                                <hr className="my-4 border-t-2 border-gray-300"/>
+                                <div className="flex items-center px-2 py-3">
+                                    <img src={post.profileImage} alt="Profile"
+                                         className="object-cover w-11 h-11 rounded-full border-2 border-emerald-400 shadow-emerald-400"/>
+                                    <div>
+                                        <span className="ml-4 text-xl font-semibold antialiased block leading-tight">{post.writerId}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="relative flex justify-center items-center w-full h-[300px]">
+                                <img
+                                    className="max-w-full max-h-full object-contain rounded-xl"
+                                    src={`./images/${post.writerId}/${post.media.categoryName}/${post.media.mediaName}`}
+                                    alt="#"
+                                />
+                            </div>
+                            <hr className="my-4 border-t-2 border-gray-300"/>
+                            <div className="font-semibold text-sm mx-4 mt-2 mb-4">
+                                {post.tags.filter(tag => tag.trim() !== '').map(tag => `#${tag}`).join(', ')}
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className="text-lg text-gray-700">검색 결과가 없습니다.</p>
+                )}
+            </GalleryContainer>
         </div>
     );
 }
+
 export default Search;

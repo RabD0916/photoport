@@ -34,7 +34,7 @@ const EventList = () => {
             const resp = await axios.get(`${SERVER_IP}/api/type/${boardType}`, {
                 params: {
                     page,
-                    size: 6, // 한 페이지에 보여줄 게시글 수
+                    size: 10, // 한 페이지에 보여줄 게시글 수
                     sortValue,
                     sortOrder
                 },
@@ -68,65 +68,72 @@ const EventList = () => {
     };
 
     return (
-        <div className="min-h-screen bg-pink-100 p-4">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">이벤트 게시판</h2>
-            <div className="flex justify-end mb-4">
-                <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded shadow"
-                    onClick={() => navigate('/EventWrite')}
-                >
-                    글쓰기
-                </button>
-            </div>
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="min-w-full bg-white">
-                    <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <div className="bg-pink-100 min-h-screen p-4 flex flex-col items-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">이벤트 게시판</h2>
+            <div className="container mx-auto">
+                <table className="min-w-full bg-white border border-gray-200 rounded-md">
+                    <thead className="bg-gray-100">
                     <tr>
-                        <th className="py-3 px-6 text-left">번호</th>
-                        <th className="py-3 px-6 text-left">제목</th>
-                        <th className="py-3 px-6 text-left">작성자</th>
-                        <th className="py-3 px-6 text-left">태그</th>
+                        <th className="py-2 px-4 border-b">번호</th>
+                        <th className="py-2 px-4 border-b">제목</th>
+                        <th className="py-2 px-4 border-b">작성자</th>
+                        <th className="py-2 px-4 border-b">태그</th>
                     </tr>
                     </thead>
-                    <tbody className="text-gray-600 text-sm font-light">
+                    <tbody>
                     {boardList.map((board, index) => (
-                        <tr key={board.id} className="border-b border-gray-200 hover:bg-gray-100">
-                            <td className="py-3 px-6 text-left">{currentPage * 6 + (index + 1)}</td>
-                            <td className="py-3 px-6 text-left">
-                                <Link to={`/Event/${board.id}`} className="text-blue-500 hover:underline">
-                                    {board.title}
-                                </Link>
+                        <tr key={board.id} className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b text-center">{currentPage * 10 + (index + 1)}</td>
+                            <td className="py-2 px-4 border-b">
+                                <Link className="text-blue-500 hover:underline" to={`/Event/${board.id}`}>{board.title}</Link>
                             </td>
-                            <td className="py-3 px-6 text-left">{board.writerId}</td>
-                            <td className="py-3 px-6 text-left">{board.tags}</td>
+                            <td className="py-2 px-4 border-b text-center">{board.writerId}</td>
+                            <td className="py-2 px-4 border-b text-center">{board.tags}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-center mt-4">
+            <div className="w-full flex justify-end mt-4">
+                    <button
+                        onClick={() => navigate('/EventWrite')}
+                        className="relative inline-flex items-center justify-center p-0.5 mb-2 mx-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+                    >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black">
+                            글쓰기
+                        </span>
+                    </button>
+            </div>
+            <div className="flex justify-center mt-6">
                 <button
-                    className={`mx-1 px-4 py-2 bg-blue-500 text-white rounded ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 0}
                 >
-                    이전
+                    <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                        이전
+                    </span>
                 </button>
-                {Array.from({length: totalPages}, (_, index) => (
+                {Array.from({ length: totalPages }, (_, index) => (
                     <button
                         key={index}
-                        className={`mx-1 px-4 py-2 bg-blue-500 text-white rounded ${index === currentPage ? 'bg-blue-700' : ''}`}
+                        className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                         onClick={() => handlePageChange(index)}
+                        disabled={index === currentPage}
                     >
-                        {index + 1}
+                        <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                            {index + 1}
+                        </span>
                     </button>
                 ))}
                 <button
-                    className={`mx-1 px-4 py-2 bg-blue-500 text-white rounded ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages - 1}
                 >
-                    다음
+                    <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                        다음
+                    </span>
                 </button>
             </div>
         </div>

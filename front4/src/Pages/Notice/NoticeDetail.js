@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const NoticeDetail = () => {
@@ -37,7 +37,7 @@ const NoticeDetail = () => {
     const moveToUpdate = () => {
         navigate('/update/' + id);
     };
-    /*axios url 수정해야함 */
+
     const deleteNotice = async () => {
         try {
             const response = await axios.delete(`${SERVER_IP}/api/delete/board/${id}`, {
@@ -46,8 +46,7 @@ const NoticeDetail = () => {
                 }
             });
             console.log("Post deleted:", response);
-            // 게시글 삭제 후 모달 닫기 및 게시글 목록 새로고침
-            alert("해당 게시글이 삭제되었습니다.")
+            alert("해당 게시글이 삭제되었습니다.");
             navigate('/Notice');
         } catch (error) {
             console.error("Error deleting post:", error);
@@ -60,35 +59,52 @@ const NoticeDetail = () => {
 
     useEffect(() => {
         getNotice();
-    }, [id]); // id 값이 변경될 때마다 getNotice 함수를 호출
+    }, [id]);
 
     return (
-        <div>
+        <div className="min-h-screen bg-pink-100 p-4 flex items-center justify-center">
             {loading ? (
-                <h2>Loading...</h2>
+                <h2 className="text-2xl font-bold">Loading...</h2>
             ) : (
-                <div>
-                    {/*<h2>게시글 아이디 : {notice.id}</h2>*/}
-                    <h2>제목 : {notice.title}</h2>
-                    <h5>작성자 : {notice.writerId}</h5>
-                    <hr/>
-                    <p>내용 : {notice.content}
-                    </p>
-                    <hr/>
-                    <p>
-                        태그: {notice.tags}
-                    </p>
-                    <hr/>
-                    <p>
-                        작성 일자 : {notice.createdAt}
-                    </p>
+                <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-2xl">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{notice.title}</h2>
+                    <div className="text-gray-700 mb-4">
+                        <p className="text-lg">작성자: {notice.writerId}</p>
+                        <p className="text-sm text
+-gray-500">작성 일자: {notice.createdAt}</p>
+                    </div>
+                    <hr className="my-4"/>
+                    <div className="text-gray-700 mb-4">
+                        <p className="text-lg">{notice.content}</p>
+                    </div>
+                    <hr className="my-4"/>
+                    <div className="text-gray-700 mb-4">
+                        <p className="text-sm">태그: {notice.tags}</p>
+                    </div>
                     {userId === "ADMIN" && (
-                        <div>
-                            <button id='cancle_save_btn' onClick={moveToUpdate}>수정</button>
-                            <button id='cancle_save_btn' onClick={deleteNotice}>삭제</button>
-                            <button id='cancle_save_btn' onClick={moveToList}>목록</button>
+                        <div className="flex justify-end space-x-4 mt-4">
+                            <button
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                                onClick={moveToUpdate}
+                            >
+                                수정
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700"
+                                onClick={deleteNotice}
+                            >
+                                삭제
+                            </button>
                         </div>
                     )}
+                    <div className="flex justify-end mt-4">
+                        <button
+                            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
+                            onClick={moveToList}
+                        >
+                            목록
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

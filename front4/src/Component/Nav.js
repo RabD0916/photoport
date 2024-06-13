@@ -78,11 +78,6 @@ function Nav() {
                     <div className="flex items-center flex-shrink-0 text-gray-800 mr-16">
                         <Link to={"/"} className="font-semibold text-xl tracking-tight">포토포트</Link>
                     </div>
-                    <div className="block lg:hidden">
-                        <button className="flex items-center px-3 py-2 border-2 rounded text-blue-700 border-blue-700 hover:text-blue-700 hover:border-blue-700">
-                            <title>머지이건?</title>
-                        </button>
-                    </div>
                 </div>
                 <div className="menu w-full lg:block flex-grow lg:flex lg:items-center lg:w-auto lg:px-3 px-8">
                     <div className="text-md font-bold text-blue-700 lg:flex-grow">
@@ -129,7 +124,7 @@ function Nav() {
                         value={keyword}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress}
-                        placeholder="검색어를 입력하세요"
+                        placeholder="제목 또는 태그를 검색하세요"
                     />
                     <button className="absolute right-0 top-0 mt-3 mr-2" onClick={searchContent}>
                         <img className="text-gray-600 h-4 w-4 fill-current" src={Search} alt="검색사진"/>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -9,11 +9,9 @@ const FindID = ({ handleLogin }) => {
     const [inputVisible, setInputVisible] = useState(false);
     const navigate = useNavigate();
     const [timerRunning, setTimerRunning] = useState(false);
-    // 시간을 담을 변수
     const [count, setCount] = useState(300);
 
     useEffect(() => {
-        // 설정된 시간 간격마다 setInterval 콜백이 실행된다.
         let id;
 
         if (timerRunning) {
@@ -23,7 +21,7 @@ const FindID = ({ handleLogin }) => {
         }
 
         return () => clearInterval(id);
-    }, []);
+    }, [timerRunning]);
 
     const minutes = Math.floor(count / 60);
     const seconds = count % 60;
@@ -38,15 +36,12 @@ const FindID = ({ handleLogin }) => {
 
     const handleSendAuthCode = async () => {
         try {
-            // 이메일 인증번호 발송 요청
-            const response = await axios.post(`${SERVER_IP}/api/mailSend`,
-                {email}
-            );
+            const response = await axios.post(`${SERVER_IP}/api/mailSend`, { email });
             const res = response.data;
 
             if (res) {
-                setInputVisible(true); // 인증번호 입력 필드를 보이게 설정
-                setTimerRunning(true);//런닝
+                setInputVisible(true);
+                setTimerRunning(true);
             } else {
                 console.error('인증번호 발송 실패!');
             }
@@ -60,17 +55,13 @@ const FindID = ({ handleLogin }) => {
         e.preventDefault();
 
         try {
-            // 인증번호 확인 요청
-            const response = await axios.post(`${SERVER_IP}/api/mailauthCheck`, { // URL 경로를 소문자로 시작하는 것으로 수정
+            const response = await axios.post(`${SERVER_IP}/api/mailauthCheck`, {
                 email,
                 authNum
             });
-            const {username, message} = response.data; // 구조 분해 할당을 사용하여 result와 message 추출
+            const { username, message } = response.data;
             console.log("사용자 아이디:", username);
-            console.log("메시지:", message); // 서버로부터 받은 메시지도 출력
-
-            // 인증 성공 후 로직 처리 (예: 로그인 처리)
-            // handleLogin(accessToken); // 실제 구현에 맞게 조정 필요
+            console.log("메시지:", message);
 
             alert(`사용자 아이디는 ${username} 입니다. ${message}`);
             navigate('/login');
@@ -81,18 +72,43 @@ const FindID = ({ handleLogin }) => {
     };
 
     return (
-        <div>
-            <h4>아이디 찾기</h4>
-            <div className="container">
-                <form onSubmit={handleSubmit}>
-                    <div className="first-input input__block">
-                        <input type="email" placeholder="이메일을 입력해주세요" className="input1" name="email" onChange={handleEmailChange} />
-                        <button type="button" className={"input_btn"} onClick={handleSendAuthCode}>인증번호 발송</button>
-                        {inputVisible && <input type="text" placeholder="6자리 입력" onChange={handleAuthCodeChange} />}
-                        {inputVisible && <p className="find__p">*인증번호를 입력해 주세요</p>}
-                        {inputVisible &&<p className={"time_font"}>{minutes}분 {seconds}초</p>}
+        <div className="min-h-screen flex items-center justify-center bg-main-image">
+            <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-md border border-gray-300">
+                <h4 className="text-2xl font-bold text-center mb-4">아이디 찾기</h4>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <input
+                            type="email"
+                            placeholder="이메일을 입력해주세요"
+                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+                            name="email"
+                            onChange={handleEmailChange}
+                        />
+                        <button onClick={handleSendAuthCode}
+                                className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                            <span className="w-full relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black">
+                                인증번호 발송
+                            </span>
+                        </button>
+                        {inputVisible && (
+                            <>
+                                <input
+                                    type="text"
+                                    placeholder="6자리 입력"
+                                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500 mt-2"
+                                    onChange={handleAuthCodeChange}
+                                />
+                                <p className="text-gray-600 text-sm mt-2">*인증번호를 입력해 주세요</p>
+                                <p className="text-red-500 text-sm">{minutes}분 {seconds}초</p>
+                            </>
+                        )}
                     </div>
-                    <button className="signin__btn" type="submit">확인</button>
+                    <button type="submit"
+                            className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                        <span className="w-full relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black">
+                            확인
+                        </span>
+                    </button>
                 </form>
             </div>
         </div>

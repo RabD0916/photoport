@@ -74,35 +74,46 @@ const Notice = () => {
             </div>
             <div className="w-full flex justify-end mt-4">
                 {id === "ADMIN" && (
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700" onClick={() => navigate('/NoticeWrite')}>
-                        글쓰기
+                    <button
+                        onClick={() => navigate('/NoticeWrite')}
+                        className="relative inline-flex items-center justify-center p-0.5 mb-2 mx-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+                    >
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black">
+                            글쓰기
+                        </span>
                     </button>
                 )}
             </div>
             <div className="flex justify-center mt-6">
                 <button
-                    className={`px-4 py-2 mx-1 ${currentPage === 0 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                    className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 0}
                 >
-                    이전
+                    <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                        이전
+                    </span>
                 </button>
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button
                         key={index}
-                        className={`px-4 py-2 mx-1 ${index === currentPage ? "bg-blue-700 text-white" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                        className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                         onClick={() => handlePageChange(index)}
                         disabled={index === currentPage}
                     >
-                        {index + 1}
+                        <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                            {index + 1}
+                        </span>
                     </button>
                 ))}
                 <button
-                    className={`px-4 py-2 mx-1 ${currentPage === totalPages - 1 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-700"}`}
+                    className={`relative inline-flex items-center justify-center p-0.5 mb-2 mx-1 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800`}
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages - 1}
                 >
-                    다음
+                    <span className={`relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 text-black`}>
+                        다음
+                    </span>
                 </button>
             </div>
         </div>

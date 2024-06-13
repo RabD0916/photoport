@@ -72,7 +72,7 @@ const SignUp = ({ onSignUpSuccess }) => {
 
     return (
         <div className="bg-white rounded-lg py-5">
-            <div className="container flex flex-col mx-auto bg-white rounded-lg pt-12 my-5">
+            <div className="container flex flex-col mx-auto bg-white pt-12 my-5 border-4 border-sky-200 rounded-2xl w-4/5">
                 <div
                     className={"flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable"}>
                     <div className={"flex items-center justify-center w-full lg:p-12"}>
