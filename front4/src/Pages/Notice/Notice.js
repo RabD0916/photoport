@@ -48,7 +48,7 @@ const Notice = () => {
     };
 
     return (
-        <div className="bg-pink-100 min-h-screen p-4 flex flex-col items-center">
+        <div className="bg-pink-100 bg-main-image p-4 flex flex-col items-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-6">공지사항</h2>
             <div className="container mx-auto">
                 <table className="min-w-full bg-white border border-gray-200 rounded-md">

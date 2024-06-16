@@ -28,10 +28,13 @@ public class BlackController {
         return ResponseEntity.badRequest().body(new BlackResponse(null, null, null, null, "신고 접수에 실패하였습니다."));
     }
 
-    //     신고 접수를 받은 리스트 목록 가져오기
+    //  신고 접수를 받은 리스트 목록 가져오기
     @GetMapping("/reportUser")
     public ResponseEntity<List<BlackResponse>> getReportUser() {
         List<Black> reportUser = blackService.getReportUser();
+        if (reportUser == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
         List<BlackResponse> responses = reportUser.stream()
                 .map(report -> new BlackResponse(report.getId(), report.getBlackType(), report.getReason(), report.getBlackUser().getId()))
                 .toList();
@@ -59,6 +62,9 @@ public class BlackController {
     @GetMapping("/blacklist")
     public ResponseEntity<List<BlackResponse>> getBlackList() {
         List<Black> blackList = blackService.getBlackUser();
+        if (blackList == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
         List<BlackResponse> responses = blackList.stream()
                 .map(black -> new BlackResponse(black.getId(), black.getBlackType(), black.getReason(), black.getBlackUser().getId()))
                 .collect(Collectors.toList());

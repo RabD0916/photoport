@@ -20,7 +20,4 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     // 사용자와 상태로 친구 찾기
     List<Friendship> findByUsersAndStatus(User users, FriendshipStatus status);
-
-
-    List<Friendship> findByUserEmailAndStatus(String userEmail, FriendshipStatus status);
 }

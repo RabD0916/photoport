@@ -27,6 +27,9 @@ public class FriendController {
     @PostMapping("/user/friends/{email}")
     public ResponseEntity<FriendshipRequestResponse> sendFriendshipRequest(@PathVariable("email") String email, Principal user) throws Exception {
         FriendshipRequestResponse response = friendshipService.createFriendship(email, user);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -36,6 +39,9 @@ public class FriendController {
         User users = userService.findById(user.getName());
         String email = users.getEmail();
         WaitingFriendListResponse response = friendshipService.getWaitingFriendList(email);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -43,6 +49,9 @@ public class FriendController {
     @PostMapping("/user/friends/approve/{friendshipId}")
     public ResponseEntity<FriendshipApprovalResponse> approveFriendship(@PathVariable("friendshipId") Long friendshipId) throws Exception {
         FriendshipApprovalResponse response = friendshipService.approveFriendshipRequest(friendshipId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -50,6 +59,9 @@ public class FriendController {
     @DeleteMapping("/user/friends/reject/{friendshipId}")
     public ResponseEntity<FriendshipRejectionResponse> rejectFriendship(@PathVariable("friendshipId") Long friendshipId) throws Exception {
         FriendshipRejectionResponse response = friendshipService.rejectFriendshipRequest(friendshipId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -59,6 +71,9 @@ public class FriendController {
         User users = userService.findById(user.getName());
         String userEmail = users.getEmail();
         List<FriendDTO> response = friendshipService.findFriendsByUserEmail(userEmail);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -66,6 +81,9 @@ public class FriendController {
     @DeleteMapping("/user/friends/remove/{friendshipId}")
     public ResponseEntity<FriendshipRemovalResponse> removeFriend(@PathVariable("friendshipId") Long friendshipId) throws Exception {
         FriendshipRemovalResponse response = friendshipService.removeFriendship(friendshipId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 

@@ -75,6 +75,12 @@ const PostList = () => {
         }
     };
 
+    const handleSortChange = (event) => {
+        const [value, order] = event.target.value.split('_');
+        setSortValue(value);
+        setSortOrder(order);
+    };
+
     const moveToWrite = () => {
         navigate('/Posewrite');
     };
@@ -236,6 +242,58 @@ const PostList = () => {
                 <div className="mx-auto lg:mx-0">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">포즈 게시판</h2>
                     <hr className="my-4 border-t-2 border-gray-300"/>
+                    <div className="sort-options text-right">
+                        <label>
+                            <input
+                                type="radio"
+                                name="sort"
+                                value="createdAt_desc"
+                                checked={sortValue === "createdAt" && sortOrder === "desc"}
+                                onChange={handleSortChange}
+                            />
+                            최신순
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="sort"
+                                value="createdAt_asc"
+                                checked={sortValue === "createdAt" && sortOrder === "asc"}
+                                onChange={handleSortChange}
+                            />
+                            오래된순
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="sort"
+                                value="like_desc"
+                                checked={sortValue === "like" && sortOrder === "desc"}
+                                onChange={handleSortChange}
+                            />
+                            좋아요
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="sort"
+                                value="bookmark_desc"
+                                checked={sortValue === "bookmark" && sortOrder === "desc"}
+                                onChange={handleSortChange}
+                            />
+                            북마크
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="sort"
+                                value="view_desc"
+                                checked={sortValue === "view" && sortOrder === "desc"}
+                                onChange={handleSortChange}
+                            />
+                            조회수
+                        </label>
+                    </div>
                     <button onClick={moveToWrite}
                             className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500" +
                                 " group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}><span
@@ -393,7 +451,8 @@ const PostList = () => {
                                             <img src={profileImages[post.writerId]} alt="Profile"
                                                  className="object-cover w-11 h-11 rounded-full border-2 border-blue-400 shadow-blue-400"/>
                                             <div>
-                                                <span className="ml-4 text-xl font-semibold antialiased block leading-tight text-black">{post.writerName}</span>
+                                                <span
+                                                    className="ml-4 text-xl font-semibold antialiased block leading-tight text-black">{post.writerName}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -433,21 +492,30 @@ const PostList = () => {
                         </div>
                     </GalleryContainer>
                     <PaginationContainer>
-                        <button  className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
-                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>이전</span>
+                        <button
+                            className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                                " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}
+                            onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                            <span
+                                className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>이전</span>
                         </button>
                         {Array.from({length: totalPages}, (_, index) => (
-                            <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
-                                " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} key={index} onClick={() => handlePageChange(index)}
-                                    disabled={index === currentPage}>
-                                <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>{index +1}</span>
+                            <button
+                                className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                                    " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}
+                                key={index} onClick={() => handlePageChange(index)}
+                                disabled={index === currentPage}>
+                                <span
+                                    className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>{index + 1}</span>
                             </button>
                         ))}
-                        <button className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
-                            " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"} onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages - 1}>
-                            <span className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>다음</span>
+                        <button
+                            className={"relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500" +
+                                " group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages - 1}>
+                            <span
+                                className={"relative px-5 py-2.5 transition-all ease-in duration-75 bg-white white:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-black"}>다음</span>
                         </button>
                     </PaginationContainer>
                 </div>

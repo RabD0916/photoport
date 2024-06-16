@@ -67,7 +67,7 @@ const EventUpdate = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-pink-100">
             <div className="bg-white p-8 rounded-md shadow-lg w-full max-w-2xl">
-                <h2 className="text-2xl font-bold mb-6 text-center">공지사항 수정</h2>
+                <h2 className="text-2xl font-bold mb-6 text-center">이벤트 수정</h2>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-gray-700">제목</label>

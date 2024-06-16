@@ -246,15 +246,13 @@ public class FriendshipService {
         List<LookedBoard> lookedBoards = lookedBoardRepository.findByUser(friendship.getUsers());
         lookedBoards.stream()
                 .filter(lookedBoard -> lookedBoard.getBoard().getWriter().getEmail().equals(friendship.getFriendEmail()))
-                .forEach(lookedBoard -> lookedBoardRepository.delete(lookedBoard));
+                .forEach(lookedBoardRepository::delete);
 
         // 응답 객체 생성 및 반환
-        FriendshipRemovalResponse responseDto = FriendshipRemovalResponse.builder()
+        return FriendshipRemovalResponse.builder()
                 .friendshipId(friendshipId)
                 .message("친구 관계가 성공적으로 해제되었습니다!")
                 .build();
-
-        return responseDto;
     }
 
 
@@ -314,15 +312,13 @@ public class FriendshipService {
         List<LookedBoard> lookedBoards = lookedBoardRepository.findByUser(friendship.getUsers());
         lookedBoards.stream()
                 .filter(lookedBoard -> lookedBoard.getBoard().getWriter().getEmail().equals(friendship.getFriendEmail()))
-                .forEach(lookedBoard -> lookedBoardRepository.delete(lookedBoard));
+                .forEach(lookedBoardRepository::delete);
 
         // 응답 객체 생성 및 반환
-        FriendshipUnblockResponse responseDto = FriendshipUnblockResponse.builder()
+        return FriendshipUnblockResponse.builder()
                 .friendshipId(friendshipId)
                 .message("친구 차단이 해제되었습니다!")
                 .build();
-
-        return responseDto;
     }
 
     // 차단된 친구 목록 조회

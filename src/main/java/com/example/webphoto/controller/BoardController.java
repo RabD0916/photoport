@@ -40,10 +40,12 @@ public class BoardController {
 
     // 공통 게시글 추가 로직
     private ResponseEntity<BoardResponse> addBoardCommon(Principal userId, BoardRequest dto, List<MultipartFile> files) {
-        // 공지사항 게시글이면 파일 처리 X
+        // 이벤트와 포즈 디렉토리 구분
+        String folderName = dto.getType() == BoardType.EVENT ? "event" : "pose";
+
         if (dto.getType() != BoardType.NOTICE && files != null && !files.isEmpty()) {
             String path = "./front4/public/images/";
-            String dir = path + userId.getName() + "/pose";
+            String dir = path + userId.getName() + "/" + folderName;
             File folder = new File(dir);
 
             if (!folder.exists() && !folder.mkdirs()) {
@@ -65,7 +67,13 @@ public class BoardController {
 
                     // 파일 쓰기
                     Files.write(filePath, file.getBytes(), StandardOpenOption.CREATE_NEW);
-                    mediaService.addPose(userId.getName(), fileName);
+
+                    // 폴더 이름에 따라 적절한 미디어 서비스 메소드 호출
+                    if ("pose".equals(folderName)) {
+                        mediaService.addPose(userId.getName(), fileName);
+                    } else if ("event".equals(folderName)) {
+                        mediaService.addEvent(userId.getName(), fileName);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     return ResponseEntity.internalServerError().body(new BoardResponse(null, "File upload error: " + file.getOriginalFilename(), null, null, 0, 0, 0, dto.getType(), dto.getWriterId(), null, null, null, null));
@@ -77,14 +85,13 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
+
     // 포즈 추천 게시글 등록
     @PostMapping("/poseBoard")
     public ResponseEntity<BoardResponse> addPoseBoard(Principal userId,
                                                       @RequestPart(value = "dto") BoardRequest dto,
                                                       @RequestPart("files") List<MultipartFile> files) {
-        System.out.println(userId);
-        System.out.println(dto);
-        System.out.println(files);
+
         return addBoardCommon(userId, dto, files);
     }
 
@@ -112,9 +119,11 @@ public class BoardController {
 
     // 이벤트 게시글 추가
     @PostMapping("/eventBoard")
-    public ResponseEntity<BoardResponse> addEventBoard(@RequestBody BoardRequest dto, Principal principal) {
+    public ResponseEntity<BoardResponse> addEventBoard(Principal principal,
+                                                       @RequestPart("dto") BoardRequest dto,
+                                                       @RequestPart("files") List<MultipartFile> files) {
 
-        return addBoardCommon(principal, dto, null);
+        return addBoardCommon(principal, dto, files);
     }
 
 
@@ -122,6 +131,9 @@ public class BoardController {
     @GetMapping("/eventBoards")
     public ResponseEntity<List<BoardResponse>> getEventBoards() {
         List<BoardResponse> participationPosts = eventService.getEventBoards();
+        if (participationPosts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         return ResponseEntity.ok(participationPosts);
     }
 
@@ -129,6 +141,9 @@ public class BoardController {
     @GetMapping("/eventBoard")
     public ResponseEntity<List<BoardResponse>> getEventBoard() {
         List<BoardResponse> adminBoard = eventService.getEventBoard();
+        if (adminBoard.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         return ResponseEntity.ok(adminBoard);
     }
 
@@ -150,6 +165,9 @@ public class BoardController {
             Principal principal) throws Exception {
 
         Page<BoardPreviewResponse> responses = boardService.findAllByBoardType(BoardType.valueOf(boardType.toUpperCase()), page, size, sortValue, sortOrder, principal);
+        if (responses.getContent().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(responses);
     }
 
@@ -157,20 +175,31 @@ public class BoardController {
     @GetMapping("/top3/{boardType}")
     public ResponseEntity<List<BoardPreviewResponse>> getTop3Boards(@PathVariable("boardType") String boardType) {
         List<BoardPreviewResponse> responses = boardService.getTop3BoardsByType(BoardType.valueOf(boardType.toUpperCase()));
+        if (responses.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         return ResponseEntity.ok(responses);
     }
 
 
     // 내가(로그인한 유저) 작성한 게시글 전체 불러오기
     @GetMapping("/myBoards")
-    public List<BoardResponse> getMyBoards(Principal user) {
-        return boardService.getBoardByUser(user.getName());
+    public ResponseEntity<List<BoardResponse>> getMyBoards(Principal user) {
+        List<BoardResponse> response = boardService.getBoardByUser(user.getName());
+        if (response.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(response);
     }
 
     // 특정 유저(ex 블랙리스트 유저 등) 게시글 불러오기
     @GetMapping("/blackBoards/{blackUser}")
-    public List<BoardResponse> getBlackBoards(@PathVariable String blackUser) {
-        return boardService.getBoardByUser(blackUser);
+    public ResponseEntity<List<BoardResponse>> getBlackBoards(@PathVariable String blackUser) {
+        List<BoardResponse> response = boardService.getBoardByUser(blackUser);
+        if (response.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(response);
     }
 
     // 게시글 조회 시 조회수 증가 기능 추가
@@ -236,7 +265,9 @@ public class BoardController {
             @PathVariable("id") Long id, @RequestBody BoardRequest dto) {
 
         BoardResponse response = boardService.updateBoard(id, dto);
-
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(response);
     }
 

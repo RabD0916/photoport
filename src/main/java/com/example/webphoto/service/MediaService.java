@@ -7,6 +7,7 @@ import com.example.webphoto.repository.MediaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -119,4 +120,18 @@ public class MediaService {
                 .owner(res)
                 .build());
     }
+
+    public void addEvent(String userId, String fileURL) {
+        User res = userService.findById(userId);
+        if (res == null) {
+            throw new EntityNotFoundException("해당 유저를 찾을 수 없습니다");
+        }
+        mediaRepository.save(Media.builder()
+                .name(fileURL)
+                .date(LocalDateTime.now())
+                .category("event")
+                .owner(res)
+                .build());
+    }
+
 }

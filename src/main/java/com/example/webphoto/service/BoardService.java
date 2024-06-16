@@ -165,9 +165,8 @@ public class BoardService {
                 .map(tag -> new BoardTag(null, null, tag))
                 .collect(Collectors.toList());
 
-        // NOTICE, EVENT 타입 게시글일 경우 미디어 리스트를 초기화 X
         List<MediaBoard> mediaBoards = new ArrayList<>();
-        if (dto.getType() != BoardType.NOTICE && dto.getType() != BoardType.EVENT) {
+        if (dto.getType() != BoardType.NOTICE) {
             for (int i = 0; i < dto.getMediaNames().length; i++) {
                 Media media = mediaRepository.findByOwnerAndCategoryAndName(user, dto.getCategories()[i], dto.getMediaNames()[i]);
                 mediaBoards.add(new MediaBoard(null, media, null));
@@ -224,13 +223,15 @@ public class BoardService {
     }
 
     // 게시물 종류별로 전체 불러오기(추가로 블랙리스트 된 유저들의 게시글들은 필터링 되서 숨김처리)
+// 게시물 종류별로 전체 불러오기 (블랙리스트 유저의 게시글 필터링, 공개 범위 필터링만 적용)
     public Page<BoardPreviewResponse> findAllByBoardType(BoardType boardType, int page, int size, String sortValue, String sortOrder, Principal principal) throws Exception {
-        Sort sort = Sort.by(sortValue);
+        Sort sort;
 
+        // 정렬 기준과 순서 설정
         if ("desc".equalsIgnoreCase(sortOrder)) {
-            sort = sort.descending();
+            sort = Sort.by(Sort.Order.desc(sortValue));
         } else {
-            sort = sort.ascending();
+            sort = Sort.by(Sort.Order.asc(sortValue));
         }
 
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -249,10 +250,6 @@ public class BoardService {
                 .map(CloseFriendResponse::getUserId)
                 .collect(Collectors.toList());
 
-        List<Long> lookedBoardIds = lookedBoardRepository.findByUser(user).stream()
-                .map(lookedBoard -> lookedBoard.getBoard().getId())
-                .collect(Collectors.toList());
-
         List<Board> allBoards = boardRepository.findByType(boardType, sort).stream()
                 .filter(board -> !blacklistedUserIds.contains(board.getWriter().getId()))
                 .filter(board -> board.getShare() == BoardShare.PUBLIC ||
@@ -263,27 +260,12 @@ public class BoardService {
                         (board.getShare() == BoardShare.PRIVATE && board.getWriter().getId().equals(user.getId())))
                 .collect(Collectors.toList());
 
-        // 한번도 보지 않은 게시글들을 상위에 추가
-        List<BoardPreviewResponse> newBoards = allBoards.stream()
-                .filter(board -> !lookedBoardIds.contains(board.getId()))
+        // 필터링된 결과로 페이지 객체 생성
+        int start = Math.min((int) pageable.getOffset(), allBoards.size());
+        int end = Math.min((start + pageable.getPageSize()), allBoards.size());
+        List<BoardPreviewResponse> paginatedBoards = allBoards.subList(start, end).stream()
                 .map(this::entityToPreviewResponse)
                 .collect(Collectors.toList());
-
-        // 이미 본 게시글들을 아래에 추가(가장 최근에 봤던 게시글이 가장 아래로감)
-        List<BoardPreviewResponse> seenBoards = lookedBoardRepository.findByUser(user).stream()
-                .filter(lookedBoard -> lookedBoard.getBoard().getType() == boardType)
-                .sorted(Comparator.comparing(LookedBoard::getDate))
-                .map(lookedBoard -> entityToPreviewResponse(lookedBoard.getBoard()))
-                .collect(Collectors.toList());
-
-        List<BoardPreviewResponse> finalSortedBoards = new ArrayList<>();
-        finalSortedBoards.addAll(newBoards);
-        finalSortedBoards.addAll(seenBoards);
-
-        // 필터링된 결과로 페이지 객체 생성
-        int start = Math.min((int) pageable.getOffset(), finalSortedBoards.size());
-        int end = Math.min((start + pageable.getPageSize()), finalSortedBoards.size());
-        List<BoardPreviewResponse> paginatedBoards = finalSortedBoards.subList(start, end);
 
         return new PageImpl<>(paginatedBoards, pageable, allBoards.size());
     }
@@ -413,14 +395,18 @@ public class BoardService {
 
     @Transactional
     public void deleteBoard(Long id, String userId) throws IOException {
-        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
         User user = userService.findById(userId);
-        // 게시글 유형이 포즈인 경우에만 파일 삭제 로직 수행
+
+        // 작성자 또는 관리자인 경우에만 삭제 가능
         if (board.getWriter().getId().equals(userId) || user.getUserType() == UserType.ADMIN) {
-            if (board.getType() == BoardType.POSE) {
+            // 게시글 유형이 포즈인 경우 파일 삭제 로직 수행
+            if (board.getType() == BoardType.POSE || board.getType() == BoardType.EVENT) {
+                String folderName = board.getType() == BoardType.POSE ? "pose" : "event";
                 for (MediaBoard mediaBoard : board.getMedia()) {
                     Media media = mediaBoard.getMedia();
-                    Path filePath = Paths.get("./front4/public/images/" + userId + "/pose/" + media.getName());
+                    Path filePath = Paths.get("./front4/public/images/" + userId + "/" + folderName + "/" + media.getName());
                     if (Files.exists(filePath)) {
                         Files.delete(filePath);
                     }
@@ -432,6 +418,7 @@ public class BoardService {
             throw new IllegalArgumentException("작성자와 관리자만 게시글을 삭제할 수 있습니다.");
         }
     }
+
     // 특정 사용자의 게시글 목록을 가져옴
     public List<BoardResponse> getBoardByUser(String id) {
         return boardRepository.findByWriter_IdOrderByCreatedAtDesc(id).stream()
